@@ -243,8 +243,8 @@ NMI:				;-----------------------|
 	STX.w $4315		; $8081DF  8E 15 43	| 
 	LDA.b #$02		; $8081E2  A9 02	| 
 	STA.w $420B		; $8081E4  8D 0B 42	| 
-	JSR CODE_8083EC		; $8081E7  20 EC 83	| 
-	REP #$30		; $8081EA  C2 30	| 
+	JSR CODE_8083EC		; $8081E7  20 EC 83	| 2115b [80] and 4300w [1801] set in here
+	REP #$30		; $8081EA  C2 30	| below uploads Kawase's GFX
 	LDA.w $0226		; $8081EC  AD 26 02	| RAM ADDRESS
 	BMI CODE_80824A		; $8081EF  30 59	| 
 	ORA.w #$8000		; $8081F1  09 00 80	| 
@@ -280,15 +280,15 @@ CODE_808211:			;			|
 	STA.w $2116		; $808241  8D 16 21	| 
 	STY.w $4305		; $808244  8C 05 43	| 
 	STX.w $420B		; $808247  8E 0B 42	| 
-CODE_80824A:			;			| 
+CODE_80824A:			;			| below uploads GFX for Kawase's arm (and death ani?)
 	LDA.w $0228		; $80824A  AD 28 02	| RAM ADDRESS
 	BMI CODE_808280		; $80824D  30 31	| 
 	ORA.w #$8000		; $80824F  09 00 80	| 
 	STA.w $0228		; $808252  8D 28 02	| RAM ADDRESS
 	CLC			; $808255  18		| 
-	ADC.w #$5049		; $808256  69 49 50	| 
+	ADC.w #DATA_99D049&$7FFF; $808256  69 49 50	| 
 	STA.w $4302		; $808259  8D 02 43	| 
-	LDA.w #$0099		; $80825C  A9 99 00	| 
+	LDA.w #DATA_99D049>>16	; $80825C  A9 99 00	| 
 	STA.w $4304		; $80825F  8D 04 43	| 
 	LDX.w #$0001		; $808262  A2 01 00	| 
 	LDY.w #$0040		; $808265  A0 40 00	| 
@@ -300,15 +300,15 @@ CODE_80824A:			;			|
 	STA.w $2116		; $808277  8D 16 21	| 
 	STY.w $4305		; $80827A  8C 05 43	| 
 	STX.w $420B		; $80827D  8E 0B 42	| 
-CODE_808280:			;			| 
+CODE_808280:			;			| below uploads GFX for fishing lure
 	LDA.w $022A		; $808280  AD 2A 02	| RAM ADDRESS
 	BMI CODE_8082B6		; $808283  30 31	| 
 	ORA.w #$8000		; $808285  09 00 80	| 
 	STA.w $022A		; $808288  8D 2A 02	| RAM ADDRESS
 	CLC			; $80828B  18		| 
-	ADC.w #$59AF		; $80828C  69 AF 59	| 
+	ADC.w #DATA_9BD9AF&$7FFF; $80828C  69 AF 59	| 
 	STA.w $4302		; $80828F  8D 02 43	| 
-	LDA.w #$009B		; $808292  A9 9B 00	| 
+	LDA.w #DATA_9BD9AF>>16	; $808292  A9 9B 00	| 
 	STA.w $4304		; $808295  8D 04 43	| 
 	LDX.w #$0001		; $808298  A2 01 00	| 
 	LDY.w #$0040		; $80829B  A0 40 00	| 
@@ -320,15 +320,15 @@ CODE_808280:			;			|
 	STA.w $2116		; $8082AD  8D 16 21	| 
 	STY.w $4305		; $8082B0  8C 05 43	| 
 	STX.w $420B		; $8082B3  8E 0B 42	| 
-CODE_8082B6:			;			| 
+CODE_8082B6:			;			| below uploads GFX for fishing hook
 	LDA.w $022C		; $8082B6  AD 2C 02	| RAM ADDRESS
 	BMI CODE_8082E0		; $8082B9  30 25	| 
 	ORA.w #$8000		; $8082BB  09 00 80	| 
 	STA.w $022C		; $8082BE  8D 2C 02	| RAM ADDRESS
 	CLC			; $8082C1  18		| 
-	ADC.w #$59AF		; $8082C2  69 AF 59	| 
+	ADC.w #DATA_9BD9AF&$7FFF; $8082C2  69 AF 59	| 
 	STA.w $4302		; $8082C5  8D 02 43	| 
-	LDA.w #$009B		; $8082C8  A9 9B 00	| 
+	LDA.w #DATA_9BD9AF>>16	; $8082C8  A9 9B 00	| 
 	STA.w $4304		; $8082CB  8D 04 43	| 
 	LDX.w #$0001		; $8082CE  A2 01 00	| 
 	LDY.w #$0020		; $8082D1  A0 20 00	| 
@@ -336,7 +336,7 @@ CODE_8082B6:			;			|
 	STA.w $2116		; $8082D7  8D 16 21	| 
 	STY.w $4305		; $8082DA  8C 05 43	| 
 	STX.w $420B		; $8082DD  8E 0B 42	| 
-CODE_8082E0:			;			| 
+CODE_8082E0:			;			| below uploads GFX for fishing line
 	LDA.w $0220		; $8082E0  AD 20 02	| RAM ADDRESS
 	BEQ CODE_808340		; $8082E3  F0 5B	| 
 	LDX.w #$1000		; $8082E5  A2 00 10	| INDIRECT RAM ADDRESS
@@ -373,7 +373,7 @@ CODE_8082F7:			;			|
 	BRA CODE_8082F7		; $80833B  80 BA	| 
 CODE_80833D:			;			| 
 	STZ.w $0220		; $80833D  9C 20 02	| RAM ADDRESS
-CODE_808340:			;			| 
+CODE_808340:			;			| below updates time/scores during gameplay
 	LDA.w $0201		; $808340  AD 01 02	| RAM ADDRESS
 	BIT.w #$0010		; $808343  89 10 00	| 
 	BEQ CODE_80837E		; $808346  F0 36	| 
@@ -381,21 +381,21 @@ CODE_808340:			;			|
 	STX.w $4302		; $80834B  8E 02 43	| 
 	STZ.w $4304		; $80834E  9C 04 43	| 
 	LDX.w #$0001		; $808351  A2 01 00	| 
-	LDA.w #$05F6		; $808354  A9 F6 05	| 
-	LDY.w #$000C		; $808357  A0 0C 00	| 
-	STA.w $2116		; $80835A  8D 16 21	| 
-	STY.w $4305		; $80835D  8C 05 43	| 
-	STX.w $420B		; $808360  8E 0B 42	| 
-	LDA.w #$05A7		; $808363  A9 A7 05	| 
-	STA.w $2116		; $808366  8D 16 21	| 
-	STY.w $4305		; $808369  8C 05 43	| 
-	STX.w $420B		; $80836C  8E 0B 42	| 
-	LDA.w #$05B8		; $80836F  A9 B8 05	| 
-	LDY.w #$0008		; $808372  A0 08 00	| 
-	STA.w $2116		; $808375  8D 16 21	| 
-	STY.w $4305		; $808378  8C 05 43	| 
-	STX.w $420B		; $80837B  8E 0B 42	| 
-CODE_80837E:			;			| 
+	LDA.w #$05F6		; $808354  A9 F6 05	|\ 
+	LDY.w #$000C		; $808357  A0 0C 00	|| 
+	STA.w $2116		; $80835A  8D 16 21	|| high score
+	STY.w $4305		; $80835D  8C 05 43	|| 
+	STX.w $420B		; $808360  8E 0B 42	|/ 
+	LDA.w #$05A7		; $808363  A9 A7 05	|\ 
+	STA.w $2116		; $808366  8D 16 21	|| score
+	STY.w $4305		; $808369  8C 05 43	|| 
+	STX.w $420B		; $80836C  8E 0B 42	|/ 
+	LDA.w #$05B8		; $80836F  A9 B8 05	|\ 
+	LDY.w #$0008		; $808372  A0 08 00	|| 
+	STA.w $2116		; $808375  8D 16 21	|| time
+	STY.w $4305		; $808378  8C 05 43	|| 
+	STX.w $420B		; $80837B  8E 0B 42	|/ 
+CODE_80837E:			;			| CGRAM uploader
 	SEP #$10		; $80837E  E2 10	| 
 	LDA.w $0238		; $808380  AD 38 02	| RAM ADDRESS
 	BMI CODE_8083AE		; $808383  30 29	| 
@@ -448,7 +448,7 @@ CODE_8083D8:			;			|
 	PLA			; $8083EA  68		| 
 	RTI			; $8083EB  40		| 
 
-CODE_8083EC:			;-----------------------| 
+CODE_8083EC:			;-----------------------| VRAM DMA buffer uploader
 	SEP #$20		; $8083EC  E2 20	| 
 	LDA.b #$80		; $8083EE  A9 80	| 
 	STA.w $2115		; $8083F0  8D 15 21	| 
@@ -476,7 +476,7 @@ CODE_808402:			;			|
 	TAX			; $808423  AA		| 
 	LDY.b $00,x		; $808424  B4 00	| 
 	BNE CODE_808402		; $808426  D0 DA	| 
-CODE_808428:			;			| 
+CODE_808428:			;			| reset DMA buffer when finished
 	REP #$30		; $808428  C2 30	| 
 	LDX.w #$0280		; $80842A  A2 80 02	| INDIRECT RAM ADDRESS
 	STX.w $02F2		; $80842D  8E F2 02	| RAM ADDRESS
@@ -804,19 +804,20 @@ CODE_808A8B:			;			|
 	BNE CODE_808A8B		; $808A96  D0 F3	| 
 	RTS			; $808A98  60		| 
 
-CODE_808A99:			;-----------------------| 
+
+CODE_808A99:			;-----------------------| resets VRAM DMA buffer
 	REP #$30		; $808A99  C2 30	| 
 	LDX.w #$0280		; $808A9B  A2 80 02	| INDIRECT RAM ADDRESS
 	STX.w $02F2		; $808A9E  8E F2 02	| RAM ADDRESS
 	STZ.b $00,x		; $808AA1  74 00	| RAM ADDRESS
 	RTS			; $808AA3  60		| 
 
-CODE_808AA4:			;-----------------------| 
-	REP #$30		; $808AA4  C2 30	| 
+CODE_808AA4:			;-----------------------| VRAM DMA buffer handler
+	REP #$30		; $808AA4  C2 30	| A = srcaddr, X = vramaddr, Y = bytes, stack = srcbank
 	PHA			; $808AA6  48		| 
 	PHX			; $808AA7  DA		| 
 	LDX.w $02F2		; $808AA8  AE F2 02	| RAM ADDRESS
-	CPX.w #$02F0		; $808AAB  E0 F0 02	| INDIRECT RAM ADDRESS????
+	CPX.w #$02F0		; $808AAB  E0 F0 02	| INDIRECT RAM ADDRESS
 	BEQ CODE_808ACC		; $808AAE  F0 1C	| 
 	STY.b $00,x		; $808AB0  94 00	| RAM ADDRESS
 	STA.b $04,x		; $808AB2  95 04	| RAM ADDRESS
@@ -837,6 +838,7 @@ CODE_808ACC:			;			| why not jump 3 bytes up...
 	PLX			; $808ACC  FA		| 
 	PLA			; $808ACD  68		| 
 	RTL			; $808ACE  6B		| 
+
 
 CODE_808BC0:			;-----------------------| controller RAM updater
 	REP #$20		; $808BC0  C2 20	| 
@@ -1066,12 +1068,12 @@ CODE_80E519:			;			|
 	STA.w $021C		; $80E564  8D 1C 02	| RAM ADDRESS
 	RTS			; $80E567  60		| 
 
-DATA_80E568:			;			| 
+DATA_80E568:			; | HDMA table for layer 2 X/Y (static)
 	db $70 : dw $0000,$018F
 	db $01 : dw $0100,$011F
 	db $00
 
-DATA_80E5A3:			;			| 
+DATA_80E5A3:			; | HDMA table for mainscreen (uploaded to RAM)
 	db $40,$13
 	db $10,$17
 	db $20,$13
@@ -1083,7 +1085,7 @@ DATA_80E5A3:			;			|
 	db $01,$13
 	db $00
 
-DATA_80E5B6:			;			| 
+DATA_80E5B6:			; | HDMA table for layer 3 X/Y (uploaded to RAM)
 	db $70 : dw $0000,$001F
 	db $20 : dw $0000,$FFFF
 	db $08 : dw $0000,$FFE7
@@ -1097,11 +1099,15 @@ CODE_80E5CB:			;			|
 	JSR CODE_80E730		; $80E5D4  20 30 E7	| 
 	RTS			; $80E5D7  60		| 
 
-DATA_80E6E6:			;			| 
-
-DATA_80E6E8:			;			| 
-
-DATA_80E6E9:			;			| 
+DATA_80E6E6:			; | water images. latter byte is timer.framecount
+	dl DATA_9C9CDC : db $54
+	dl DATA_9C9CDC : db $54
+	dl DATA_9C9CDC : db $54
+	dl DATA_9C9CDC : db $54
+	dl DATA_9C934E : db $86
+	dl DATA_9C934E : db $86
+	dl DATA_9C934E : db $86
+	dl DATA_9C934E : db $86
 	
 
 CODE_80E706:			;			| 
@@ -1114,10 +1120,10 @@ CODE_80E706:			;			|
 	ASL			; $80E718  0A		| 
 	ASL			; $80E719  0A		| 
 	TAY			; $80E71A  A8		| 
-	LDA.w DATA_80E6E8,y	; $80E71B  B9 E8 E6	| 
+	LDA.w DATA_80E6E6+2,y	; $80E71B  B9 E8 E6	| 
 	AND.w #$0F00		; $80E71E  29 00 0F	| 
 	STA.w $0BC6		; $80E721  8D C6 0B	| RAM ADDRESS
-	LDA.w DATA_80E6E9,y	; $80E724  B9 E9 E6	| 
+	LDA.w DATA_80E6E6+3,y	; $80E724  B9 E9 E6	| 
 	AND.w #$00F0		; $80E727  29 F0 00	| 
 	LSR			; $80E72A  4A		| 
 	LSR			; $80E72B  4A		| 
@@ -1151,7 +1157,7 @@ CODE_80E75D:			;			|
 	ASL			; $80E767  0A		| 
 	ASL			; $80E768  0A		| 
 	TAY			; $80E769  A8		| 
-	LDA.w DATA_80E6E8,y	; $80E76A  B9 E8 E6	| 
+	LDA.w DATA_80E6E6+2,y	; $80E76A  B9 E8 E6	| 
 	PHA			; $80E76D  48		| 
 	LDA.w $0BC2		; $80E76E  AD C2 0B	| RAM ADDRESS
 	AND.w #$FF00		; $80E771  29 00 FF	| 
@@ -1474,12 +1480,12 @@ CODE_80EF41:			;			| title screen menu handler
 	PHY			; $80EF53  5A		| 
 	INC.w $0274		; $80EF54  EE 74 02	| RAM ADDRESS
 	LDA.w $0274		; $80EF57  AD 74 02	| RAM ADDRESS
-	CMP.w #$0064		; $80EF5A  C9 64 00	| 
+	CMP.w #$0064		; $80EF5A  C9 64 00	| # of times select needs to be pressed for 5 MIN.
 	BNE CODE_80EF64		; $80EF5D  D0 05	| 
 	LDY.w #DATA_80EEF1	; $80EF5F  A0 F1 EE	| 
 	BRA CODE_80EF6C		; $80EF62  80 08	| 
 CODE_80EF64:			;			| 
-	CMP.w #$0065		; $80EF64  C9 65 00	| 
+	CMP.w #$0065		; $80EF64  C9 65 00	| delete 5 MIN. at this amount
 	BNE CODE_80EF81		; $80EF67  D0 18	| 
 	LDY.w #DATA_80EEE1	; $80EF69  A0 E1 EE	| 
 CODE_80EF6C:			;			| 
@@ -1523,7 +1529,7 @@ CODE_80EF9F:			;			|
 	LDA.w #$8000		; $80EFB3  A9 00 80	| 
 	TSB.w $0202		; $80EFB6  0C 02 02	| RAM ADDRESS
 	BRA CODE_80EFE6		; $80EFB9  80 2B	| 
-CODE_80EFBB:			;			| 
+CODE_80EFBB:			;			| handles toggling STEREO/MONAURAL
 	LDA.w $1A00		; $80EFBB  AD 00 1A	| RAM ADDRESS
 	EOR.w #$4000		; $80EFBE  49 00 40	| 
 	STA.w $1A00		; $80EFC1  8D 00 1A	| RAM ADDRESS
@@ -1976,6 +1982,12 @@ DATA_97E660:			;-----------------------| GFX for TNN logo [xCC0 bytes]
 warnpc $988000
 
 
+org $998000
+
+DATA_99D049:			;-----------------------| GFX for Kawase's arm and backpack death ani
+	incbin DATA_99D049.bin:0-F80
+
+warnpc $9A8000
 
 
 org $9B8000
@@ -1983,7 +1995,22 @@ org $9B8000
 DATA_9BC203:			;-----------------------| GFX for layer 3 text
 	incbin DATA_9BC203.bin:0-800
 
+DATA_9BD9AF:			;-----------------------| GFX for fishing hook & lure
+	incbin DATA_9BD9AF.bin:0-700
+
 warnpc $9C8000
+
+
+org $9C8000
+
+DATA_9C934E:			;-----------------------| GFX for layer 3 water (wave)
+	incbin DATA_9C934E.bin:0-180
+
+DATA_9C9CDC:			;-----------------------| GFX for layer 3 water (calm)
+	incbin DATA_9C9CDC.bin:0-100
+
+warnpc $9D8000
+
 
 
 
