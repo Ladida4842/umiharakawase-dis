@@ -8,7 +8,7 @@ RESET:				;-----------------------|
 	XCE			; $808002  FB		| 
 	REP #$30		; $808003  C2 30	| 
 	CLD			; $808005  D8		| 
-	LDA.w #$1FFF		; $808006  A9 FF 1F FF	| 
+	LDA.w #$1FFF		; $808006  A9 FF 1F	| 
 	TCS			; $808009  1B		| 
 	PHK			; $80800A  4B		| 
 	PLB			; $80800B  AB		| 
@@ -80,7 +80,7 @@ CODE_808093:			;			|
 	LDA.w #$8000		; $808093  A9 00 80	| 
 	STA.b $06,x		; $808096  95 06	| RAM ADDRESS
 	STA.b $03,x		; $808098  95 03	| RAM ADDRESS
-	LDA.w #$8196		; $80809A  A9 96 81	| INDIRECT ROM?????????
+	LDA.w #CODE_808197-1	; $80809A  A9 96 81	| 
 	STA.b $05,x		; $80809D  95 05	| RAM ADDRESS
 	STZ.b $01,x		; $80809F  74 01	| RAM ADDRESS
 	STX.b $00,y		; $8080A1  96 00	| RAM ADDRESS
@@ -92,7 +92,7 @@ CODE_808093:			;			|
 	TAX			; $8080AA  AA		| 
 	CPY.w #$1F08		; $8080AB  C0 08 1F	| 
 	BNE CODE_808093		; $8080AE  D0 E3	| 
-	LDA.w #$84DE		; $8080B0  A9 DE 84	| INDIRECT ROM apparently... (stores to stack?)
+	LDA.w #CODE_8084DF-1	; $8080B0  A9 DE 84	| first game mode loc
 	STA.w $1E3D		; $8080B3  8D 3D 1E	| RAM ADDRESS
 	JSL CODE_1D8000		; $8080B6  22 00 80 1D	| 
 	REP #$30		; $8080BA  C2 30	| 
@@ -120,7 +120,7 @@ CODE_8080ED:			;			| this is the NMI wait loop
 	BEQ CODE_8080ED		; $8080F0  F0 FB	| 
 	LDA.b #$01		; $8080F2  A9 01	| 
 CODE_8080F4:			;			| 
-	BIT.w $4212		; $8080F4  2C 12 42	| 
+	BIT.w $4212		; $8080F4  2C 12 42	| wait for controller automatic read to finish
 	BNE CODE_8080F4		; $8080F7  D0 FB	| 
 	REP #$20		; $8080F9  C2 20	| 
 	LDA.w $4218		; $8080FB  AD 18 42	| 
@@ -573,7 +573,7 @@ CODE_8084D1:			;			|
 	BPL CODE_8084D1		; $8084DC  10 F3	| 
 	RTS			; $8084DE  60		| 
 
-DATA_8084DF:			;-----------------------| first game mode???
+CODE_8084DF:			;-----------------------| first game mode???
 	REP #$30		; $8084DF  C2 30	| 
 	LDA.w #$0000		; $8084E1  A9 00 00	| 
 	STA.w $0255		; $8084E4  8D 55 02	| RAM ADDRESS
@@ -838,7 +838,7 @@ CODE_808ACC:			;			| why not jump 3 bytes up...
 	PLA			; $808ACD  68		| 
 	RTL			; $808ACE  6B		| 
 
-CODE_808BC0:			;-----------------------| 
+CODE_808BC0:			;-----------------------| controller RAM updater
 	REP #$20		; $808BC0  C2 20	| 
 	LDA.w $0240		; $808BC2  AD 40 02	| RAM ADDRESS
 	AND.w $0248		; $808BC5  2D 48 02	| RAM ADDRESS
@@ -1429,7 +1429,7 @@ DATA_80EE55:			;			| title screen layer 3 text
 	dw $0000
 	dw $0000
 
-DATA_80EEA7:			;			| 
+DATA_80EEA7:			;			| title screen cursor positions
 	dw $060C
 	dw $064C
 	dw $068C
@@ -1460,7 +1460,7 @@ DATA_80EF21:			;			| PAL for title screen game logo
 	dw $04C4,$08E5,$1106,$1948,$1D69,$25AB,$2DCC,$31EE
 	dw $3A2F,$4251,$4692,$4EB4,$56D5,$5B17,$6338,$6759
 
-CODE_80EF41:			;			| 
+CODE_80EF41:			;			| title screen menu handler
 	REP #$30		; $80EF41  C2 30	| 
 	PHK			; $80EF43  4B		| 
 	PLB			; $80EF44  AB		| 
@@ -1580,9 +1580,9 @@ CODE_80F023:			;			|
 CODE_80F031:			;			| 
 	RTS			;			| 
 
-DATA_80F032:			;			| 
+DATA_80F032:			;			| nullifies below
 	dw $0000
-DATA_80F034:			;			| 
+DATA_80F034:			;			| cursor tile
 	dw $3C6A
 
 

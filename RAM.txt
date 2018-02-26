@@ -1,11 +1,26 @@
 7E0090	4? bytes	holds source address for BG DMA uploads
 
 7E0200	1 byte		NMI thingy (set when NMI runs, breaks loop)
-7E0208	8 bytes		not sure. seems important [8A 43 95 A0 90 EC 94 77]
+7E0201	1 byte		if bit 7 set, quit NMI completely. if bit 6 also set, update 4200/2100 then quit
 
+7E0208	8 bytes		not sure. seems (un)important [8A 43 95 A0 90 EC 94 77]
+
+7E021C	1 byte		HDMA channel enable (420C mirror)
+
+7E0240	2 bytes		port 1 "raw" controller data
+7E0242	2 bytes		port 2 "raw" controller data
+7E0244  2 bytes		port 1 pressed
+7E0246  2 bytes		port 2 pressed
+7E0248  2 bytes		port 1 held
+7E024A	2 bytes		port 2 held
+7E024C  2 bytes		copy of port 1 "raw" controller data?
+7E024E  2 bytes		copy of port 2 "raw" controller data?
+
+7E0270  2 bytes		title screen cursor position (0,1,2)
 7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
 
 7E0280	??? bytes	full of DMA stuff i think (dynamic?)
+7E02F2	2 bytes		index to 0280
 
 7E0B80	x13 bytes	HDMA table (212C, 1 reg write once) [ch6]
 
@@ -13,7 +28,21 @@
 
 7E0BC0	1 byte		brightness mirror, for water? (stores when high bit of horiz scanline is set)
 
+7E1A01  1 byte		bit 6 determines stereo/monaural output?
+
 7E1BE0	x200 bytes	OAM mirror?
 7E1DE0	x20 bytes	OAM high table
+
+7E1E00	x40 bytes	stack 1
+7E1E40	x40 bytes	stack 2
+7E1E80	x40 bytes	stack 3
+7E1EC0	x40 bytes	stack 4
+7E1F00	x2 bytes	stack 1 pointer
+7E1F02	x2 bytes	stack 2 pointer
+7E1F04	x2 bytes	stack 3 pointer
+7E1F06	x2 bytes	stack 4 pointer
+7E1F10	x2 bytes	index to 1F00
+7E1F12	x2 bytes	backup of stack pointer
+7E1F14	until 1FFF	stack 0
 
 7E5200	x200 bytes	CGRAM mirror?
