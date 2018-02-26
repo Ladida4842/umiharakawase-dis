@@ -1,0 +1,19 @@
+7E0090	4? bytes	holds source address for BG DMA uploads
+
+7E0200	1 byte		NMI thingy (set when NMI runs, breaks loop)
+7E0208	8 bytes		not sure. seems important [8A 43 95 A0 90 EC 94 77]
+
+7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
+
+7E0280	??? bytes	full of DMA stuff i think (dynamic?)
+
+7E0B80	x13 bytes	HDMA table (212C, 1 reg write once) [ch6]
+
+7E0B98	x15 bytes	HDMA table (2111-2112, 2 regs write twice each) [ch7]
+
+7E0BC0	1 byte		brightness mirror, for water? (stores when high bit of horiz scanline is set)
+
+7E1BE0	x200 bytes	OAM mirror?
+7E1DE0	x20 bytes	OAM high table
+
+7E5200	x200 bytes	CGRAM mirror?
