@@ -120,27 +120,27 @@ CODE_8080ED:			;			| this is the NMI wait loop
 	BEQ CODE_8080ED		; $8080F0  F0 FB	| 
 	LDA.b #$01		; $8080F2  A9 01	| 
 CODE_8080F4:			;			| 
-	BIT.w $4212		; $8080F4  2C 12 42	| wait for controller automatic read to finish
+	BIT.w $4212		; $8080F4  2C 12 42	| wait for joypad automatic read to finish
 	BNE CODE_8080F4		; $8080F7  D0 FB	| 
-	REP #$20		; $8080F9  C2 20	| 
-	LDA.w $4218		; $8080FB  AD 18 42	| 
+	REP #$20		; $8080F9  C2 20	| store joypad regs to RAM
+	LDA.w $4218		; $8080FB  AD 18 42	| [port 1]
 	AND.w #$FFF0		; $8080FE  29 F0 FF	| 
 	STA.w $0240		; $808101  8D 40 02	| RAM ADDRESS
-	XBA			; $808104  EB		| 
-	AND.w #$4040		; $808105  29 40 40	| 
-	ASL			; $808108  0A		| 
-	ORA.w $0240		; $808109  0D 40 02	| RAM ADDRESS
-	STA.w $0240		; $80810C  8D 40 02	| RAM ADDRESS
-	LDA.w $421A		; $80810F  AD 1A 42	| 
+	XBA			; $808104  EB		|\ 
+	AND.w #$4040		; $808105  29 40 40	|| [port1] Y mimics A button, X mimics B button
+	ASL			; $808108  0A		|| 
+	ORA.w $0240		; $808109  0D 40 02	|| RAM ADDRESS
+	STA.w $0240		; $80810C  8D 40 02	|/ RAM ADDRESS
+	LDA.w $421A		; $80810F  AD 1A 42	| [port 2]
 	AND.w #$FFF0		; $808112  29 F0 FF	| 
 	STA.w $0242		; $808115  8D 42 02	| RAM ADDRESS
-	XBA			; $808118  EB		| 
-	AND.w #$4040		; $808119  29 40 40	| 
-	ASL			; $80811C  0A		| 
-	ORA.w $0242		; $80811D  0D 42 02	| RAM ADDRESS
-	STA.w $0242		; $808120  8D 42 02	| RAM ADDRESS
-	LDA.w $4016		; $808123  AD 16 40	| 
-	AND.w #$0101		; $808126  29 01 01	| 
+	XBA			; $808118  EB		|\ 
+	AND.w #$4040		; $808119  29 40 40	|| [port2] Y mimics A button, X mimics B button
+	ASL			; $80811C  0A		|| 
+	ORA.w $0242		; $80811D  0D 42 02	|| RAM ADDRESS
+	STA.w $0242		; $808120  8D 42 02	|/ RAM ADDRESS
+	LDA.w $4016		; $808123  AD 16 40	| read joypad ports again
+	AND.w #$0101		; $808126  29 01 01	| to determine if connected
 	SEP #$20		; $808129  E2 20	| 
 	TSB.w $0240		; $80812B  0C 40 02	| RAM ADDRESS
 	XBA			; $80812E  EB		| 
@@ -573,19 +573,19 @@ CODE_8084D1:			;			|
 	BPL CODE_8084D1		; $8084DC  10 F3	| 
 	RTS			; $8084DE  60		| 
 
-CODE_8084DF:			;-----------------------| first game mode???
+CODE_8084DF:			;-----------------------| start here
 	REP #$30		; $8084DF  C2 30	| 
 	LDA.w #$0000		; $8084E1  A9 00 00	| 
 	STA.w $0255		; $8084E4  8D 55 02	| RAM ADDRESS
 	LDA.w #$6158		; $8084E7  A9 58 61	| 
 	STA.w $0254		; $8084EA  8D 54 02	| RAM ADDRESS
 	JSR CODE_8084B4		; $8084ED  20 B4 84	| initialize registers
-	JSL CODE_82D9BD		; $8084F0  22 BD D9 82	| spends several frames here
+	JSL CODE_82D9BD		; $8084F0  22 BD D9 82	| TNN logo stuff
 	JSR CODE_8084B4		; $8084F4  20 B4 84	| initialize registers again
 	SEP #$20		; $8084F7  E2 20	| 
 	STZ.w $025B		; $8084F9  9C 5B 02	| RAM ADDRESS
 	REP #$30		; $8084FC  C2 30	| 
-	JSR CODE_80EBC6		; $8084FE  20 C6 EB	| 
+	JSR CODE_80EBC6		; $8084FE  20 C6 EB	| title screen stuff
 
 
 CODE_8087F6:			;-----------------------| 
@@ -630,7 +630,7 @@ CODE_8088E5:			;-----------------------|
 	STA.w $1900		; $808900  8D 00 19	| RAM ADDRESS
 	JML CODE_1D8004		; $808903  5C 04 80 1D	| 
 
-CODE_808907:			;-----------------------| 
+CODE_808907:			;-----------------------| song player. A = song to play
 	REP #$30		; $808907  C2 30	| 
 	AND.w #$003F		; $808909  29 3F 00	| 
 	PHA			; $80890C  48		| 
@@ -672,7 +672,7 @@ CODE_808966:			;			|
 	PLA			; $808966  68		| 
 	RTL			; $808967  6B		| 
 
-CODE_808968:			;-----------------------| 
+CODE_808968:			;-----------------------| SFX player. A = SFX to play
 	REP #$30		; $808968  C2 30	| 
 	PHX			; $80896A  DA		| 
 	AND.w #$00FF		; $80896B  29 FF 00	| 
@@ -712,16 +712,17 @@ DATA_8089C9:			;-----------------------|
 
 
 
-CODE_808A04:			;-----------------------| 
+CODE_808A04:			;-----------------------| used by other banks to jump to addrs in this bank
 	REP #$30		; $808A04  C2 30	| 
 	PHA			; $808A06  48		| 
-	PHY			; $808A07  5A		| Y contains address
+	PHY			; $808A07  5A		| Y contains address to jump to!
 	PHA			; $808A08  48		| 
-	LDA.w #$8A0F		; $808A09  A9 0F 8A	| INDIRECT ROM??????
-	STA.b $05,s		; $808A0C  83 05	| push RTL address below
+	LDA.w #CODE_808A10-1	; $808A09  A9 0F 8A	| store RTL address below
+	STA.b $05,s		; $808A0C  83 05	| 
 	PLA			; $808A0E  68		| 
 	RTS			; $808A0F  60		| 
-	RTL			; $808A10  6B		| ...
+CODE_808A10:			;			| 
+	RTL			; $808A10  6B		| 
 
 CODE_808A11:			;-----------------------| 
 	SEP #$20		; $808A11  E2 20	| 
@@ -736,8 +737,8 @@ CODE_808A11:			;-----------------------|
 	RTS			; $808A26  60		| 
 
 CODE_808A27:			;-----------------------| 
-	JSL CODE_808178		; $808A27  22 78 81 80	| ... return next frame
-CODE_808A2B:			;-----------------------| 
+	JSL CODE_808178		; $808A27  22 78 81 80	| return next frame
+CODE_808A2B:			;-----------------------| NMI & F-blank enable
 	SEI			; $808A2B  78		| 
 	SEP #$20		; $808A2C  E2 20	| 
 	LDA.b #$80		; $808A2E  A9 80	| 
@@ -840,7 +841,7 @@ CODE_808ACC:			;			| why not jump 3 bytes up...
 	RTL			; $808ACE  6B		| 
 
 
-CODE_808BC0:			;-----------------------| controller RAM updater
+CODE_808BC0:			;-----------------------| joypad RAM updater
 	REP #$20		; $808BC0  C2 20	| 
 	LDA.w $0240		; $808BC2  AD 40 02	| RAM ADDRESS
 	AND.w $0248		; $808BC5  2D 48 02	| RAM ADDRESS
@@ -884,10 +885,10 @@ CODE_80E3AB:			;-----------------------| This is the BG uploader (handles pal, g
 	LDA.b #$01		; $80E3BA  A9 01	| 
 	STA.w $2110		; $80E3BC  8D 10 21	| 
 	REP #$30		; $80E3BF  C2 30	| 
-	LDX.w #$E47A		; $80E3C1  A2 7A E4	| src = DATA_80E47A
+	LDX.w #DATA_80E47A	; $80E3C1  A2 7A E4	| src = DATA_80E47A
 	LDY.w #$5200		; $80E3C4  A0 00 52	| dst = $7E5200
 	LDA.w #$001F		; $80E3C7  A9 1F 00	| 
-	MVN $7E,$80		; $80E3CA  54 7E 80	| 
+	MVN $7E,DATA_80E47A>>16	; $80E3CA  54 7E 80	| 
 	PHK			; $80E3CD  4B		| 
 	PLB			; $80E3CE  AB		| 
 	SEP #$20		; $80E3CF  E2 20	| 
@@ -966,7 +967,7 @@ CODE_80E44A:			;			|
 	BNE CODE_80E419		; $80E458  D0 BF	| 
 	RTS			; $80E45A  60		| 
 
-DATA_80E45B:			;			| pointers to GFX for all the stage BGs
+DATA_80E45B:			; | pointers to GFX for all the stage BGs
 	dl DATA_838000 : db $00	; $80E45B  00 80 83 00	| 
 	dl DATA_858000 : db $00	; $80E45F  00 80 85 00	| 
 	dl DATA_868000 : db $00	; $80E463  00 80 86 00	| 
@@ -976,11 +977,12 @@ DATA_80E45B:			;			| pointers to GFX for all the stage BGs
 	dl DATA_888000 : db $00	; $80E473  00 80 88 00	| 
 	dl DATA_888000		; $80E477  00 80 88	| 
 
-DATA_80E47A:			;-----------------------| palette for stage BGs (shared)
+DATA_80E47A:			; | palette for stage BGs (shared)
 	dw $0883,$0CA4,$10C5,$14E6,$1907,$1D28,$2149,$256A
 	dw $298B,$2DAC,$31CD,$35EE,$3A0F,$3E30,$4251,$4672
 
-CODE_80E49A:			;-----------------------| 
+
+CODE_80E49A:			;-----------------------| upload select layer 3 GFX during levels
 	PHK			; $80E49A  4B		| 
 	PLB			; $80E49B  AB		| 
 	SEP #$20		; $80E49C  E2 20	| 
@@ -1019,12 +1021,13 @@ CODE_80E4C9:			;			|
 	BNE CODE_80E4BA		; $80E4DA  D0 DE	| 
 	RTS			; $80E4DC  60		| 
 
-DATA_80E4DD:			;			| essentially, text chars to upload
+DATA_80E4DD:			; | essentially, text chars to upload for levels (when not in REPLAY menu)
 	db $50,$41,$55,$45,$5C,$46,$4C,$44
 	db $60,$61,$62,$63,$64,$65,$66,$67
 	db $68,$69,$6A,$6B,$48,$49,$53,$43
 
-CODE_80E501:			;-----------------------| 
+
+CODE_80E501:			;-----------------------| set up HDMA on channels 5,6,7
 	PHK			; $80E501  4B		| 
 	PLB			; $80E502  AB		| 
 	REP #$30		; $80E503  C2 30	| 
@@ -1073,26 +1076,26 @@ DATA_80E568:			; | HDMA table for layer 2 X/Y (static)
 	db $01 : dw $0100,$011F
 	db $00
 
-DATA_80E5A3:			; | HDMA table for mainscreen (uploaded to RAM)
-	db $40,$13
-	db $10,$17
-	db $20,$13
-	db $08,$17
-	db $18,$13
-	db $08,$17
-	db $01,$13
-	db $00,$17
-	db $01,$13
+DATA_80E5A3:			; | HDMA table for mainscreen (uploaded to RAM), used during level
+	db $40,$13		; | L3 disabled
+	db $10,$17		; | show lives, score, time
+	db $20,$13		; | 
+	db $08,$17		; | show FIELD/PAUSE
+	db $18,$13		; | 
+	db $08,$17		; | show high score
+	db $01,$13		; |\
+	db $00,$17		; || L3 water depends on L1 Ypos, hence why this is in RAM
+	db $01,$13		; |/
 	db $00
 
-DATA_80E5B6:			; | HDMA table for layer 3 X/Y (uploaded to RAM)
-	db $70 : dw $0000,$001F
-	db $20 : dw $0000,$FFFF
-	db $08 : dw $0000,$FFE7
-	db $08 : dw $0000,$FFB7
+DATA_80E5B6:			; | HDMA table for layer 3 X/Y (uploaded to RAM), used during level
+	db $70 : dw $0000,$001F	; | lives, score, time
+	db $20 : dw $0000,$FFFF	; | FIELD/PAUSE
+	db $08 : dw $0000,$FFE7	; | high score
+	db $08 : dw $0000,$FFB7	; | L3 water (Xpos varies, hence why this is in RAM)
 	db $00
 
-CODE_80E5CB:			;			| 
+CODE_80E5CB:			; | do L3 water stuff?
 	REP #$30		; $80E5CB  C2 30	| 
 	JSL CODE_81D397		; $80E5CD  22 97 D3 81	| 
 	JSR CODE_80E706		; $80E5D1  20 06 E7	| 
@@ -1108,9 +1111,8 @@ DATA_80E6E6:			; | water images. latter byte is timer.framecount
 	dl DATA_9C934E : db $86
 	dl DATA_9C934E : db $86
 	dl DATA_9C934E : db $86
-	
 
-CODE_80E706:			;			| 
+CODE_80E706:			; | set up timer for water animation
 	REP #$30		; $80E706  C2 30	| 
 	LDA.w #$FFFF		; $80E708  A9 FF FF	| 
 	STA.w $0BC2		; $80E70B  8D C2 0B	| RAM ADDRESS
@@ -1131,7 +1133,7 @@ CODE_80E706:			;			|
 CODE_80E72F:			;			| 
 	RTS			; $80E72F  60		| 
 
-CODE_80E730:			;			| 
+CODE_80E730:			;			| upload and animate L3 water
 	REP #$30		; $80E730  C2 30	| 
 	LDA.w $0BC2		; $80E732  AD C2 0B	| RAM ADDRESS
 	STA.b $80		; $80E735  85 80	| RAM ADDRESS
@@ -1173,7 +1175,7 @@ CODE_80E75D:			;			|
 	RTS			; $80E787  60		| 
 
 
-CODE_80EBC6:			;-----------------------| 
+CODE_80EBC6:			;-----------------------| title screen code
 	REP #$30		; $80EBC6  C2 30	| 
 	PHK			; $80EBC8  4B		| 
 	PLB			; $80EBC9  AB		| 
@@ -1185,14 +1187,14 @@ CODE_80EBC6:			;-----------------------|
 	JSR CODE_80E501		; $80EBD7  20 01 E5	| 
 	JSR CODE_8083EC		; $80EBDA  20 EC 83	| 
 	SEP #$20		; $80EBDD  E2 20	| 
-	LDA.b #$20		; $80EBDF  A9 20	| 
+	LDA.b #$20		; $80EBDF  A9 20	| only enable L2 X/Y HDMA
 	STA.w $021C		; $80EBE1  8D 1C 02	| RAM ADDRESS
 	JSL CODE_81EC72		; $80EBE4  22 72 EC 81	| 
 	JSR CODE_80EC60		; $80EBE8  20 60 EC	| 
 	JSR CODE_808A81		; $80EBEB  20 81 8A	| 
 	JSR CODE_808A11		; $80EBEE  20 11 8A	| 
 	REP #$30		; $80EBF1  C2 30	| 
-	LDA.w #$0007		; $80EBF3  A9 07 00	| 
+	LDA.w #$0007		; $80EBF3  A9 07 00	| only L1/L2 enabled
 	STA.w $212C		; $80EBF6  8D 2C 21	| 
 	REP #$30		; $80EBF9  C2 30	| 
 	STZ.w $0202		; $80EBFB  9C 02 02	| RAM ADDRESS
@@ -1203,7 +1205,7 @@ CODE_80EBC6:			;-----------------------|
 	STA.w $0272		; $80EC0A  8D 72 02	| RAM ADDRESS
 	STZ.w $0274		; $80EC0D  9C 74 02	| RAM ADDRESS
 	JSR CODE_80EDBA		; $80EC10  20 BA ED	| 
-	LDA.w #$0005		; $80EC13  A9 05 00	| 
+	LDA.w #$0005		; $80EC13  A9 05 00	| title screen song #
 	JSL CODE_808907		; $80EC16  22 07 89 80	| 
 	SEP #$20		; $80EC1A  E2 20	| 
 	LDA.b #$80		; $80EC1C  A9 80	| 
@@ -1229,10 +1231,10 @@ CODE_80EC60:			;			| this uploads the title screen bg, text, etc
 	STA.b $92		; $80EC71  85 92	| RAM ADDRESS
 	JSR CODE_80E3AB		; $80EC73  20 AB E3	| 
 	REP #$30		; $80EC76  C2 30	| 
-	LDX.w #$EF01		; $80EC78  A2 01 EF	| src = DATA_80EF01
+	LDX.w #DATA_80EF01	; $80EC78  A2 01 EF	| src = DATA_80EF01
 	LDY.w #$5200		; $80EC7B  A0 00 52	| dst = $7E5200
 	LDA.w #$001F		; $80EC7E  A9 1F 00	| 
-	MVN $7E,$80		; $80EC81  54 7E 80	| 
+	MVN $7E,DATA_80EF01>>16	; $80EC81  54 7E 80	| 
 	PHK			; $80EC84  4B		| 
 	PLB			; $80EC85  AB		| 
 	SEP #$20		; $80EC86  E2 20	| 
@@ -1249,7 +1251,7 @@ CODE_80EC60:			;			| this uploads the title screen bg, text, etc
 	STZ.w $0218		; $80ECA4  9C 18 02	| RAM ADDRESS
 	STZ.w $021A		; $80ECA7  9C 1A 02	| RAM ADDRESS
 	LDA.w #$4000		; $80ECAA  A9 00 40	| 
-	STA.w $2118		; $80ECAD  8D 18 21	| 
+	STA.w $2118		; $80ECAD  8D 18 21	| looks like a typo... (luckily $2116 = x4000?)
 	LDY.w #$0380		; $80ECB0  A0 80 03	| 
 CODE_80ECB3:			;			| 
 	STZ.w $2118		; $80ECB3  9C 18 21	| 
@@ -1274,7 +1276,7 @@ CODE_80ECDD:			;			|
 	STX.b $80		; $80ECDD  86 80	| RAM ADDRESS
 	PHY			; $80ECDF  5A		| 
 	LDY.w #$0008		; $80ECE0  A0 08 00	| 
-CODE_80ECE3:			;			| 
+CODE_80ECE3:			;			| 2bpp GFX copied as 4BPP GFX here
 	LDA.l DATA_9BC203+$20,x	; $80ECE3  BF 23 C2 9B	| 
 	STA.w $2118		; $80ECE7  8D 18 21	| 
 	INX			; $80ECEA  E8		| 
@@ -1316,10 +1318,10 @@ CODE_80ED21:			;			|
 	LDA.w DATA_80EDDB,x	; $80ED2E  BD DB ED	| 
 	BNE CODE_80ED14		; $80ED31  D0 E1	| 
 	REP #$30		; $80ED33  C2 30	| 
-	LDX.w #$EF21		; $80ED35  A2 21 EF	| src = DATA_80EF21
+	LDX.w #DATA_80EF21	; $80ED35  A2 21 EF	| src = DATA_80EF21
 	LDY.w #$5260		; $80ED38  A0 60 52	| dst = $7E5260
 	LDA.w #$001F		; $80ED3B  A9 1F 00	| 
-	MVN $7E,$80		; $80ED3E  54 7E 80	| 
+	MVN $7E,DATA_80EF21>>16	; $80ED3E  54 7E 80	| 
 	PHK			; $80ED41  4B		| 
 	PLB			; $80ED42  AB		| 
 	SEP #$20		; $80ED43  E2 20	| 
@@ -1374,7 +1376,7 @@ CODE_80ED99:			;			|
 	BNE CODE_80ED90		; $80EDA6  D0 E8	| 
 	RTL			; $80EDA8  6B		| 
 
-CODE_80EDA9:			;			| 
+CODE_80EDA9:			;			| which of STEREO/MONAURAL to display on title
 	REP #$30		; $80EDA9  C2 30	| 
 	LDY.w #DATA_80EEAD	; $80EDAB  A0 AD EE	| 
 	LDA.w $1A00		; $80EDAE  AD 00 1A	| RAM ADDRESS
@@ -1383,7 +1385,7 @@ CODE_80EDA9:			;			|
 	LDY.w #DATA_80EEC7	; $80EDB6  A0 C7 EE	| 
 	RTS			; $80EDB9  60		| 
 
-CODE_80EDBA:			;			| 
+CODE_80EDBA:			;			| process stereo/mono output
 	REP #$30		; $80EDBA  C2 30	| 
 	LDY.w #$0009		; $80EDBC  A0 09 00	| 
 	LDA.w $1A00		; $80EDBF  AD 00 1A	| RAM ADDRESS
@@ -1398,8 +1400,8 @@ CODE_80EDCD:			;			|
 	JSL CODE_1D8004		; $80EDD6  22 04 80 1D	| 
 	RTS			; $80EDDA  60		| 
 
-DATA_80EDDB:			;			| 
-	dw $4063,$0E00,$0010	; $80EDDB		| 
+DATA_80EDDB:			;			| compressed MAP for title screen game logo
+	dw $4063,$0E00,$0010	; $80EDDB		| VRAMADDR,TILE,LENGTH (for TILE += 1)
 	dw $4073,$0E80,$000A	; $80EDE1		| 
 	dw $4083,$0E10,$0010	; $80EDE7		| 
 	dw $4093,$0E90,$000A	; $80EDED		| 
@@ -1421,48 +1423,46 @@ DATA_80EDDB:			;			|
 	dw $4159,$0ED4,$0004	; $80EE4D		| 
 	dw $0000		; $80EE53		| 
 
-DATA_80EE55:			;			| title screen layer 3 text
-	dw $4307
+DATA_80EE55:			; | title screen text tilemaps
+	dw $4307		; | "©1994  TNN / NHK SC" (layer 1)
 	dw $08ED,$08E1,$08E9,$08E9,$08E4,$0800,$0800,$08D4
 	dw $08CE,$08CE,$0800,$08EC,$0800,$08CE,$08C8,$08CB
 	dw $0800,$08D3,$08C3
 	dw $0000
-	dw $060C
+	dw $060C		; | "O *START"
 	dw $3C6A,$3000,$3005,$3053,$3054,$3041,$3052,$3054
 	dw $0000
-	dw $064E
+	dw $064E		; | "*REPLAY"
 	dw $3005,$3052,$3045,$3050,$304C,$3041,$3059
 	dw $0000
 	dw $0000
-
-DATA_80EEA7:			;			| title screen cursor positions
+DATA_80EEA7:			; | title screen cursor positions
 	dw $060C
 	dw $064C
 	dw $068C
-
-DATA_80EEAD:			;			| title screen "( STEREO )" text
+DATA_80EEAD:			; | "( STEREO )"
 	dw $068D
 	dw $306E,$3000,$3053,$3054,$3045,$3052,$3045,$304F
 	dw $3000,$306F
 	dw $0000
 	dw $0000
-DATA_80EEC7:			;			| title screen "(MONAURAL)" text
+DATA_80EEC7:			; | "(MONAURAL)"
 	dw $068D
 	dw $306E,$304D,$304F,$304E,$3041,$3055,$3052,$3041
 	dw $304C,$306F
 	dw $0000
 	dw $0000
 
-DATA_80EEE1:			;			| this uploads in place of below
+DATA_80EEE1:			; | this uploads in place of below
 	dw $3000,$3000,$3000,$3000,$3000,$3000,$3000,$3000
-DATA_80EEF1:			;			| title screen "(5 MIN.)" text
+DATA_80EEF1:			; | title screen "(5 MIN.)" text
 	dw $386E,$3865,$3800,$384D,$3849,$384E,$385B,$386F
 
-DATA_80EF01:			;			| PAL for title screen BG
+DATA_80EF01:			; | PAL for title screen BG
 	dw $0443,$04A4,$04C4,$10A6,$1107,$1D28,$1149,$1D4A
 	dw $1D6B,$298C,$1DAD,$29CD,$31CD,$2DF1,$3211,$3631
 
-DATA_80EF21:			;			| PAL for title screen game logo
+DATA_80EF21:			; | PAL for title screen game logo
 	dw $04C4,$08E5,$1106,$1948,$1D69,$25AB,$2DCC,$31EE
 	dw $3A2F,$4251,$4692,$4EB4,$56D5,$5B17,$6338,$6759
 
@@ -1520,11 +1520,11 @@ CODE_80EF91:			;			|
 	LDY.w #$0000		; $80EF9C  A0 00 00	| 
 CODE_80EF9F:			;			| 
 	STY.w $0270		; $80EF9F  8C 70 02	| RAM ADDRESS
-	BIT.w #$1080		; $80EFA2  89 80 10	| 
+	BIT.w #$1080		; $80EFA2  89 80 10	| check if start or A pressed
 	BEQ CODE_80EFE6		; $80EFA5  F0 3F	| 
 	CPY.w #$0002		; $80EFA7  C0 02 00	| 
 	BEQ CODE_80EFBB		; $80EFAA  F0 0F	| 
-	LDA.w #$0019		; $80EFAC  A9 19 00	| 
+	LDA.w #$0019		; $80EFAC  A9 19 00	| SFX for choosing title screen item (except 3rd)
 	JSL CODE_808968		; $80EFAF  22 68 89 80	| 
 	LDA.w #$8000		; $80EFB3  A9 00 80	| 
 	TSB.w $0202		; $80EFB6  0C 02 02	| RAM ADDRESS
@@ -1534,7 +1534,7 @@ CODE_80EFBB:			;			| handles toggling STEREO/MONAURAL
 	EOR.w #$4000		; $80EFBE  49 00 40	| 
 	STA.w $1A00		; $80EFC1  8D 00 1A	| RAM ADDRESS
 	JSR CODE_80EDBA		; $80EFC4  20 BA ED	| 
-	LDA.w #$0018		; $80EFC7  A9 18 00	| 
+	LDA.w #$0018		; $80EFC7  A9 18 00	| SFX for toggling STEREO/MONAURAL
 	JSL CODE_808968		; $80EFCA  22 68 89 80	| 
 	JSR CODE_80EDA9		; $80EFCE  20 A9 ED	| 
 	PHK			; $80EFD1  4B		| 
@@ -1571,7 +1571,7 @@ CODE_80EFE6:			;			|
 	JSL CODE_808AA4		; $80F011  22 A4 8A 80	| 
 	REP #$30		; $80F015  C2 30	| 
 	PLA			; $80F017  68		| 
-	LDA.w #$0018		; $80F018  A9 18 00	| 
+	LDA.w #$0018		; $80F018  A9 18 00	| SFX for moving up/down on title screen menu
 	JSL CODE_808968		; $80F01B  22 68 89 80	| 
 	JSR CODE_80F023		; $80F01F  20 23 F0	| 
 CODE_80F022:			;			| 
@@ -1586,9 +1586,9 @@ CODE_80F023:			;			|
 CODE_80F031:			;			| 
 	RTS			;			| 
 
-DATA_80F032:			;			| nullifies below
+DATA_80F032:			; | nullifies below
 	dw $0000
-DATA_80F034:			;			| cursor tile
+DATA_80F034:			; | cursor tile
 	dw $3C6A
 
 
@@ -1682,16 +1682,17 @@ CODE_81D397:			;-----------------------|
 	STZ.w $0BC8		; $81D399  9C C8 0B	| RAM ADDRESS
 	RTL			; $81D39C  6B		| 
 
-DATA_81EC32:			;-----------------------| PAL
-	dw $0188,$28C6,$7F9D,$7E7A,$0188,$18CA,$45BF,$34DF
-	dw $0188,$1926,$43FC,$03F7,$0188,$495A,$665F,$7F9E
-
-CODE_81EC72:			;-----------------------| 
+DATA_81EC32:			;-----------------------| PAL for layer 3 text
+	dw $0188,$28C6,$7F9D,$7E7A
+	dw $0188,$18CA,$45BF,$34DF
+	dw $0188,$1926,$43FC,$03F7
+	dw $0188,$495A,$665F,$7F9E
+CODE_81EC72:			;			| upload layer 3 palette
 	REP #$30		; $81EC72  C2 30	| 
-	LDX.w #$EC32		; $81EC74  A2 32 EC	| src = DATA_81EC32
+	LDX.w #DATA_81EC32	; $81EC74  A2 32 EC	| src = DATA_81EC32
 	LDY.w #$5220		; $81EC77  A0 20 52	| dst = $7E5220
 	LDA.w #$001F		; $81EC7A  A9 1F 00	| 
-	MVN $7E,$81		; $81EC7D  54 7E 81	| 
+	MVN $7E,DATA_81EC32>>16	; $81EC7D  54 7E 81	| 
 	RTL			; $81EC80  6B		| 
 
 DATA_81F218:			;-----------------------| 
@@ -1782,8 +1783,8 @@ CODE_82C3BD:			;-----------------------|
 	STA.l $7EAFFE		; $82C3D1  8F FE AF 7E	| RAM ADDRESS
 	RTL			; $82C3D5  6B		| 
 
-DATA_82D996:			;-----------------------| 
-	db $00,$8F
+DATA_82D996:			; | initial PPU reg parameters for TNN logo
+	db $00,$8F		; | format: 21xx,value
 	db $05,$01
 	db $06,$00
 	db $07,$40
@@ -1804,7 +1805,7 @@ DATA_82D996:			;-----------------------|
 	db $33,$00
 	db $FF
 
-CODE_82D9BD:			;-----------------------| load/display the TNN logo
+CODE_82D9BD:			;-----------------------| TNN logo code (load/display/wait)
 	REP #$30		; $82D9BD  C2 30	| 
 	PHK			; $82D9BF  4B		| 
 	PLB			; $82D9C0  AB		| 
@@ -1832,7 +1833,7 @@ CODE_82D9E4:			;			|
 	STA.w $2116		; $82D9ED  8D 16 21	| 
 	LDX.w #$0000		; $82D9F0  A2 00 00	| 
 CODE_82D9F3:			;			| 
-	LDA.l DATA_97E660,x	; $82D9F3  BF 60 E6 97	| 
+	LDA.l DATA_97E660,x	; $82D9F3  BF 60 E6 97	| TNN logo graphics
 	STA.w $2118		; $82D9F7  8D 18 21	| 
 	INX			; $82D9FA  E8		| 
 	INX			; $82D9FB  E8		| 
@@ -1849,33 +1850,33 @@ CODE_82DA0A:			;			|
 	STA.w $2116		; $82DA13  8D 16 21	| 
 	LDX.w #$0000		; $82DA16  A2 00 00	| 
 CODE_82DA19:			;			| 
-	LDA.w DATA_82DABA,x	; $82DA19  BD BA DA	| 
+	LDA.w DATA_82DABA,x	; $82DA19  BD BA DA	| TNN logo tilemap
 	STA.w $2118		; $82DA1C  8D 18 21	| 
 	INX			; $82DA1F  E8		| 
 	INX			; $82DA20  E8		| 
 	CPX.w #$0180		; $82DA21  E0 80 01	| 
 	BCC CODE_82DA19		; $82DA24  90 F3	| 
 	PHB			; $82DA26  8B		| 
-	LDX.w #$E640		; $82DA27  A2 40 E6	| src = DATA_97E640
+	LDX.w #DATA_97E640	; $82DA27  A2 40 E6	| src = DATA_97E640
 	LDY.w #$5200		; $82DA2A  A0 00 52	| dst = $7E5200
 	LDA.w #$001F		; $82DA2D  A9 1F 00	| 
-	MVN $7E,$97		; $82DA30  54 7E 97	| might be palette for TNN logo
+	MVN $7E,DATA_97E640>>16	; $82DA30  54 7E 97	| TNN logo palette
 	PLB			; $82DA33  AB		| 
 	LDX.w #$001E		; $82DA34  A2 1E 00	| 
-CODE_82DA37:			;			| 
+CODE_82DA37:			;			| inverse the logo palette.
 	LDA.l $7E5200,x		; $82DA37  BF 00 52 7E	| RAM ADDRESS
-	EOR.w #$7FFF		; $82DA3B  49 FF 7F	| 
+	EOR.w #$7FFF		; $82DA3B  49 FF 7F	| why not have inverse as default? prolly lazy fix
 	STA.l $7E5200,x		; $82DA3E  9F 00 52 7E	| RAM ADDRESS
 	DEX			; $82DA42  CA		| 
 	DEX			; $82DA43  CA		| 
 	BPL CODE_82DA37		; $82DA44  10 F1	| 
-	LDY.w #$8A98		; $82DA46  A0 98 8A	| INDIRECT ROM (to CODE_808A99)
+	LDY.w #CODE_808A99-1	; $82DA46  A0 98 8A	| 
 	JSL CODE_808A04		; $82DA49  22 04 8A 80	| 
-	LDY.w #$8A41		; $82DA4D  A0 41 8A	| INDIRECT ROM (to CODE_808A42)
+	LDY.w #CODE_808A42-1	; $82DA4D  A0 41 8A	| 
 	JSL CODE_808A04		; $82DA50  22 04 8A 80	| 
-	LDY.w #$8A62		; $82DA54  A0 62 8A	| INDIRECT ROM (to CODE_808A63)
+	LDY.w #CODE_808A63-1	; $82DA54  A0 62 8A	| 
 	JSL CODE_808A04		; $82DA57  22 04 8A 80	| 
-	LDY.w #$8A80		; $82DA5B  A0 80 8A	| INDIRECT ROM (to CODE_808A81)
+	LDY.w #CODE_808A81-1	; $82DA5B  A0 80 8A	| 
 	JSL CODE_808A04		; $82DA5E  22 04 8A 80	| 
 	REP #$30		; $82DA62  C2 30	| 
 	LDA.w #$0106		; $82DA64  A9 06 01	| 
@@ -1892,7 +1893,7 @@ CODE_82DA37:			;			|
 	LDA.b #$0F		; $82DA83  A9 0F	| 
 	STA.w $2100		; $82DA85  8D 00 21	| 
 	REP #$30		; $82DA88  C2 30	| 
-	LDY.w #$00F0		; $82DA8A  A0 F0 00	| 
+	LDY.w #$00F0		; $82DA8A  A0 F0 00	| how long TNN logo should display
 CODE_82DA8D:			;			| 
 	PHY			; $82DA8D  5A		| 
 	TYA			; $82DA8E  90		| 
@@ -1903,16 +1904,16 @@ CODE_82DA8D:			;			|
 CODE_82DA99:			;			| 
 	JSL CODE_808178		; $82DA99  22 78 81 80	| game mode jumper (return next frame)
 	REP #$30		; $82DA9D  C2 30	| 
-	LDY.w #$8BBF		; $82DA9F  A0 BF 8B	| INDIRECT ROM (to CODE_808BC0)
+	LDY.w #CODE_808BC0-1	; $82DA9F  A0 BF 8B	| 
 	JSL CODE_808A04		; $82DAA2  22 04 8A 80	| 
 	LDA.w $0244		; $82DAA6  AD 44 02	| RAM ADDRESS
 	PLY			; $82DAA9  7A		| 
-	BIT.w #$9080		; $82DAAA  89 80 90	| 
-	BNE CODE_82DAB2		; $82DAAD  D0 03	| 
+	BIT.w #$9080		; $82DAAA  89 80 90	|\ if B, start, or A pressed on port 1
+	BNE CODE_82DAB2		; $82DAAD  D0 03	|/ skip TNN logo
 	DEY			; $82DAAF  88		| 
 	BNE CODE_82DA8D		; $82DAB0  D0 DB	| 
 CODE_82DAB2:			;			| 
-	LDY.w #$8A26		; $82DAB2  A0 26 8A	| INDIRECT ROM (to CODE_808A27)
+	LDY.w #CODE_808A27-1	; $82DAB2  A0 26 8A	| 
 	JSL CODE_808A04		; $82DAB5  22 04 8A 80	| 
 	RTL			; $82DAB9  6B		| 
 

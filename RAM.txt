@@ -24,18 +24,21 @@
 7E0238	2 bytes		palette index to upload to (low byte). if high byte negative, no palette update
 7E023A	2 bytes		number of colors to update
 
-7E0240	2 bytes		port 1 "raw" controller data
-7E0242	2 bytes		port 2 "raw" controller data
-7E0244  2 bytes		port 1 pressed
-7E0246  2 bytes		port 2 pressed
-7E0248  2 bytes		port 1 held
-7E024A	2 bytes		port 2 held
-7E024C  2 bytes		copy of port 1 "raw" controller data?
-7E024E  2 bytes		copy of port 2 "raw" controller data?
+7E0240	2 bytes		joypad port 1 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
+7E0242	2 bytes		joypad port 2 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
+7E0244  2 bytes		joypad port 1 pressed (aka 1 frame)
+7E0246  2 bytes		joypad port 2 pressed (aka 1 frame)
+7E0248  2 bytes		inverse of joypad port 1 data
+7E024A	2 bytes		inverse of joypad port 2 data
+7E024C  2 bytes		copy of joypad port 1 data
+7E024E  2 bytes		copy of joypad port 2 data
+
+7E0250	2 bytes		16bit frame counter. resets on blackscreens
 
 7E025B	1 byte		might be tileset?
 
 7E0270  2 bytes		title screen cursor position (0,1,2)
+7E0272	2 bytes		???
 7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
 
 7E0280	until 02F0	VRAM DMA buffer. 2 byte length, 2 byte vramaddr, 3 byte srcaddr. so 7 bytes each
@@ -50,12 +53,14 @@
 7E0B98	x15 bytes	HDMA table (2111-2112, 2 regs write twice each) [ch7]
 7E0BAD  x3 bytes	maybe empty, or extension for above
 
-7E0BB0	
+7E0BB0	2 bytes		???
 
 7E0BC0	1 byte		brightness mirror, for water? (used in IRQ only)
 7E0BC2	2 bytes		current animation frame for water (high byte; low byte is clear)
 7E0BC4	2 bytes		timer for water animation? (low byte; high byte is clear). basically added to above
 7E0BC6	2 bytes		frames of animation for water (high byte; low byte is clear). 4 for calm, 6 for wave
+
+7E0BC8	2 bytes		???
 
 7E1000	??? bytes	GFX for fishing line uploaded here (since theyre dynamic)
 
