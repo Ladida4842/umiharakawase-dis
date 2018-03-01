@@ -24,7 +24,7 @@ RESET:				;-----------------------|
 	REP #$10		; $808024  C2 10	| 
 	LDX.w #$0007		; $808026  A2 07 00	| 
 CODE_808029:			;			| 
-	LDA.w DATA_80845C,x	; $808029  BD 5C 84	| NO clue what its doing here
+	LDA.w DATA_80845C,x	; $808029  BD 5C 84	| check Shift-JIS string
 	CMP.w $0208,x		; $80802C  DD 08 02	| RAM ADDRESS
 	BNE CODE_808036		; $80802F  D0 05	| 
 	DEX			; $808031  CA		| 
@@ -62,7 +62,7 @@ CODE_808067:			;			|
 	SEP #$20		; $80806F  E2 20	| 
 	LDX.w #$0007		; $808071  A2 07 00	| 
 CODE_808074:			;			| 
-	LDA.w DATA_80845C,x	; $808074  BD 5C 84	| 
+	LDA.w DATA_80845C,x	; $808074  BD 5C 84	| store Shift-JIS string
 	STA.w $0208,x		; $808077  9D 08 02	| RAM ADDRESS
 	DEX			; $80807A  CA		| 
 	BPL CODE_808074		; $80807B  10 F7	| 
@@ -73,9 +73,9 @@ CODE_808085:			;			|
 	STZ.w $2118		; $808085  9C 18 21	| 
 	DEX			; $808088  CA		| 
 	BNE CODE_808085		; $808089  D0 FA	| 
-	REP #$30		; $80808B  C2 30	| 
-	LDX.w #$1E38		; $80808D  A2 38 1E	| this code is the start
-	LDY.w #$1F00		; $808090  A0 00 1F	| of some stack BS
+	REP #$30		; $80808B  C2 30	| stack setup code below
+	LDX.w #$1E38		; $80808D  A2 38 1E	| 
+	LDY.w #$1F00		; $808090  A0 00 1F	| 
 CODE_808093:			;			| 
 	LDA.w #$8000		; $808093  A9 00 80	| 
 	STA.b $06,x		; $808096  95 06	| RAM ADDRESS
@@ -501,7 +501,7 @@ CODE_808444:			;			|
 	PLA			; $80845A  68		| 
 	RTI			; $80845B  40		| 
 
-DATA_80845C:			;-----------------------| 
+DATA_80845C:			;-----------------------| game title in Shift-JIS (海腹川背)
 	db $8A,$43,$95,$A0,$90,$EC,$94,$77
 
 DATA_808464:			;-----------------------| 1st byte is $21xx, 2nd is value
@@ -586,6 +586,12 @@ CODE_8084DF:			;-----------------------| start here
 	STZ.w $025B		; $8084F9  9C 5B 02	| RAM ADDRESS
 	REP #$30		; $8084FC  C2 30	| 
 	JSR CODE_80EBC6		; $8084FE  20 C6 EB	| title screen stuff
+	REP #$30		; $808501  C2 30	|\ A has cursor pos (high bit set if 5 MIN)
+	BIT.w #$00FF		; $808503  89 FF 00	|| 
+f	BEQ 13			; $808506  F0 13	|| START
+	BMI 0c			; $808508  30 0C	|/ START (5 MIN)
+	JSR CODE_808840		; $80850A  20 40 88	| 
+
 
 
 CODE_8087F6:			;-----------------------| 
@@ -615,6 +621,27 @@ CODE_8087F6:			;-----------------------|
 	STA.w $022C		; $808837  8D 2C 02	| RAM ADDRESS
 	STA.w $0238		; $80883A  8D 38 02	| RAM ADDRESS
 	RTS			; $80883D  60		| 
+
+CODE_80883E:			;-----------------------| ?
+	CLC			; $80883E  18		| w
+	RTS			; $80883F  60		| 
+
+CODE_808840:			;-----------------------| code for REPLAY menu
+	JSR CODE_808A27		; $808840  20 27 8A	| 
+	JSR CODE_80E49A		; $808843  20 9A E4	| 
+	JSR CODE_80E501		; $808846  20 01 E5	| 
+	JSR CODE_809022		; $808849  20 22 90	| 
+	JSR CODE_808A81		; $80884C  20 81 8A	| 
+	REP #$30		; $80884F  C2 30	| 
+	STZ.w $0204		; $808851  9C 04 02	| RAM ADDRESS
+	BRA CODE_80885E		; $808854  80 08	| 
+CODE_808854:			;			| 
+	REP #$30		; $808856  C2 30	| 
+	LDA.w #$8000		; $808858  A9 00 80	| 
+	STA.w $0204		; $80885B  8D 04 02	| RAM ADDRESS
+CODE_80885E:			;			| 
+	JSR CODE_808A11		; $80885E  20 11 8A	| 
+	JSL CODE_82AB1E		; $808861  22 1E AB 82	| 
 
 
 CODE_8088E5:			;-----------------------| 
@@ -654,7 +681,7 @@ CODE_80892F:			;			|
 CODE_808937:			;			| 
 	LDA.w $1A00		; $808937  AD 00 1A	| RAM ADDRESS
 	AND.w #$FFC0		; $80893A  29 C0 FF	| 
-	ORA $01,s		; $80893D  03 01	| 
+	ORA.b $01,s		; $80893D  03 01	| 
 	ORA.w #$8000		; $80893F  09 00 80	| 
 	STA.w $1A00		; $808942  8D 00 1A	| RAM ADDRESS
 	LDA.w #$0001		; $808945  A9 01 00	| 
@@ -724,7 +751,7 @@ CODE_808A04:			;-----------------------| used by other banks to jump to addrs in
 CODE_808A10:			;			| 
 	RTL			; $808A10  6B		| 
 
-CODE_808A11:			;-----------------------| 
+CODE_808A11:			;-----------------------| turn screen on
 	SEP #$20		; $808A11  E2 20	| 
 	LDA.b #$80		; $808A13  A9 80	| 
 	TSB.w $0201		; $808A15  0C 01 02	| RAM ADDRESS
@@ -738,7 +765,7 @@ CODE_808A11:			;-----------------------|
 
 CODE_808A27:			;-----------------------| 
 	JSL CODE_808178		; $808A27  22 78 81 80	| return next frame
-CODE_808A2B:			;-----------------------| NMI & F-blank enable
+CODE_808A2B:			;-----------------------| NMI & F-blank enable (turn screen off)
 	SEI			; $808A2B  78		| 
 	SEP #$20		; $808A2C  E2 20	| 
 	LDA.b #$80		; $808A2E  A9 80	| 
@@ -792,7 +819,7 @@ CODE_808A6E:			;			|
 	BNE CODE_808A6E		; $808A7E  D0 EE	| 
 	RTS			; $808A80  60		| 
 
-CODE_808A81:			;-----------------------| 
+CODE_808A81:			;-----------------------| upload palette to CGRAM
 	SEP #$20		; $808A81  E2 20	| 
 	REP #$10		; $808A83  C2 10	| 
 	STZ.w $2121		; $808A85  9C 21 21	| 
@@ -856,6 +883,21 @@ CODE_808BC0:			;-----------------------| joypad RAM updater
 	EOR.w #$FFFF		; $808BE0  49 FF FF	| 
 	STA.w $024A		; $808BE3  8D 4A 02	| 
 	RTS			; $808BE6  60		| 
+
+
+CODE_809022:			;-----------------------| place all sprites offscreen
+	REP #$30		; $809022  C3 30	| 
+	LDX.w #$1BE0		; $809024  A2 E0 1B	| INDIRECT RAM ADDRESS
+	LDA.w #$E000		; $809027  A9 00 E0	| 
+CODE_80902A:			;			| 
+	STA.b $00,x		; $80902A  95 00	| 
+	INX			; $80902C  E8		| 
+	INX			; $80902D  E8		| 
+	INX			; $80902E  E8		| 
+	INX			; $80902F  E8		| 
+	CPX.w #$1DE0		; $809030  E0 E0 1D	| INDIRECT RAM ADDRESS
+	BNE CODE_80902A		; $809033  D0 F5	| 
+	RTS			; $809035  60		| 
 
 
 CODE_809084:			;-----------------------| 
@@ -1076,6 +1118,18 @@ DATA_80E568:			; | HDMA table for layer 2 X/Y (static)
 	db $01 : dw $0100,$011F
 	db $00
 
+DATA_80E595:			; | HDMA table for mainscreen (static), used for REPLAY menu in level
+	db $50,$13		; | L3 disabled
+	db $40,$17		; | show REPLAY menu
+	db $01,$13		; | L3 disabled
+	db $00
+
+DATA_80E59C:			; | HDMA table for mainscreen (static), used for REPLAY menu in titlescreen
+	db $68,$13		; | L3 disabled
+	db $40,$17		; | show REPLAY menu
+	db $01,$13		; | L3 disabled
+	db $00
+
 DATA_80E5A3:			; | HDMA table for mainscreen (uploaded to RAM), used during level
 	db $40,$13		; | L3 disabled
 	db $10,$17		; | show lives, score, time
@@ -1201,12 +1255,13 @@ CODE_80EBC6:			;-----------------------| title screen code
 	STZ.w $0204		; $80EBFE  9C 04 02	| RAM ADDRESS
 	STZ.w $0250		; $80EC01  9C 50 02	| RAM ADDRESS
 	STZ.w $0270		; $80EC04  9C 70 02	| RAM ADDRESS
-	LDA.w #$05DC		; $80EC07  A9 DC 05	| 
+	LDA.w #$05DC		; $80EC07  A9 DC 05	| title screen timer
 	STA.w $0272		; $80EC0A  8D 72 02	| RAM ADDRESS
 	STZ.w $0274		; $80EC0D  9C 74 02	| RAM ADDRESS
 	JSR CODE_80EDBA		; $80EC10  20 BA ED	| 
 	LDA.w #$0005		; $80EC13  A9 05 00	| title screen song #
 	JSL CODE_808907		; $80EC16  22 07 89 80	| 
+CODE_80EC1A:			;			| 
 	SEP #$20		; $80EC1A  E2 20	| 
 	LDA.b #$80		; $80EC1C  A9 80	| 
 	TSB.w $0201		; $80EC1E  0C 01 02	| RAM ADDRESS
@@ -1218,6 +1273,24 @@ CODE_80EBC6:			;-----------------------| title screen code
 	INC.w $0250		; $80EC2E  EE 50 02	| RAM ADDRESS
 	JSR CODE_808BC0		; $80EC31  20 C0 8B	| 
 	JSR CODE_80EF41		; $80EC34  20 41 EF	| 
+	JSL CODE_81D361		; $80EC37  22 61 D3 81	| 
+	REP #$30		; $80EC3B  C2 30	| 
+	LDA.w $0202		; $80EC3D  AD 02 02	| RAM ADDRESS
+	BMI CODE_80EC4D		; $80EC40  30 0B	| 
+	DEC.w $0272		; $80EC42  CE 72 02	| RAM ADDRESS
+	BNE CODE_80EC1A		; $80EC45  D0 D3	| 
+	LDA.w #$FFFF		; $80EC47  A9 FF FF	| 
+	STA.w $0270		; $80EC4A  8D 70 02	| RAM ADDRESS
+CODE_80EC4D:			;			| 
+	REP #$30		; $80EC4D  C2 30	| 
+	LDA.w $0270		; $80EC4F  AD 70 02	| RAM ADDRESS
+	BNE CODE_80EC5F		; $80EC52  D0 0B	| 
+	LDY.w $0274		; $80EC54  AC 74 02	| RAM ADDRESS
+	CPY.w #$0064		; $80EC57  C0 64 00	| 
+	BNE CODE_80EC5F		; $80EC5A  D0 03	| 
+	ORA.w #$8000		; $80EC5C  09 00 80	| 
+CODE_80EC5F:			;			| 
+	RTS			; $80EC5F  60		| 
 	
 
 CODE_80EC60:			;			| this uploads the title screen bg, text, etc
@@ -1473,7 +1546,7 @@ CODE_80EF41:			;			| title screen menu handler
 	LDY.w $0270		; $80EF45  AC 70 02	| RAM ADDRESS
 	PHY			; $80EF48  5A		| 
 	LDA.w $0244		; $80EF49  AD 44 02	| RAM ADDRESS
-	BIT.w #$2000		; $80EF4C  89 00 20	| 
+	BIT.w #$2000		; $80EF4C  89 00 20	| check if select is pressed
 	BEQ CODE_80EF84		; $80EF4F  F0 33	| 
 	PHA			; $80EF51  48		| 
 	PHX			; $80EF52  DA		| 
@@ -1677,6 +1750,23 @@ warnpc $818000
 
 org $818000
 
+CODE_81D361:			;-----------------------| possibly RNG generator
+	REP #$30		; $81D361  C2 30	| 
+	LDA.w $023E		; $81D363  AD 3E 02	| RAM ADDRESS
+	CLC			; $81D366  18		| 
+	ADC.w #$8765		; $81D367  69 65 87	| INDIRECT ROM ADDRESS?
+	ROL			; $81D36A  2A		| 
+	XBA			; $81D36B  EB		| 
+	EOR.w #$BCDE		; $81D36C  49 DE BC	| ?
+	ROR			; $81D36F  6A		| 
+	ROR			; $81D370  6A		| 
+	ADC.w #$1969		; $81D371  69 69 19	| 
+	ROR			; $81D374  6A		| 
+	ADC.w $023E		; $81D375  6D 3E 02	| RAM ADDRESS
+	STA.w $023E		; $81D378  8D 3E 02	| RAM ADDRESS
+	RTL			; $81D37B  6B		| 
+
+
 CODE_81D397:			;-----------------------| 
 	REP #$30		; $81D397  C2 30	| 
 	STZ.w $0BC8		; $81D399  9C C8 0B	| RAM ADDRESS
@@ -1772,6 +1862,966 @@ warnpc $828000
 
 
 org $828000
+
+CODE_82AB1E:			;-----------------------| REPLAY menu setup
+	REP #$30		; $82AB1E  C2 30	| 
+	LDX.w #$AD77		; $82AB20  A2 77 AD	| INDIRECT ROM ADDRESS?
+	BRA CODE_82AB2A		; $82AB23  80 05	| 
+CODE_82AB25:			;			| 
+	REP #$30		; $82AB25  C2 30	| 
+	LDX.w #$AD5B		; $82AB27  A2 5B AD	| INDIRECT ROM ADDRESS?
+CODE_82AB2A:			;			| 
+	STX.b $96		; $82AB2A  86 96	| RAM ADDRESS
+	PHK			; $82AB2C  4B		| 
+	PLB			; $82AB2D  AB		| 
+	SEP #$20		; $82AB2E  E2 20	| 
+	LDA.b #$80		; $82AB30  A9 80	| 
+	TSB.w $0201		; $82AB32  0C 01 02	| RAM ADDRESS
+	JSL CODE_808178		; $82AB35  22 78 81 80	| return next frame
+	REP #$30		; $82AB39  C2 30	| 
+	LDA.w #$0000		; $82AB3B  A9 00 00	| 
+	STA.l $7E560C		; $82AB3E  8F 0C 56 7E	| RAM ADDRESS
+	LDX.w #$1BE0		; $82AB42  A2 E0 1B	| INDIRECT RAM ADDRESS
+	LDY.w #$000C		; $82AB45  A0 0C 00	| 
+	LDA.w #$E000		; $82AB48  A9 00 E0	| 
+CODE_82AB4B:			;			| 
+	STA.b $00,x		; $82AB4B  95 00	| 
+	INX			; $82AB4D  E8		| 
+	INX			; $82AB4E  E8		| 
+	INX			; $82AB4F  E8		| 
+	INX			; $82AB50  E8		| 
+	DEY			; $82AB51  88		| 
+	BNE CODE_82AB4B		; $82AB52  D0 F7	| 
+	LDX.w #$1C20		; $82AB54  A2 20 1C	| INDIRECT RAM ADDRESS
+	LDY.w #$0007		; $82AB57  A0 07 00	| 
+	LDA.w #$E000		; $82AB5A  A9 00 E0	| 
+CODE_82AB5D:			;			| 
+	STA.b $00,x		; $82AB5D  95 00	| 
+	INX			; $82AB5F  E8		| 
+	INX			; $82AB60  E8		| 
+	INX			; $82AB61  E8		| 
+	INX			; $82AB62  E8		| 
+	DEY			; $82AB63  88		| 
+	BNE CODE_82AB5D		; $82AB64  D0 F7	| 
+	JSL CODE_808178		; $82AB66  22 78 81 80	| return next frame
+	REP #$30		; $82AB6A  C2 30	| 
+	LDX.w #$01FE		; $82AB6C  A2 FE 01	| 
+CODE_82AB6F:			;			| below code darkens palette except for L3 colors
+	TXA			; $82AB6F  8A		| 
+	AND.w #$01E0		; $82AB70  29 E0 01	| 
+	TAY			; $82AB73  A8		| 
+	LDA.l $7E5200,x		; $82AB74  BF 00 52 7E	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AB78  9F 00 54 7E	| RAM ADDRESS
+	CPY.w #$0020		; $82AB7C  C0 20 00	| 
+	BEQ CODE_82AB85		; $82AB7F  F0 04	| 
+	LSR			; $82AB81  4A		|\ clear high bit of each color component
+	AND.w #$3DEF		; $82AB82  29 EF 3D	|/ #%0011110111101111
+CODE_82AB85:			;			| 
+	STA.l $7E5200,x		; $82AB85  9F 00 52 7E	| RAM ADDRESS
+	DEX			; $82AB89  CA		| 
+	DEX			; $82AB8A  CA		| 
+	BPL CODE_82AB6F		; $82AB8B  10 E2	| 
+	LDA.w #$0000		; $82AB8D  A9 00 00	| 
+	STA.w $0238		; $82AB90  8D 38 02	| RAM ADDRESS
+	LDA.w #$0100		; $82AB93  A9 00 01	| 
+	STA.w $023A		; $82AB96  8D 3A 02	| RAM ADDRESS
+	JSL CODE_808178		; $82AB99  22 78 81 80	| return next frame
+	REP #$30		; $82AB9D  C2 30	| 
+	LDX.w #$01FE		; $82AB9F  A2 FE 01	| 
+CODE_82ABA2:			;			| restore palette (but not uploaded to CGRAM yet)
+	LDA.l $7E5400,x		; $82ABA2  BF 00 54 7E	| RAM ADDRESS
+	STA.l $7E5200,x		; $82ABA6  9F 00 52 7E	| RAM ADDRESS
+	DEX			; $82ABAA  CA		| 
+	DEX			; $82ABAB  CA		| 
+	BPL CODE_82ABA2		; $82ABAC  10 F4	| 
+	REP #$30		; $82ABAE  C2 30	| 
+	LDA.w #DATA_9BC203>>16	; $82ABB0  A9 9B 00	| 
+	PHA			; $82ABB3  48		| 
+	LDA.w #DATA_9BC203+$20	; $82ABB4  A9 23 C2	| 
+	LDX.w #$0010		; $82ABB7  A2 10 00	| 
+	LDY.w #$05E0		; $82ABBA  A0 E0 05	| 
+	JSL CODE_808AA4		; $82ABBD  22 A4 8A 80	| 
+	LDA.w #DATA_9BC203+$700	; $82ABC1  A9 03 C9	| 
+	LDX.w #$0440		; $82ABC4  A2 40 04	| 
+	LDY.w #$0080		; $82ABC7  A0 80 00	| 
+	JSL CODE_808AA4		; $82ABCA  22 A4 8A 80	| 
+	LDA.w #DATA_9BC203+$780	; $82ABCE  A9 83 C9	| 
+	LDX.w #$04E0		; $82ABD1  A2 E0 04	| 
+	LDY.w #$0040		; $82ABD4  A0 40 00	| 
+	JSL CODE_808AA4		; $82ABD7  22 A4 8A 80	| 
+	PLA			; $82ABDB  68		| 
+	LDX.w #$01FE		; $82ABDC  A2 FE 01	| 
+	LDA.w #$0000		; $82ABDF  A9 00 00	| 
+CODE_82ABE2:			;			| clear out tilemap buffer
+	STA.l $7E5400,x		; $82ABE2  9F 00 54 7E	| RAM ADDRESS
+	DEX			; $82ABE6  CA		| 
+	DEX			; $82ABE7  CA		| 
+	BPL CODE_82ABE2		; $82ABE8  10 F8	| 
+	LDA.w #$007E		; $82ABEA  A9 7E 00	| 
+	PHA			; $82ABED  48		| 
+	LDA.w #$5400		; $82ABEE  A9 00 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0300		; $82ABF1  A2 00 03	| 
+	LDY.w #$0200		; $82ABF4  A0 00 02	| 
+	JSL CODE_808AA4		; $82ABF7  22 A4 8A 80	| upload tilemap to VRAM buffer (effectively clear L3)
+	PLA			; $82ABFB  68		| 
+	SEP #$20		; $82ABFC  E2 20	| 
+	LDA.b #$60		; $82ABFE  A9 60	| no L3 X/Y HDMA
+	STA.w $021C		; $82AC00  8D 1C 02	| RAM ADDRESS
+	JSL CODE_808178		; $82AC03  22 78 81 80	| return next frame
+	REP #$30		; $82AC07  C2 30	| 
+	LDA.w $0204		; $82AC09  AD 04 02	| RAM ADDRESS
+	ASL			; $82AC0C  0A		| 
+	LDA.w #DATA_80E595	; $82AC0D  A9 95 E5	| 
+	LDY.w #$006F		; $82AC10  A0 6F 00	| REPLAY menu Y pos in level
+	BCS CODE_82AC1B		; $82AC13  B0 06	| 
+	LDA.w #DATA_80E59C	; $82AC15  A9 9C E5	| 
+	LDY.w #$0057		; $82AC18  A0 57 00	| REPLAY menu Y pos on title screen
+CODE_82AC1B:			;			| 
+	STA.w $4362		; $82AC1B  8D 62 43	| 
+	LDA.w #DATA_80E595>>16	; $82AC1E  A9 80 00	| 
+	STA.w $4364		; $82AC21  8D 64 43	| 
+	SEP #$20		; $82AC24  E2 20	| 
+	STZ.w $2109		; $82AC26  9C 09 21	| 
+	TYA			; $82AC29  98		| 
+	STA.w $2112		; $82AC2A  8D 12 21	| 
+	STZ.w $2112		; $82AC2D  9C 12 21	| 
+	STZ.w $2111		; $82AC30  9C 11 21	| 
+	STZ.w $2111		; $82AC33  9C 11 21	| 
+	REP #$20		; $82AC36  C2 20	| 
+	LDA.w #$000F		; $82AC38  A9 0F 00	| 
+	STA.w $0BC0		; $82AC3B  8D C0 0B	| RAM ADDRESS
+	REP #$30		; $82AC3E  C2 30	| 
+	LDX.w #$01FE		; $82AC40  A2 FE 01	| 
+	LDA.w #$0000		; $82AC43  A9 00 00	| 
+CODE_82AC46:			;			| clear out tilemap buffer again
+	STA.l $7E5400,x		; $82AC46  9F 00 54 7E	| 
+	DEX			; $82AC4A  CA		| 
+	DEX			; $82AC4B  CA		| 
+	BPL CODE_82AC46		; $82AC4C  10 F8	| 
+	JSR CODE_82C1E5		; $82AC4E  20 E5 C1	| SRAM stuff
+a	BCC 0d			; $82AC51  90 0D	| carry determines ???
+	LDA.w #CODE_82AEF6	; $82AC53  A9 F6 AE	| storing ROM loc?
+	STA.b $90		; $82AC56  85 90	| 
+	LDY.w #DATA_82BF93	; $82AC58  A0 93 BF	| 
+	JSR CODE_82B303		; $82AC5B  20 03 B3	| 
+
+
+
+CODE_82AD8F:			;-----------------------| 
+	REP #$30		; $82AD8F  C2 30	| 
+	LDX.w #$000E		; $82AD91  A2 0E 00	| 
+CODE_82AD94:			;			| 
+	LDA.b $80,x		; $82AD94  B5 80	| RAM ADDRESS
+	PHA			; $82AD96  48		| 
+	DEX			; $82AD97  CA		| 
+	DEX			; $82AD98  CA		| 
+	BPL CODE_82AD94		; $82AD99  10 F9	| 
+	LDA.w $0240		; $82AD9B  AD 40 02	| RAM ADDRESS
+	STA.w $0276		; $82AD9E  8D 76 02	| RAM ADDRESS
+	JSR CODE_82ADDF		; $82ADA1  20 DF AD	| 
+	JSL CODE_808178		; $82ADA4  22 78 81 80	| return next frame
+	REP #$30		; $82ADA8  C2 30	| 
+	LDX.w #$0000		; $82ADAA  A2 00 00	| 
+CODE_82ADAD:			;			| 
+	PLA			; $82ADAD  68		| 
+	STA.b $80,x		; $82ADAE  95 80	| RAM ADDRESS
+	INX			; $82ADB0  E8		| 
+	INX			; $82ADB1  E8		| 
+	CPX.w #$0010		; $82ADB2  E0 10 00	| 
+	BNE CODE_82ADAD		; $82ADB5  D0 F6	| 
+	LDA.w $0240		; $82ADB7  AD 40 02	| RAM ADDRESS
+	AND.w #$0F00		; $82ADBA  29 00 0F	| 
+	BEQ CODE_82ADCC		; $82ADBD  F0 0D	| 
+	DEC.w $0278		; $82ADBF  CE 78 02	| RAM ADDRESS
+	BNE CODE_82ADD2		; $82ADC2  D0 0E	| 
+	TRB.w $0276		; $82ADC4  1C 76 02	| RAM ADDRESS
+	LDA.w #$0003		; $82ADC7  A9 03 00	| 
+	BRA CODE_82ADCF		; $82ADCA  80 03	|
+CODE_82ADCC:			;			| 
+	LDA.w #$001E		; $82ADCC  A9 1E 00	| 
+CODE_82ADCF:			;			| 
+	STA.w $0278		; $82ADCF  8D 78 02	| RAM ADDRESS
+CODE_82ADD2:			;			| 
+	RTS			; $82ADD2  60		| 
+
+
+CODE_82ADD3:			;-----------------------| 
+	REP #$30		; $82ADD3  C2 30	| 
+	LDA.w $0276		; $82ADD5  AD 76 02	| RAM ADDRESS
+	EOR.w #$FFFF		; $82ADD8  49 FF FF	| 
+	AND.w $0240		; $82ADDB  2D 40 02	| 
+	RTS			; $82ADDE  60		| 
+
+
+CODE_82ADDF:			;-----------------------| upload rendered tilemap to VRAM buffer
+	REP #$30		; $82ADDF  C2 30	| 
+	LDA.w #$007E		; $82ADE1  A9 7E 00	| 
+	PHA			; $82ADE3  48		| 
+	LDA.w #$5400		; $82ADE4  A9 00 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0308		; $82ADE7  A2 08 03	| 
+	LDY.w #$0020		; $82ADEA  A0 20 00	| 
+	JSL CODE_808AA4		; $82ADEE  22 A4 8A 80	| 
+	LDA.w #$5420		; $82ADF2  A9 20 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0328		; $82ADF5  A2 28 03	| 
+	LDY.w #$0020		; $82ADF8  A0 20 00	| 
+	JSL CODE_808AA4		; $82ADFB  22 A4 8A 80	| 
+	LDA.w #$5440		; $82ADFF  A9 40 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0348		; $82AE02  A2 48 03	| 
+	LDY.w #$0020		; $82AE05  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE08  22 A4 8A 80	| 
+	LDA.w #$5460		; $82AE0C  A9 60 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0368		; $82AE0F  A2 68 03	| 
+	LDY.w #$0020		; $82AE12  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE15  22 A4 8A 80	| 
+	LDA.w #$5480		; $82AE19  A9 80 54	| INDIRECT RAM ADDRESS
+	LDX.w #$0388		; $82AE1C  A2 88 03	| 
+	LDY.w #$0020		; $82AE1F  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE22  22 A4 8A 80	| 
+	LDA.w #$54A0		; $82AE26  A9 A0 54	| INDIRECT RAM ADDRESS
+	LDX.w #$03A8		; $82AE29  A2 A8 03	| 
+	LDY.w #$0020		; $82AE2C  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE2F  22 A4 8A 80	| 
+	LDA.w #$54C0		; $82AE33  A9 C0 54	| INDIRECT RAM ADDRESS
+	LDX.w #$03C8		; $82AE36  A2 C8 03	| 
+	LDY.w #$0020		; $82AE39  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE3C 22 A4 8A 80	| 
+	LDA.w #$54E0		; $82AE40  A9 E0 54	| INDIRECT RAM ADDRESS
+	LDX.w #$03E8		; $82AE43  A2 E8 03	| 
+	LDY.w #$0020		; $82AE46  A0 20 00	| 
+	JSL CODE_808AA4		; $82AE49  22 A4 8A 80	| 
+	PLA			; $82AE4D  68		| 
+	RTS			; $82AE4E  60		| 
+
+
+CODE_82AE4F:			;-----------------------| draw layer 3 menu border in buffer
+	REP #$30		; $82AE4F  C2 30	| 
+	STA.b $80		; $82AE51  85 80	| RAM ADDRESS
+	TXA			; $82AE53  8A		| 
+	XBA			; $82AE54  EB		| 
+	AND.w #$00FF		; $82AE55  29 FF 00	| 
+	STA.b $82		; $82AE58  85 82	| RAM ADDRESS
+	TXA			; $82AE5A  8A		| 
+	AND.w #$00FF		; $82AE5B  29 FF 00	| 
+	STA.b $84		; $82AE5E  85 84	| RAM ADDRESS
+	STY.b $86		; $82AE60  84 86	| RAM ADDRESS
+	LDX.b $80		; $82AE62  A6 80	| RAM ADDRESS
+	LDA.w #$3088		; $82AE64  A9 88 30	| top left corner tile
+	ORA.b $86		; $82AE67  05 86	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AE69  9F 00 54 7E	| RAM ADDRESS
+	LDY.b $82		; $82AE6D  A4 82	| RAM ADDRESS
+	DEY			; $82AE6F  88		| 
+	DEY			; $82AE70  88		| 
+	LDA.w #$3089		; $82AE71  A9 89 30	| top edge tile
+	ORA.b $86		; $82AE74  05 86	| RAM ADDRESS
+	BRA CODE_82AE7E		; $82AE76  80 06	| 
+CODE_82AE78:			;			| 
+	INX			; $82AE78  E8		| 
+	INX			; $82AE79  E8		| 
+	STA.l $7E5400,x		; $82AE7A  9F 00 54 7E	| RAM ADDRESS
+CODE_82AE7E:			;			| 
+	DEY			; $82AE7E  88		| 
+	BPL CODE_82AE78		; $82AE7F  10 F7	| 
+	LDA.w #$308A		; $82AE81  A9 8A 30	| top right corner tile
+	ORA.b $86		; $82AE84  05 86	| RAM ADDRESS
+	STA.l $7E5402,x		; $82AE86  9F 02 54 7E	| RAM ADDRESS
+	LDA.b $84		; $82AE8A  A5 84	| RAM ADDRESS
+	DEC			; $82AE8C  3A		| 
+	XBA			; $82AE8D  EB		| 
+	LSR			; $82AE8E  4A		| 
+	LSR			; $82AE8F  4A		| 
+	LSR			; $82AE90  4A		| 
+	CLC			; $82AE91  18		| 
+	ADC.b $80		; $82AE92  65 80	| RAM ADDRESS
+	TAX			; $82AE94  AA		| 
+	LDA.w #$308B		; $82AE95  A9 8B 30	| bottom left corner tile
+	ORA.b $86		; $82AE98  05 86	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AE9A  9F 00 54 7E	| RAM ADDRESS
+	LDY.b $82		; $82AE9E  A4 82	| RAM ADDRESS
+	DEY			; $82AEA0  88		| 
+	DEY			; $82AEA1  88		| 
+	LDA.w #$308C		; $82AEA2  A9 8C 30	| bottom edge tile
+	ORA.b $86		; $82AEA5  05 86	| RAM ADDRESS
+	BRA CODE_82AEAF		; $82AEA7  80 06	| 
+CODE_82AEA9:			;			| 
+	INX			; $82AEA9  E8		| 
+	INX			; $82AEAA  E8		| 
+	STA.l $7E5400,x		; $82AEAB  9F 00 54 7E	| RAM ADDRESS
+CODE_82AEAF:			;			| 
+	DEY			; $82AEAF  88		| 
+	BPL CODE_82AEA9		; $82AEB0  10 F7	| 
+	LDA.w #$308D		; $82AEB2  A9 8D 30	| bottom right corner tile
+	ORA.b $86		; $82AEB5  05 86	| RAM ADDRESS
+	STA.l $7E5402,x		; $82AEB7  9F 02 54 7E	| RAM ADDRESS
+	LDX.b $80		; $82AEBB  A6 80	| RAM ADDRESS
+	LDY.b $84		; $82AEBD  A4 84	| RAM ADDRESS
+	DEY			; $82AEBF  88		| 
+	DEY			; $82AEC0  88		| 
+	BRA CODE_82AED2		; $82AEC1  80 0F	| 
+CODE_82AEC3:			;			| 
+	TXA			; $82AEC3  8A		| 
+	CLC			; $82AEC4  18		| 
+	ADC.w #$0020		; $82AEC5  69 20 00	| 
+	TAX			; $82AEC8  AA		| 
+	LDA.w #$308E		; $82AEC9  A9 8E 30	| left edge tile
+	ORA.b $86		; $82AECC  05 86	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AECE  9F 00 54 7E	| RAM ADDRESS
+CODE_82AED2:			;			| 
+	DEY			; $82AED2  88		| 
+	BPL CODE_82AEC3		; $82AED3  10 EE	| 
+	LDA.b $82		; $82AED5  A5 82	| RAM ADDRESS
+	DEC			; $82AED7  3A		| 
+	ASL			; $82AED8  0A		| 
+	CLC			; $82AED9  18		| 
+	ADC.b $80		; $82AEDA  65 80	| RAM ADDRESS
+	TAX			; $82AEDC  AA		| 
+	LDY.b $84		; $82AEDD  A4 84	| RAM ADDRESS
+	DEY			; $82AEDF  88		| 
+	DEY			; $82AEE0  88		| 
+	BRA CODE_82AEF2		; $82AEE1  80 0F	| 
+CODE_82AEE3:			;			| 
+	TXA			; $82AEE3  8A		| 
+	CLC			; $82AEE4  18		| 
+	ADC.w #$0020		; $82AEE5  69 20 00	| 
+	TAX			; $82AEE8  AA		| 
+	LDA.w #$308F		; $82AEE9  A9 8F 30	| right edge tile
+	ORA.b $86		; $82AEEC  05 86	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AEEE  9F 00 54 7E	| RAM ADDRESS
+CODE_82AEF2:			:			| 
+	DEY			; $82AEF2  88		| 
+	BPL CODE_82AEE3		; $82AEF3  10 EE	| 
+	RTS			; $82AEF5  60		| 
+
+
+CODE_82AEF6:			;-----------------------| 
+	REP #$30		; $82AEF6  C2 30	| 
+	LDX.w #$00FE		; $82AEF8  A2 FE 00	| 
+	LDA.w #$0000		; $82AEFB  A9 00 00	| 
+CODE_82AEFE:			;			| 
+	STA.l $7E5500,x		; $82AEFE  9F 00 55 7E	| RAM ADDRESS
+	DEX			; $82AF02  CA		| 
+	DEX			; $82AF03  CA		| 
+	BPL CODE_82AEFE		; $82AF04  10 F8	| 
+	RTS			; $82AF06  60		| 
+
+CODE_82AF07:			;-----------------------| 
+	REP #$30		; $82AF07  C2 30	| 
+	STA.b $88		; $82AF09  85 88	| RAM ADDRESS
+	STY.b $8C		; $82AF0B  84 8C	| RAM ADDRESS
+	TXA			; $82AF0D  8A		| 
+	XBA			; $82AF0E  EB		| 
+	AND.w #$00FF		; $82AF0F  29 FF 00	| 
+	DEC			; $82AF12  3A		| 
+	STA.b $8E		; $82AF13  85 8E	| RAM ADDRESS
+	TXA			; $82AF15  8A		| 
+	AND.w #$00FF		; $82AF16  29 FF 00	| 
+	DEC			; $82AF19  3A		| 
+	ASL			; $82AF1A  0A		| 
+	ASL			; $82AF1B  0A		| 
+	ASL			; $82AF1C  0A		| 
+	ASL			; $82AF1D  0A		| 
+	ORA.b $8E		; $82AF1E  05 8E	| RAM ADDRESS
+	ASL			; $82AF20  0A		| 
+	CLC			; $82AF21  18		| 
+	ADC.b $88		; $82AF22  65 88	| RAM ADDRESS
+	STA.b $8E		; $82AF24  85 8E	| RAM ADDRESS
+	TXA			; $82AF26  8A		| 
+	XBA			; $82AF27  EB		| 
+	AND.w #$00FE		; $82AF28  29 FE 00	| 
+	CLC			; $82AF2B  18		| 
+	ADC.b $88		; $82AF2C  65 88	| RAM ADDRESS
+	STA.b $80		; $82AF2E  85 80	| RAM ADDRESS
+	TXA			; $82AF30  8A		| 
+	AND.w #$00FE		; $82AF31  29 FE 00	| 
+	ASL			; $82AF34  0A		| 
+	ASL			; $82AF35  0A		| 
+	ASL			; $82AF36  0A		| 
+	ASL			; $82AF37  0A		| 
+	CLC			; $82AF38  18		| 
+	ADC.b $80		; $82AF39  65 80	| RAM ADDRESS
+	STA.b $8A		; $82AF3B  85 8A	| RAM ADDRESS
+	SEC			; $82AF3D  38		| 
+	SBC.w #$0022		; $82AF3E  E9 22 00	| 
+	STA.b $80		; $82AF41  85 80	| RAM ADDRESS
+	TXA			; $82AF43  8A		| 
+	BIT.w #$0001		; $82AF44  89 01 00	| 
+	BEQ CODE_82AF51		; $82AF47  F0 08	| 
+	LDA.b $8A		; $82AF49  A5 8A	| RAM ADDRESS
+	CLC			; $82AF4B  18		| 
+	ADC.w #$0020		; $82AF4C  69 20 00	| 
+	STA.b $8A		; $82AF4F  85 8A	| 
+CODE_82AF51:			;			| 
+	TXA			; $82AF51  8A		| 
+	BIT.w #$0100		; $82AF52  89 00 01	| 
+	BEQ CODE_82AF5B		; $82AF55  F0 04	| 
+	INC.b $8A		; $82AF57  E6 8A	| RAM ADDRESS
+	INC.b $8A		; $82AF59  E6 8A	| RAM ADDRESS
+CODE_82AF5B:			;			| 
+	LDA.b $8A		; $82AF5B  A5 8A	| RAM ADDRESS
+	SEC			; $82AF5D  38		| 
+	SBC.b $80		; $82AF5E  E5 80	| RAM ADDRESS
+	AND.w #$001E		; $82AF60  29 1E 00	| 
+	LSR			; $82AF63  4A		| 
+	STA.b $82		; $82AF64  85 82	| RAM ADDRESS
+	LDA.b $8A		; $82AF66  A5 8A	| RAM ADDRESS
+	SEC			; $82AF68  38		| 
+	SBC.b $80		; $82AF69  E5 80	| RAM ADDRESS
+	AND.w #$00E0		; $82AF6B  29 E0 00	| 
+	ASL			; $82AF6E  0A		| 
+	ASL			; $82AF6F  0A		| 
+	ASL			; $82AF70  0A		| 
+	ORA.b $82		; $82AF71  05 82	| RAM ADDRESS
+	XBA			; $82AF73  EB		| 
+	CLC			; $82AF74  18		| 
+	ADC.w #$0101		; $82AF75  69 01 01	| 
+	TAX			; $82AF78  AA	 	| 
+	PHX			; $82AF79  DA		| 
+	LDA.b $80		; $82AF7A  A5 80	| RAM ADDRESS
+	LDY.b $8C		; $82AF7C  A4 8C	| RAM ADDRESS
+	JSR CODE_82AE4F		; $82AF7E  20 4F AE	| 
+	LDX.b $80		; $82AF81  A6 80	| RAM ADDRESS
+	LDA.b $01,s		; $82AF83  A3 01	| 
+	AND.w #$00FF		; $82AF85  29 FF 00	| 
+	TAY			; $82AF88  A8		| 
+	DEY			; $82AF89  88		| 
+	DEY			; $82AF8A  88		| 
+	BRA CODE_82AFA8		; $82AF8B  80 1B	| 
+CODE_82AF8D:			;			| 
+	LDA.b $02,s		; $82AF8D  A3 02	| 
+	PHX			; $82AF8F  DA		| 
+	PHY			; $82AF90  5A		| 
+	AND.w #$00FF		; $82AF91  29 FF 00	| 
+	TAY			; $82AF94  A8		| 
+	DEY			; $82AF95  88		| 
+	DEY			; $82AF96  88		| 
+	BRA CODE_82AFA9		; $82AF97  80 08	| 
+CODE_82AF99:			;			| 
+	LDA.l $7E5500,x		; $82AF99  BF 00 55 7E	| RAM ADDRESS
+	STA.l $7E5400,x		; $82AF9D  9F 00 54 7E	| RAM ADDRESS
+	INX			; $82AFA1  E8		| 
+	INX			; $82AFA2  E8		| 
+	DEY			; $82AFA3  88		| 
+	BPL CODE_82AF99		; $82AFA4  10 F3	| 
+	PLY			; $82AFA6  7A		| 
+	PLX			; $82AFA7  FA		| 
+CODE_82AFA8:			;			| 
+	TXA			; $82AFA8  8A		| 
+CODE_82AFA9:			;			| 
+	CLC			; $82AFA9  18		| 
+	ADC.w #$0020		; $82AFAA  69 20 00	| 
+	TAX			; $82AFAD  AA		| 
+	DEY			; $82AFAE  88		| 
+	BPL CODE_82AF8D		; $82AFAF  10 DC	| 
+	PLA			; $82AFB1  68		| 
+	JSR CODE_82AD8F		; $82AFB2  20 8F AD	| 
+	LDY.w #$0000		; $82AFB5  A0 00 00	| 
+	LDA.b $80		; $82AFB8  A5 80	| RAM ADDRESS
+	TAX			; $82AFBA  AA		| 
+	EOR.b $88		; $82AFBB  45 88	| RAM ADDRESS
+	AND.w #$001E		; $82AFBD  29 1E 00	| 
+	BEQ CODE_82AFC5		; $82AFC0  F0 03	| 
+	INY			; $82AFC2  C8		| 
+	DEX			; $82AFC3  CA		| 
+	DEX			; $82AFC4  CA		| 
+CODE_82AFC5:			;			| 
+	TXA			; $82AFC5  8A		| 
+	EOR.b $88		; $82AFC6  45 88	| RAM ADDRESS
+	AND.w #$00E0		; $82AFC8  29 E0 00	| 
+	BEQ CODE_82AFD4		; $82AFCB  F0 07	| 
+	INY			; $82AFCD  C8		| 
+	TXA			; $82AFCE  8A		| 
+	SEC			; $82AFCF  38		| 
+	SBC.w #$0020		; $82AFD0  E9 20 00	| 
+	TAX			; $82AFD3  AA		| 
+CODE_82AFD4:			;			| 
+	STX.b $80		; $82AFD4  86 80	| RAM ADDRESS
+	LDA.b $8A		; $82AFD6  A5 8A	| RAM ADDRESS
+	TAX			; $82AFD8  AA		| 
+	EOR.b $8E		; $82AFD9  45 8E	| RAM ADDRESS
+	AND.w #$001E		; $82AFDB  29 1E 00	| 
+	BEQ CODE_82AFE3		; $82AFDE  F0 03	| 
+	INY			; $82AFE0  C8		| 
+	INX			; $82AFE1  E8		| 
+	INX			; $82AFE2  E8		| 
+CODE_82AFE3:			;			| 
+	TXA			; $82AFE3  8A		| 
+	EOR.b $8E		; $82AFE4  45 8E	| RAM ADDRESS
+	AND.w #$00E0		; $82AFE6  29 E0 00	| 
+	BEQ CODE_82AFF2		; $82AFE9  F0 07	| 
+	INY			; $82AFEB  C8		| 
+	TXA			; $82AFEC  8A		| 
+	CLC			; $82AFED  18		| 
+	ADC.w #$0020		; $82AFEE  69 20 00	| 
+	TAX			; $82AFF1  AA		| 
+CODE_82AFF2:			;			| 
+	STX.b $8A		; $82AFF2  86 8A	| RAM ADDRESS
+	TYA			; $82AFF4  98		| 
+	BEQ CODE_82AFFA		; $82AFF5  F0 03	| 
+	JMP CODE_82AF5B		; $82AFF7  4C 5B AF	| 
+CODE_82AFFA:			;			| 
+	RTS			; $82AFFA  60		| 
+
+
+CODE_82B1A2:			;-----------------------| 
+	REP #$30		; $82B1A2  C2 30	| 
+	LDA.w #$0000		; $82B1A4  A9 00 00	| 
+	PHA			; $82B1A7  48		| 
+CODE_82B1A8:			;			| loop
+	LDA.w $0000,y		; $82B1A8  B9 00 00	| 
+	INY			; $82B1AB  C8		| 
+	AND.w #$00FF		; $82B1AC  29 FF 00	| 
+	BIT.w #$0080		; $82B1AF  89 80 00	| 
+	BNE CODE_82B1DF		; $82B1B2  D0 2B	| 
+	CMP.w #$0001		; $82B1B4  C9 01 00	| 
+	BEQ CODE_82B1DB		; $82B1B7  F0 1E	| 
+	CMP.w #$0060		; $82B1B9  C9 60 00	| 
+	BCC CODE_82B1C2		; $82B1BC  90 04	| 
+	CLC			; $82B1BE  18		| 
+	ADC.w #$0030		; $82B1BF  69 30 00	| 
+CODE_82B1C2:			;			| 
+	ORA.b $80		; $82B1C2  05 80	| RAM ADDRESS
+	STA.l $7E5400,x		; $82B1C4  9F 00 54 7E	| RAM ADDRESS
+	AND.w #$00FF		; $82B1C8  29 FF 00	| 
+	CMP.w #$009A		; $82B1CB  C9 9A 00	| 
+	BNE CODE_82B1D7		; $82B1CE  D0 07	| 
+	ORA.w #$3C00		; $82B1D0  09 00 3C	| 
+	STA.l $7E5400,x		; $82B1D3  9F 00 54 7E	| RAM ADDRESS
+CODE_82B1D7:			;			| 
+	INX			; $82B1D7  E8		| 
+	INX			; $82B1D8  E8		| 
+	BRA CODE_82B1A8		; $82B1D9  80 CD	| 
+CODE_82B1DB:			;			| 
+	PLY			; $82B1DB  7A		| 
+	BNE CODE_82B1A8		; $82B1DC  D0 CA	| 
+	RTS			; $82B1DE  60		| 
+
+CODE_82B1DF:			;			| 
+	CMP.w #$00FF		; $82B1DF  C9 FF 00	| 
+	BEQ CODE_82B1DB		; $82B1E2  F0 F7	| 
+	CMP.w #$0088		; $82B1E4  C9 88 00	| 
+	BCC CODE_82B236		; $82B1E7  90 4D	| 
+	CMP.w #$0090		; $82B1E9  C9 00 90	| 
+	BCC CODE_82B245		; $82B1EC  90 57	| 
+	CMP.w #$0098		; $82B1EE  C9 98 00	| 
+	BCC CODE_82B254		; $82B1F1  90 61	| 
+	CMP.w #$00A0		; $82B1F3  C9 A0 00	| 
+	BCC CODE_82B261		; $82B1F6  90 69	| 
+	CMP.w #$00FE		; $82B1F8  C9 FE 00	| 
+	BEQ CODE_82B21C		; $82B1FB  F0 1F	| 
+	CMP.w #$00FD		; $82B1FD  C9 FD 00	| 
+	BEQ CODE_82B228		; $82B200  F0 26	| 
+	PHA			; $82B202  48		| 
+	AND.w #$0003		; $82B203  29 03 00	| 
+	XBA			; $82B206  EB		| 
+	ASL			; $82B207  0A		| 
+	ASL			; $82B208  0A		| 
+	ORA.w #$3000		; $82B209  09 00 30	| 
+	STA.b $80		; $82B20C  85 80	| RAM ADDRESS
+	PLA			; $82B20E  68		| 
+	AND.w #$0004		; $82B20F  29 04 00	| 
+	ASL			; $82B212  0A		| 
+	ASL			; $82B213  0A		| 
+	ASL			; $82B214  0A		| 
+	ASL			; $82B215  0A		| 
+	XBA			; $82B216  EB		| 
+	TSB.b $80		; $82B217  04 80	| RAM ADDRESS
+	JMP CODE_82B1A8		; $82B219  4C A8 B1	| 
+
+CODE_82B21C:			;			| 
+	LDA.w $0000,y		; $82B21C  B9 00 00	| 
+	INY			; $82B21F  C8		| 
+	AND.w #$00FF		; $82B220  29 FF 00	| 
+	ASL			; $82B223  0A		| 
+	TAX			; $82B224  AA		| 
+	JMP CODE_82B1A8		; $82B225  4C A8 B1	| 
+
+CODE_82B228:			;			| 
+	TXA			; $82B228  8A		| 
+	SEP #$20		; $82B229  E2 20	| 
+	CLC			; $82B22B  18		| 
+	ADC.b #$20		; $82B22C  69 20	| 
+	AND.b #$E0		; $82B22E  29 E0	| 
+	REP #$20		; $82B230  C2 20	| 
+	TAX			; $82B232  AA		| 
+	JMP CODE_82B1A8		; $82B233  4C A8 B1	| 
+
+CODE_82B236:			;			| 
+	PHX			; $82B236  DA		| 
+	AND.w #$0007		; $82B237  29 07 00	| 
+	ASL			; $82B23A  0A		| 
+	TAX			; $82B23B  AA		| 
+	LDA.b $E0,x		; $82B23C  B5 E0	| RAM ADDRESS
+	PLX			; $82B23E  FA		| 
+	JSR CODE_82B275		; $82B23F  20 75 B2	| 
+	JMP CODE_82B1A8		; $82B242  4C A8 B1	| 
+
+CODE_82B245:			;			| 
+	PHX			; $82B245  DA		| 
+	AND.w #$0007		; $82B246  29 07 00	| 
+	ASL			; $82B249  0A		| 
+	TAX			; $82B24A  AA		| 
+	LDA.b $E0,x		; $82B24B  B5 E0	| RAM ADDRESS
+	PLX			; $82B24D  FA		| 
+	JSR CODE_82B2C0		; $82B24E  20 C0 B2	| 
+	JMP CODE_82B1A8		; $82B251  4C A8 B1	| 
+
+CODE_82B254:			;			| 
+	PHY			; $82B254  5A		| 
+	AND.w #$0007		; $82B255  29 07 00	| 
+	ASL			; $82B258  0A		| 
+	CLC			; $82B259  18		| 
+	ADC.w #$00E0		; $82B25A  69 E0 00	| 
+	TAY			; $82B25D  A8		| 
+	JMP CODE_82B1A8		; $82B25E  4C A8 B1	| 
+
+CODE_82B261:			;			| 
+	PHY			; $82B261  5A		| 
+	AND.w #$0007		; $82B262  29 07 00	| 
+	ASL			; $82B265  0A		| 
+	CLC			; $82B266  18		| 
+	TAY			; $82B267  A8		| 
+	LDA.w $00E0,y		; $82B268  B9 E0 00	| RAM ADDRESS???
+	TAY			; $82B26B  A8		| 
+	JMP CODE_82B1A8		; $82B26C  4C A8 B1	| 
+
+DATA_82B26F:			;-----------------------| 
+	db $E8,$03,$64,$00,$0A,$00
+
+CODE_82B275:			;| 
+	REP #$30		; $82B275  C2 30	| 
+	STA.b $82		; $82B277  85 82	| RAM ADDRESS
+	STZ.b $86		; $82B279  64 86	| RAM ADDRESS
+	PHY			; $82B27B  5A		| 
+	LDY.w #$0000		; $82B27C  A0 00 00	| 
+CODE_82B27F:			;			| 
+	LDA.w DATA_82B26F,y	; $82B27F  B9 6F B2	| 
+	STA.b $84		; $82B282  85 84	| RAM ADDRESS
+	PHY			; $82B284  5A		| 
+	LDA.b $82		; $82B285  A5 82	| RAM ADDRESS
+	LDY.w #$FFFF		; $82B287  A0 FF FF	| 
+CODE_82B28A:			;			| 
+	INY			; $82B28A  C8		| 
+	SEC			; $82B28B  38		| 
+	SBC.b $84		; $82B28C  E5 84	| RAM ADDRESS
+	BCS CODE_82B28A		; $82B28E  B0 FA	| 
+	CLC			; $82B290  18		| 
+	ADC.b $84		; $82B291  65 84	| RAM ADDRESS
+	STA.b $82		; $82B293  85 82	| RAM ADDRESS
+	TYA			; $82B295  98		| 
+	BNE CODE_82B29E		; $82B296  D0 04	| 
+	LDY.b $86		; $82B298  A4 86	| RAM ADDRESS
+	BEQ CODE_82B2A1		; $82B29A  F0 05	| 
+CODE_82B29C:			;			| 
+	ORA.w #$0090		; $82B29C  09 90 00	| 
+	STY.b $86		; $82B29F  84 86	| RAM ADDRESS
+CODE_82B2A1:			;			| 
+	ORA.b $80		; $82B2A1  05 80	| RAM ADDRESS
+	STA.l $7E5400,x		; $82B2A3  9F 00 54 7E	| RAM ADDRESS
+	INX			; $82B2A7  E8		| 
+	INX			; $82B2A8  E8		| 
+	PLY			; $82B2A9  7A		| 
+	INY			; $82B2AA  C8		| 
+	INY			; $82B2AB  C8		| 
+	CPY.w #$0006		; $82B2AC  C0 06 00	| 
+	BNE CODE_82B27F		; $82B2AF  D0 CE	| 
+	LDA.b $82		; $82B2B1  A5 82	| RAM ADDRESS
+	ORA.w #$0090		; $82B2B3  09 90 00	| 
+	ORA.b $80		; $82B2B6  05 80	| RAM ADDRESS
+	STA.l $7E5400,x		; $82B2B8  9F 00 54 7E	| RAM ADDRESS
+	INX			; $82B2BC  E8		| 
+	INX			; $82B2BD  E8		| 
+	PLY			; $82B2BE  7A		| 
+	RTS			; $82B2BF  60		| 
+
+CODE_82B2C0:			;-----------------------| 
+	REP #$30		; $82B2C0  C2 30	| 
+	PHY			; $82B2C2  5A		| 
+	AND.w #$00FF		; $82B2C3  29 FF 00	| 
+	LDY.w #$FFFF		; $82B2C6  A0 FF FF	| 
+CODE_82B2C9:			;			| 
+	INY			; $82B2C9  C8		| 
+	SEC			; $82B2CA  38		| 
+	SBC.w #$000A		; $82B2CB  E9 0A 00	| 
+	BCS CODE_82B2C9		; $82B2CE  B0 F9	| 
+	ADC.w #$000A		; $82B2D0  69 0A 00	| 
+	PHA			; $82B2D3  48		| 
+	TYA			; $82B2D4  98		| 
+	BEQ CODE_82B2E0		; $82B2D5  F0 09	| 
+	JSR CODE_82B2EF		; $82B2D7  20 EF B2	| 
+	PLA			; $82B2DA  68		| 
+	JSR CODE_82B2EF		; $82B2DB  20 EF B2	| 
+	PLY			; $82B2DE  7A		| 
+	RTS			; $82B2DF  60		| 
+
+CODE_82B2E0:			;			| 
+	PLA			; $82B2E0  68		| 
+	JSR CODE_82B2EF		; $82B2E1  20 EF B2	| 
+	LDA.w #$0000		; $82B2E4  A9 00 00	| 
+	STA.l $7E5400,x		; $82B2E7  9F 00 54 7E	| RAM ADDRESS
+	INX			; $82B2EB  E8		| 
+	INX			; $82B2EC  E8		| 
+	PLY			; $82B2ED  7A		| 
+	RTS			; $82B2EE  60		| 
+
+CODE_82B2EF:			;-----------------------| 
+	ORA.w #$0090		; $82B2EF  09 90 00	| 
+	ORA.b $80		; $82B2F2  05 80	| RAM ADDRESS
+	STA.l $7E5400,x		; $82B2F4  9F 00 54 7E	| RAM ADDRESS
+	INX			; $82B2F8  E8		| 
+	INX			; $82B2F9  E8		| 
+	RTS			; $82B2FA  60		| 
+
+
+CODE_82B2FB:			;-----------------------| ? 1st entry point
+	REP #$30		; $82B2FB  C2 30	| 
+	LDA.w #$B001		; $82B2FD  A9 01 B0	| 
+	PHA			; $82B300  48		| 
+	BRA CODE_82B311		; $82B301  80 0E	| 
+CODE_82B303:			;-----------------------| ? 2nd entry point
+	REP #$30		; $82B303  C2 30	| 
+	LDA.w #$A080		; $82B305  A9 80 A0	| 
+	PHA			; $82B308  48		| 
+	BRA CODE_82B311		; $82B309  80 06	| 
+CODE_82B30B:			;-----------------------| ? 3rd entry point
+	REP #$30		; $82B30B  C2 30	| 
+	LDA.w #$A081		; $82B30D  A9 81 A0	| 
+	PHA			; $82B310  48		| 
+CODE_82B311:			;-----------------------| 
+	LDA.w $0000,y		; $82B311  B9 00 00	| 
+	PHA			; $82B314  48		| 
+	LDA.w $0002,y		; $82B315  B9 02 00	| 
+	PHA			; $82B318  48		| 
+	LDA.w $0004,y		; $82B319  B9 04 00	| 
+	PHA			; $82B31C  48		| 
+	TYA			; $82B31D  98		| 
+	CLC			; $82B31E  18		| 
+	ADC.w #$0006		; $82B31F  69 06 00	| 
+	PHA			; $82B322  48		| 
+	JSR CODE_82AEF6		; $82B323  20 F6 AE	| 
+	PLY			; $82B326  7A		| 
+	JSR CODE_82B1A2		; $82B327  20 A2 B1	| 
+	LDA.b $01,s		; $82B32A  A3 01	| 
+	TAY			; $82B32C  A8		| 
+	LDA.b $03,s		; $82B32D  A3 03	| 
+	TAX			; $82B32F  AA		| 
+	LDA.b $05,s		; $82B330  A3 05	| 
+	JSR CODE_82AF07		; $82B332  20 07 AF	| 
+	LDA.b $03,s		; $82B335  A3 03	| 
+	ASL			; $82B337  0A		| 
+	ASL			; $82B338  0A		| 
+	ASL			; $82B339  0A		| 
+	ASL			; $82B33A  0A		| 
+	CLC			; $82B33B  18		| 
+	ADC.b $04,s		; $82B33C  63 04	| 
+	AND.w #$00FF		; $82B33E  29 FF 00	| 
+	ASL			; $82B341  0A		| 
+	CLC			; $82B342  18		| 
+	ADC.b $05,s		; $82B343  63 05	| 
+	SEC			; $82B345  38		| 
+	SBC.w #$0024		; $82B346  E9 24 00	| 
+	TAX			; $82B349  AA		| 
+	STZ.b $C0		; $82B34A  64 C0	| RAM ADDRESS
+CODE_82B34C:			;			| 
+	INC.b $C0		; $82B34C  E6 C0	| RAM ADDRESS
+	LDA.b $C0		; $82B34E  A5 C0	| RAM ADDRESS
+	LSR			; $82B350  4A		| 
+	LSR			; $82B351  4A		| 
+	LSR			; $82B352  4A		| 
+	AND.w #$0001		; $82B353  29 01 00	| 
+	DEC			; $82B356  3A		| 
+	AND.w #$0011		; $82B357  29 11 00	| 
+	EOR.w #$008C		; $82B35A  49 8C 00	| 
+	ORA.b $01,s		; $82B35D  03 01	| 
+	STA.l $7E5400,x		; $82B35F  9F 00 54 7E	| RAM ADDRESS
+	PHX			; $82B363  DA		| 
+	JSR CODE_82AD8F		; $82B364  20 8F AD	| 
+	JSR CODE_82ADD3		; $82B367  20 D3 AD	| 
+	PLX			; $82B36A  FA		| 
+	TAY			; $82B36B  A8		| 
+	AND.b $07,s		; $82B36C  23 07	| 
+	AND.w #$FFFE		; $82B36E  29 FE FF	| 
+	BEQ CODE_82B34C		; $82B371  F0 D9	| 
+	LDA.b $07,s		; $82B373  A3 07	| 
+	LSR			; $82B375  4A		| 
+	LDA.w #$0018		; $82B376  A9 18 00	| SFX when returning to REPLAY after no files found
+	BCC CODE_82B384		; $82B379  90 09	| 
+	TYA			; $82B37B  98		| 
+	BIT.w #$A000		; $82B37C  89 00 A0	| 
+	BNE CODE_82B388		; $82B37F  D0 07	| 
+	LDA.w #$0019		; $82B381  A9 19 00	| SFX for ???
+CODE_82B384:			;			| 
+	JSL CODE_808968		; $82B384  22 68 89 80	| 
+CODE_82B388:			;			| 
+	PHY			; $82B388  5A		| 
+	JSR CODE_82AEF6		; $82B389  20 F6 AE	| 
+	LDX.w #$0000		; $82B38C  A2 00 00	| 
+	JSR ($0090,x)		; $82B38F  FC 90 00	| INDIRECT RAM ROM JUMP
+
+
+DATA_82BF93:			;-----------------------| 
+	dw $0040		; A \
+	dw $1004		; X | might be for drawing red border
+	dw $3400		; Y / because this one is the yxpccctt
+	db $FE,$B2		; FE = change index cmd, 2nd byte * 2 = index to 7E5400
+	db $F0			; Fx = string cmd?
+				; bits 0 & 1 = low 2 bits of palette (yxpcCCtt)
+				; bit 2 = x-flip (yXpccctt)
+				; p and high c get auto-set (3000)
+				; entire result stores to $80 (so $80 holds yxpccctt)
+	db $53,$52,$41,$4D	;\ 
+	db $26,$12,$1C,$3E	;|string "SRAMにいじょうが", OR'd with $80 and stored to 7E5400,x
+	db $0E,$13,$16,$3E	;/ 
+	db $FD			; FD = go to next line? low byte of index + 20 & E0, new index
+	db $01			; end. Y pulled from stack, if nonzero keep looping
+
+
+CODE_82C1E5:			;-----------------------| 
+	REP #$30		; $82C1E5  C2 30	| 
+	PHB			; $82C1E7  8B		| 
+	PHK			; $82C1E8  4B		| 
+	PLB			; $82C1E9  AB		| 
+	LDX.w #$0000		; $82C1EA  A2 00 00	| 
+CODE_82C1ED:			;			| 
+	LDA.l $700000,x		; $82C1ED  BF 00 00 70	| SAVEADDR
+	CMP.w DATA_82C308,x	; $82C1F1  DD 08 C3	| 
+	BNE CODE_82C213		; $82C1F4  D0 1D	| 
+	INX			; $82C1F6  E8		| 
+	INX			; $82C1F7  E8		| 
+	CPX.w #$0008		; $82C1F8  E0 08 00	| 
+	BNE CODE_82C1ED		; $82C1FB  D0 F0	| 
+	LDX.w #$07FE		; $82C1FD  A2 FE 07	| 
+	LDA.w #$0000		; $82C200  A9 00 00	| 
+CODE_82C203:			;			| 
+	CLC			; $82C203  18		| 
+	ADC.l $700000,x		; $82C204  7F 00 00 70	| SAVEADDR
+	DEX			; $82C208  CA		| 
+	DEX			; $82C209  CA		| 
+	BPL CODE_82C203		; $82C20A  10 F7	| 
+	CMP.w #$0000		; $82C20C  C9 00 00	| 
+	BNE CODE_82C220		; $82C20F  D0 0F	| 
+	BRA CODE_82C23F		; $82C211  80 2C	| 
+CODE_82C213:			;			| 
+	CPX.w #$0006		; $82C213  E0 06 00	| 
+	BNE CODE_82C220		; $82C216  D0 08	| 
+	AND.w #$FF00		; $82C218  29 00 FF	| 
+	CMP.w #$7700		; $82C21B  C9 00 77	| 
+	BEQ CODE_82C23C		; $82C21E  F0 1C	| 
+CODE_82C220:			;			| 
+	LDA.w #$0000		; $82C220  A9 00 00	| 
+	LDX.w #$07FE		; $82C223  A2 FE 07	| 
+CODE_82C226:			;			| 
+	STA.l $700000,x		; $82C226  9F 00 00 70	| SAVEADDR
+	DEX			; $82C22A  CA		| 
+	DEX			; $82C22B  CA		| 
+	BPL CODE_82C226		; $82C22C  10 F8	| 
+	LDX.w #$0006		; $82C22E  A2 06 00	| 
+CODE_82C231:			;			| 
+	LDA.w DATA_82C308,x	; $82C231  BD 08 C3	| 
+	STA.l $700000,x		; $82C234  9F 00 00 70	| SAVEADDR
+	DEX			; $82C238  CA		| 
+	DEX			; $82C239  CA		| 
+	BPL CODE_82C231		; $82C23A  10 F5	| 
+CODE_82C23C:			;			| 
+	JSR CODE_82C2C5		; $82C23C  20 C5 C2	| 
+CODE_82C23F:			;			| 
+	REP #$30		; $82C23F  C2 30	| 
+	LDX.w #$07FE		; $82C241  A2 FE 07	| 
+	LDA.w #$0000		; $82C244  A9 00 00	| 
+CODE_82C247:			;			| 
+	CLC			; $82C247  18		| 
+	ADC.l $700000,x		; $82C248  7F 00 00 70	| SAVEADDR
+	DEX			; $82C24C  CA		| 
+	DEX			; $82C24D  CA		| 
+	BPL CODE_82C247		; $82C24E  10 F7	| 
+	CMP.w #$0000		; $82C250  C9 00 00	| 
+	BNE CODE_82C2B7		; $82C253  D0 62	| 
+	JSR CODE_82C2BA		; $82C255  20 BA C2	| 
+	LDX.w #$000A		; $82C258  A2 0A 00	| 
+	LDA.l $700000,x		; $82C25B  BF 00 00 70	| SAVEADDR
+	BEQ CODE_82C2B1		; $82C25F  F0 50	| 
+CODE_82C261			;			| 
+	TAX			; $82C261  AA		| 
+	STX.b $80		; $82C262  86 80	| RAM ADDRESS
+	CLC			; $82C264  18		| 
+	ADC.l $700002,x		; $82C265  7F 02 00 70	| SAVEADDR
+	STA.b $82		; $82C269  85 82	| RAM ADDRESS
+	LDA.l $700000,x		; $82C26B  BF 00 00 70	| SAVEADDR
+	BNE CODE_82C274		; $82C26F  D0 03	| 
+	LDA.w #$0800		; $82C271  A9 00 08	| 
+CODE_82C274:			;			| 
+	CMP.w #$0801		; $82C274  C9 01 08	| 
+	BCS CODE_82C220		; $82C277  B0 A7	| 
+	CMP.b $82		; $82C279  C5 82	| RAM ADDRESS
+	BEQ CODE_82C27F		; $82C27B  F0 02	| 
+	BCC CODE_82C220		; $82C27D  90 A1	| 
+CODE_82C27F:			;			| 
+	LDA.l $700004,x		; $82C27F  BF 04 00 70	| SAVEADDR
+	AND.w #$7F7F		; $82C283  29 7F 7F	| 
+	STA.l $700004,x		; $82C286  9F 04 00 70	| SAVEADDR
+	LDA.l $700006,x		; $82C28A  BF 06 00 70	| SAVEADDR
+	AND.w #$7F7F		; $82C28E  29 7F 7F	| 
+	STA.l $700006,x		; $82C291  9F 06 00 70	| SAVEADDR
+	LDA.l $700008,x		; $82C295  BF 08 00 70	| SAVEADDR
+	AND.w #$7F7F		; $82C299  29 7F 7F	| 
+	STA.l $700008,x		; $82C29C  9F 08 00 70	| SAVEADDR
+	LDA.l $70000A,x		; $82C2A0  BF 0A 00 70	| SAVEADDR
+	AND.w #$7F7F		; $82C2A4  29 7F 7F	| 
+	STA.l $70000A,x		; $82C2A7  9F 0A 00 70	| SAVEADDR
+	LDA.l $700000,x		; $82C2AB  BF 00 00 70	| SAVEADDR
+	BNE CODE_82C261		; $82C2AF  D0 B0	| 
+CODE_82C2B1:			;			| 
+	JSR CODE_82C2C5		; $82C2B1  20 C5 C2	| 
+	PLB			; $82C2B4  AB		| 
+	CLC			; $82C2B5  18		| 
+	RTS			; $82C2B6		| 
+CODE_82C2B7:			;			| 
+	PLB			; $82C2B7  AB		| 
+	SEC			; $82C2B8  38		| 
+	RTS			; $82C2B9  60		| 
+
+CODE_82C2BA:			;			| 
+	SEP #$20		; $82C2BA  E2 20	| 
+	LDA.b #$77		; $82C2BC  A9 77	| 
+	STA.l $700007		; $82C2BE  8F 07 00 70	| SAVEADDR
+	REP #$20		; $82C2C2  C2 20	| 
+	RTS			; $82C2C4  60		| 
+
+CODE_82C2C5:			;			| 
+	REP #$30		; $82C2C5  C2 30	| 
+	JSR CODE_82C2EB		; $82C2C7  20 EB C2	| 
+	LDA.l $700008		; $82C2CA  AF 08 00 70	| SAVEADDR
+	SEP #$20		; $82C2CE  E2 20	| 
+	XBA			; $82C2D0  EB		| 
+	CLC			; $82C2D1  18		| 
+	ADC.l $700007		; $82C2D2  6F 07 00 70	| SAVEADDR
+	SEC			; $82C2D6  38		| 
+	SBC.b #$30		; $82C2D7  E9 30	| 
+	XBA			; $82C2D9  EB		| 
+	REP #$20		; $82C2DA  C2 20	| 
+	STA.l $700008		; $82C2DC  8F 08 00 70	| SAVEADDR
+	SEP #$20		; $82C2E0  E2 20	| 
+	LDA.b #$30		; $82C2E2  A9 30	| 
+	STA.l $700007		; $82C2E4  8F 07 00 70	| SAVEADDR
+	REP #$20		; $82C2E8  C2 20	| 
+	RTS			; $82C2EA  60		| 
+
+CODE_82C2EB:			;			| 
+	REP #$30		; $82C2EB  C2 30	| 
+	LDA.w #$0000		; $82C2ED  A9 00 00	| 
+	STA.l $700008		; $82C2F0  8F 08 00 70	| SAVEADDR
+	LDA.w #$0000		; $82C2F4  A9 00 00	| 
+	LDX.w #$07FE		; $82C2F7  A2 FE 07	| 
+	SEC			; $82C2FA  38		| 
+	SBC.l $700000,x		; $82C2FB  FF 00 00 70	| SAVEADDR
+	DEX			; $82C2FF  CA		| 
+	DEX			; $82C300  CA		| 
+	BPL CODE_82C2FA		; $82C301  10 F7	| 
+	STA.l $700008		; $82C303  8F 08 00 70	| SAVEADDR
+	RTS			; $82C307  60		| 
+
+DATA_82C308:			;-----------------------| identifier (ウミハラV3.0)
+	db $B3,$D0,$CA,$D7,$56,$33,$2E,$30
+
+
 
 CODE_82C3BD:			;-----------------------| 
 	REP #$30		; $82C3BD  C2 30	| 
@@ -2017,11 +3067,11 @@ warnpc $9D8000
 
 org $1D8000
 
-CODE_1D8000:			;-----------------------| 
+CODE_1D8000:			;-----------------------| SPC Upload
 	JSR CODE_1D8008		; $1D8000  20 08 80	| 
 	RTL			; $1D8003  6B		| 
 
-CODE_1D8004:			;-----------------------| 
+CODE_1D8004:			;-----------------------| SPC Process
 	JSR CODE_1D80DA		; $1D8004  20 DA 80	| 
 	RTL			; $1D8007  6B		| 
 

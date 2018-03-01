@@ -1,10 +1,16 @@
-7E0090	4? bytes	holds source address for BG DMA uploads
+7E0080	16 bytes	REPLAY menu drawing code uses this as scratch ram more or less
+
+7E0090	4? bytes	holds source address for BG DMA uploads, also used to store addrs for indirect jumps
 
 7E0200	1 byte		NMI thingy (set when NMI runs, breaks loop)
 7E0201	1 byte		if bit 7 set, quit NMI completely. if bit 6 also set, update 4200/2100 then quit
 			if bit 4 set, dont update score/time during gameplay (maybe this is pause flag?)
 
-7E0208	8 bytes		not sure. seems (un)important [8A 43 95 A0 90 EC 94 77]
+7E0202	2 bytes?	high bit determines if youve selected an item on the title screen
+
+7E0204	2 bytes?	high bit determines if youre on title screen or in level? (set=level?)
+
+7E0208	8 bytes		game title in Shift-JIS [8A 43 95 A0 90 EC 94 77] (海腹川背)
 
 7E0210	2 bytes		layer 1 X mirror
 7E0212	2 bytes		layer 1 Y mirror
@@ -24,6 +30,8 @@
 7E0238	2 bytes		palette index to upload to (low byte). if high byte negative, no palette update
 7E023A	2 bytes		number of colors to update
 
+7E023E	2 bytes		possibly RNG output
+
 7E0240	2 bytes		joypad port 1 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
 7E0242	2 bytes		joypad port 2 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
 7E0244  2 bytes		joypad port 1 pressed (aka 1 frame)
@@ -38,7 +46,7 @@
 7E025B	1 byte		might be tileset?
 
 7E0270  2 bytes		title screen cursor position (0,1,2)
-7E0272	2 bytes		???
+7E0272	2 bytes		title screen timer (until it plays demo)
 7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
 
 7E0280	until 02F0	VRAM DMA buffer. 2 byte length, 2 byte vramaddr, 3 byte srcaddr. so 7 bytes each
@@ -81,4 +89,5 @@
 7E1F12	x2 bytes	backup of stack pointer
 7E1F14	until 1FFF	stack 0
 
-7E5200	x200 bytes	CGRAM mirror?
+7E5200	x200 bytes	CGRAM mirror
+7E5400	x200 bytes	CGRAM mirror mirror, but also REPLAY tilemap buffer. i guess its multi-use

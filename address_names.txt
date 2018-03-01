@@ -1,0 +1,11 @@
+potential address names:
+
+808178	NextFrame
+8084B4	RegisterInit
+808907	PlayMusic
+808968	PlaySFX
+808A04	Bnk80_JSLtoRTS
+808AA4	VRAMBuffer
+808BC0	JoypadUpdate
+1D8000	SPC_Upload
+1D8004	SPC_Process
