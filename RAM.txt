@@ -50,6 +50,7 @@
 7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
 
 7E0280	until 02F0	VRAM DMA buffer. 2 byte length, 2 byte vramaddr, 3 byte srcaddr. so 7 bytes each
+			if length is 0000, end of buffer
 7E02F0	2 bytes		??? maybe empty
 7E02F2	2 bytes		index to 0280
 
@@ -91,3 +92,4 @@
 
 7E5200	x200 bytes	CGRAM mirror
 7E5400	x200 bytes	CGRAM mirror mirror, but also REPLAY tilemap buffer. i guess its multi-use
+7E5600  16 bytes	more or less scratch RAM for the REPLAY menu

@@ -5,6 +5,9 @@ potential address names:
 808907	PlayMusic
 808968	PlaySFX
 808A04	Bnk80_JSLtoRTS
+808A11	ScreenON
+808A27	ScreenOFF_0
+808A2B	ScreenOFF_1
 808AA4	VRAMBuffer
 808BC0	JoypadUpdate
 1D8000	SPC_Upload
