@@ -1,0 +1,193 @@
+﻿LEVEL DATA
+
+XX:YYYY
+((XX - $80)*$8000) + (YYYY - $8000) = address of level data
+
+Level header pointers: $40 (64) levels
+0x0F218 - 0x0F297
+
+Level header:
+0x0F298 - 0x0F9AC, $25 (37) bytes each, $40 (64) levels
+$00 - $02: level pointer
+$03: graphics bank select for level (3 bits)
+$04: displayed field #
+$05: level music select (valid values: 0x00-0x0A, others crash the game)
+$06: Enemy type #1
+$07: Enemy type #2
+$08: Enemy type #3
+$09: Enemy type #4
+$0A: Enemy type #5
+$0B: Enemy type #6
+$0C - $0D: pointer???
+$0E - $0F: pointer???
+$10 - $11: pointer???
+$12 - $13: pointer???
+$14 - $15: pointer???
+$16 - $17: pointer???
+$18 - $19: pointer???
+$1A: seems to have something to do with conveyors and moving tiles..
+$1B: water height
+$1C: water display
+$1D: water type (2 for still water, 3 for waves)
+$1E: normal value $E6, instant game over $E5, anything else weird stuff happens
+$1F-$20: level timer
+$21-$24: door exits
+
+Level data block:
+    0x0000 - 0x0FFF:
+        Decompressed to 0x7E4100; evidently, the first and last 0x40 bytes are used to calculate 4 additional identical consecutive 0x40 byte blocks of data at 0x7E4000 and 0x7E5100 respectively, as well. That's probably to extend the physmap above and below the visible tilemap and encoded physmap by 4 rows.
+    0x1000 - 0x2FFF:
+        Tilemap data decompressed to 0x7E2000. VRAM ordered tilemap is de-interleaved from it.
+    0x3000:
+        0x108*N bytes. Each 0x108 byte block overwrites the last - N may be any number, but N=1 is recommended. These are decompressed (over each other) to 0x7E5400.
+    0x3000 - 0x3001:
+        Number of graphical tiles used. Maximum is 0x3F2.
+    0x3002 - 0x3101:
+        Effectively an array of bits, each of which determines whether a tile with the corresponding index in a block decompressed later to 0x7E5502 is needed in VRAM. The previous word is essentially the number of 1 bits in this array. The bits are read right to left with each byte and tile read in ascending order.
+    0x3102 - 0x3108:
+        Each byte is an index into an array of 32 byte (16 color) palettes decompressed in the next block. The corresponding palettes are moved to 0x7E5240-0x7E5300
+
+Level data will be placed within $7E2000 - $7E5207
+$7E2000 - $7E3FFF: tilemap (8192 bytes, 4096 tiles)
+$7E4000 - $7E51FF: physmap
+$7E5240 - $7E5300: palettes
+$7E5400 - $7E54FF: related to selecting tiles in VRAM
+    $7E5460 - $7E546F: initialized as an exact copy of $7E0480-$7E48F
+    $7E5470 - $7E547F: initialized as a copy of $7E0660-$7E066F with non-zero values or'ed by 0x8000
+$7E5500 - $7E5501: tilemap de-interleave. subtracted from $03f2, stored to $80, then every byte in level data is added by $80.
+$7E5502 - $7E5507: temporarily used to store palette indexes. Byte loaded is shifted left 5 times, bitwise AND by $#01E0, added (no carry) $#55E0, 32 byte palette moved to where the result points to ($7E5240-$7E52FF)
+
+4096 tiles per field
+Tiles are made up of 2 bytes: a 1 byte tile type and a 1 byte tile property
+tile types are the tile # in the bank
+
+The algorithm reads bytes 1 at a time.
+Every read of a POS byte sets a counter equal to 8.
+This counter allows to read 8 non-POS or POS bytes before having to read another one.
+The POS byte tells where the position(s) of a LZ byte(s) is/are via a bit set.
+If a non-POS byte is read, the counter is decremented by 1.
+	EXCEPTION: if a LZ byte that is read has 0 for the left 4 bits, the counter is not decremented, and is only decremented by 1 after the next byte is read
+The leftmost bit is byte 1, the rightmost bit is byte 8.
+To end decompression, read #$00 four times when a POS bit is set
+
+The LZ bytes copy data from behind it.
+LZ byte: TTTTLLLL
+T: total amount of bytes to place (+1)
+	0bTTTT + 1
+	If TTTT is 0, the byte after the LZ byte is how many bytes to place.
+L: amount of unique bytes to copy from behind the LZ byte.
+	0b10000 - 0b0LLLL 
+
+0x28B bytes of something: physmaps? sprites?
+
+TILE PROPERTIES:
+
+VHBP PPNN
+---------
+V          is for Vertical flip of the tile.
+ H         is for Horizontal flip of the tile.
+  O        is for tile priority
+   P PP    are for palette. 8 palettes to choose from.
+       NN  is for Bank. For banks 0-3, banks 2 and 3 usually not set
+       
+       
+       
+GRAPHIC BANK DATA
+
+0x02E80 - 0x02EB7: array of 7 GraphicsData structures that specify the addresses of color and tile data. (4th is same as first? why?)
+GraphicsData block:
+    3 bytes: void FAR* to compressed palette and image data.
+    3 bytes: void FAR* to more compressed image data, if necessary.
+    2 bytes: unknown, maybe nothing
+Banks have 1024 (0x400) tiles each
+[0x70000, 0x68000, 0x58000, 0x60000, 0x88000, 0x98000, 0x70000, 0x68000, 0x50000, 0x90000, 0xA0000, 0xA4092, 0x80000, 0xAB680]
+    
+$7E5600 - $7E57FF: palettes before index selection
+
+Each field type/theme has two tile banks, which can be found by GraphicsData structures and can be selected from the level header.
+The first bank has 15 palettes in the beginning (0x0000 - 0x01DF)
+The first bank has one tile filled with black (0x01E0 - 0x01FF)
+Compressed graphics start after the palettes, with the black tile as the first tile.
+
+PHYS TILE PROPERTIES:
+    Physmap bytes:
+    • 00: Air
+
+    • 01**: always a word where the first byte implies that an action will happen when the player pushes up and the second byte implies what the action is:
+    Where ** is:
+    00: climb a ladder
+    01: enter first door
+    02: enter second door
+    03: enter third door
+    04: enter fourth door
+    05-FF: the game will crash
+    NOTE: There can also be only one door instance (0101 or 0102 etc.) per level or the game will crash.
+
+    • 02** and 03**: always a word where the first byte implies direction and the second byte implies sprite number (up until 06).
+    02: sprite is facing left
+    03: sprite is facing right
+    Where ** is:
+    00: Player starting position (There can only be one. If there's two instances of 0200 or 0300, the game will crash)
+    01: sprite 1
+    02: sprite 2
+    03: sprite 3
+    04: sprite 4
+    05: sprite 5
+    06: sprite 6
+
+    • 03 07: Spawn-safe area. Enemies killed cannot respawn here. (special case, has nothing to do with sprites or facing left or right)
+
+    04: ?
+
+    05: If the field's sprite 05 is a bird, they can land in this spot.
+    06: If the field's sprite 06 is a bird, they can land in this spot.
+    It would be wise to remember that if you use birds in your levels, set them to slots 05 or 06. Setting them to 02 and 03 will cause a conflict and the game will crash.
+    $
+    $39: 0011 1001: Spike?
+    $3A: 0011 1010: Spike?
+    $
+    $40: 0100 0000: Solid
+    $41: 0100 0001: Spike? Ice?
+    $42: 0100 0010: Spike?
+    $
+    $45: 0100 0101: Escalator left
+    $47: 0100 0111: Escalator right
+    $
+    $80: 1000 0000: Solid slope bottom-right: low
+    $81: 1000 0001: Ice slope bottom-right: low
+    $
+    $87: 1000 0111: Escalator slope bottom-right: low
+    $88: 1000 1000: Solid slope bottom-right: high
+    $89: 1000 1001: Ice slope bottom-right: high
+    $
+    $8F: 1000 1111: Escalator slope bottom-right: high
+    $90: 1001 0000: Solid slope bottom-left: low
+    $91: 1001 0001: Ice slope bottom-left: low
+    $
+    $98: 1001 1000: Solid slope bottom-left: high
+    $99: 1001 1001: Ice slope bottom-left: high
+    $
+    $A0: 1010 0000: Solid slope top-right: low
+    $
+    $A8: 1010 1000: Solid slope top-right: high
+    $
+    $B0: 1010 0000: Solid slope top-left: low
+    $
+    $B7: 1011 0111: Escalator slope top-left: low
+    $B8: 1011 1000: Solid slope top-left: high
+    $
+    $BF: 1011 1111: Escalator slope top-left: high
+    
+    
+    SRVH hEeI
+    
+    S: slope (solid if s = 1 , even if S = 0)
+    R: reacts to environment (tilemap tiles above it, or on it?) (ladder, door, spike, ice)
+    V: v-flip for slopes
+    H: h-flip for slopes
+    h: slope height (0 = low, 1 = high)
+    E: escalator (solid if E = 1, even if S = 0)
+    e: escalator direction (0 = left, 1 = right)
+    I: ice? spike?
+    
+    Can phys tiles determine objects/enemies/umihara's position?

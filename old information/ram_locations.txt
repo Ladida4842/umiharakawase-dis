@@ -1,0 +1,25 @@
+$7E0000 - $7E007F	Doesn't seem to have anything
+$7E023C - $7E023D	Random number seed
+$7E025A - $7E025A   Lives
+$7E025B - $7E025B	Level index (in header ptr table)
+$7E0404 - $7E0405	X Position of Player
+$7E0406 - $7E0407	Y Position of Player
+$7E0408 - $7E0409	X Speed of Player
+$7E040A - $7E040B	Y Speed of Player
+$7E040C - $7E040D	Screen focus X
+$7E040E - $7E040F	Screen focus Y
+$7E0480 - $7E048F	Array of the level's object (enemy) indexes from the header zero extended to words. The first word and last word are not from that table, but they are otherwise treated identically
+$7E0490 - $7E049F	Array of near pointers to object structures in the rom related to the corresponding member of the array at $7E0480. These are gathered by using the members of said array into the pointer table at $81D3E9
+$7E0500 - $7E0501	X Position of hook
+$7E0502 - $7E0503	Y Position of hook
+$7E0604	Amount of Line out
+$7E0602	Lenght of Line stretched
+$7E0660 - $7E066F	Array of words zero-extended from the header, offset 0x14. Only members 1-7 come from the header; member 0's source is unknown, but it is otherwise treated identically
+$7E0670 - $7E067F	Array of words from rom array $82A75B indexed by corresponding members of the array at $7E0660. Seems to be related to object/enemy data, like array $7E0490, but is used alternatively when the top bit of the corresponding member of that array is set.
+$7E2000 - $7E3FFF	Tilemap
+$7E4100 - $7E50FF	Physmap
+$7E5400 - $7E545F:  related to selecting tiles in VRAM
+$7E5460 - $7E546F:	initialized as an exact copy of $7E0480-$7E048F
+$7E5470 - $7E547F:	initialized as a copy of $7E0660-$7E066F with non-zero values or'ed by 0x8000
+$7E5502 - $7E55DF:  VRAM temp space?
+$7E55E0 - $7E57DF:  palettes before index selection? (first 2 bytes at $7E5600 are $#00)

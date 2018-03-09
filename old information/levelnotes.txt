@@ -1,0 +1,193 @@
+Level 00: 3C 64 28 64 00 00 00 00 , 00 00 00 00 00 00 04     red fish, snail, birds, escalator
+Level 01: 3C 64 00 00 00 00 00 00 , 00 00 00 00 06 05 04     red fish, bucket (small fish), escalator
+Level 02: 3C 64 00 00 28 64 00 00 , 00 00 00 00 00 00 00     red fish, snail, net
+Level 03: 28 96 50 50 00 00 00 00 , 00 00 00 00 00 00 00     blue fish, snail
+Level 04: 1E A0 32 78 00 00 00 00 , 00 00 00 00 00 00 22
+Level 05: 1E B4 32 78 00 00 00 00 , 00 00 00 00 00 00 00
+Level 06: 3C B4 00 00 00 00 00 00 , 29 22 00 00 00 2D 2C
+Level 07: 50 96 00 00 00 00 00 00 , 00 00 00 00 00 2D 2C
+Level 08: 00 00 00 00 00 00 00 00 , 00 00 00 00 00 00 28
+Level 09: 3C 96 28 64 00 00 00 00 , 00 00 00 00 00 20 21
+Level 10: 28 B4 00 00 00 00 00 00 , 00 00 00 00 00 00 00
+Level 11: 1E 96 3C 64 00 00 00 00 , 00 00 00 00 00 00 0F
+Level 12: 00 00 00 00 00 00 00 00 , 29 00 00 00 00 0E 0F
+Level 13: 32 8C 00 00 50 64 00 00 , 29 00 00 00 00 00 00
+Level 14: 32 B4 50 64 00 00 00 00 , 00 00 00 00 00 18 00
+Level 15: 32 B4 46 50 00 00 00 00 , 29 00 00 00 2C 11 00
+Level 16: 32 B4 00 00 00 00 00 00 , 00 00 00 00 00 34 34
+Level 18: 50 96 00 00 00 00 00 00 , 00 00 00 00 00 00 00
+Level 20: 3C DC 00 00 50 B4 00 00 , 29 00 00 00 07 05 04
+Level 22: 14 FF 32 DC 00 00 00 00 , 00 00 00 26 26 09 08
+Level 28: 50 64 00 00 00 00 00 00 , 29 00 00 00 00 2F 2E
+Level 36: 32 B4 50 64 00 00 00 00 , 00 00 00 00 00 19 00
+Level 37: 3C B4 5A 78 00 00 00 00 , 2A 00 00 0B 30 10 00
+Level 38: 3C B4 00 00 00 00 00 00 , 2A 00 00 00 00 10 00
+Level 39: 3C A0 50 64 00 00 00 00 , 00 00 00 00 00 00 00
+Level 40: 50 8C 00 00 00 00 50 78 , 00 00 00 00 00 00 00
+Level 41: 3C B4 00 00 00 00 00 00 , 00 29 00 00 00 3B 3A
+Level 42: 50 A0 00 00 00 00 00 00 , 00 29 00 00 00 38 38
+Level 43: 00 00 00 00 00 00 00 00 , 2A 00 00 00 00 00 00
+Level 44: 50 A0 00 00 00 00 00 00 , 00 29 00 00 00 00 00
+Level 45: 50 A0 78 78 00 00 00 00 , 00 29 00 00 00 38 39
+Level 46: 3C 64 28 64 00 00 00 00 , 00 00 00 00 00 04 05
+Level 47: 3C A0 64 64 00 00 00 00 , 00 00 00 00 00 00 00
+Level 48: 50 A0 00 00 00 00 00 00 , 00 00 00 00 00 00 00
+Level 49: 3C C8 50 8C 00 00 00 00 , 2A 00 00 00 00 00 00
+Level 50: 50 78 00 00 00 00 00 00 , 29 00 00 0C 0C 0C 00
+Level 51: 3C 78 78 3C 00 00 00 00 , 2A 00 00 00 00 00 00
+Level 52: 00 00 50 B4 00 00 00 00 , 2A 29 2B 00 00 33 32
+Level 53: 3C B4 64 8C 00 00 00 00 , 00 00 00 00 0C 30 31
+Level 54: 3C B4 64 8C 00 00 00 00 , 00 29 00 0F 0E 00 00
+Level 55: 50 46 78 64 00 00 00 00 , 00 29 00 0F 0E 36 37
+Level 56: 3C 64 00 00 00 00 00 00 , 00 00 00 00 00 37 00
+Level 57: 3C 64 64 28 00 00 00 00 , 00 00 00 35 35 35 00
+Level 58: 00 00 00 00 00 00 00 00 , 00 00 00 00 00 10 00
+Level 59: 00 00 00 00 00 00 00 00 , 00 00 00 00 00 00 28
+Level 60: 00 00 00 00 00 00 00 00 , 00 00 00 28 04 05 00
+Level 61: 00 00 00 00 00 00 00 00 , 00 00 00 00 00 28 00
+Level 62: 00 00 00 00 00 00 00 00 , 29 00 00 00 00 00 00
+Level 63: 00 00 00 00 00 00 00 00 , 00 00 00 00 00 00 00
+
+object values:
+0x00: nothing
+0x04: escalator slow right. animates palette 7.
+0x05: escalator slow left.
+0x06: escalator fast right
+0x07: causes death
+0x08: rising platform series (bank 0)
+0x09: falling platform series (bank 0)
+0x0B: pullable/moveable wall
+0x0C: door
+0x0E: downward pillar
+0x0F: upward pillar
+0x10: pop-out ceiling tile
+0x11: pop-out ground tile
+0x18: bridge piece
+0x19: bridge piece. collapses when touched.
+0x20: single platform (bank 0, white)
+0x21: single platform (bank 0, blue)
+0x22: waves can push you on platform $41-$47. slippery.
+0x26: rising platform series (bank 0, blue, way less frequent)
+0x28: boss door barricade
+0x29: causes death
+0x2A: ice/glass
+0x2B:
+0x2C: rising platform series (bank 4)
+0x2D: falling platform series (bank 4)
+0x2E: rising spiked platform series (bank 4)
+0x2F: falling spiked platform series (bank 4)
+0x30: rising platform series (bank 2)
+0x31: falling platform series (bank 2)
+0x32: rising spiked platform series (bank 2)
+0x33: falling spiked platform series (bank 2)
+0x34: single platform (bank 1)
+0x35: single platform (bank 5)
+0x36: rising platform series (bank 1)
+0x37: falling platform series (bank 1)
+0x38: single platform (bank 6)
+0x39: single spiked platform (bank 6)
+0x3A: rising platform series (bank 5)
+0x3B: falling platform series (bank 5)
+
+word values:
+0x0000: nothing
+0x14FF:
+0x1E96:
+0x1EA0:
+0x1EB4:
+0x2864:
+0x2896:
+0x28B4:
+0x3278:
+0x328C:
+0x32B4:
+0x32DC:
+0x3C64:
+0x3C78:
+0x3C96:
+0x3CA0:
+0x3CB4:
+0x3CC8:
+0x3CDC:
+0x4650:
+0x5046:
+0x5050:
+0x5064:
+0x5078:
+0x508C:
+0x5096:
+0x50A0:
+0x50B4:
+0x5A78:
+0x6428:
+0x6464:
+0x648C:
+0x783C:
+0x7864:
+0x7878:
+
+enemy values:
+0x00: nothing
+0x01: "Poof"-sprite, crashes alone
+0x02: "Splash"-sprite, crashes alone
+0x03: net spawner (byte before this is what's dropped)
+0x04: goldfish
+0x05: eel
+0x06: flying clam
+0x07: brown snail
+0x08: bucket, type 1 (byte after this is what's spouted)
+0x09: bucket, type 2 (byte after this is what's spouted)
+0x0A: flying fish (for bucket)
+0x0B: small fish (for bucket)
+0x0C: UNUSED. Puffer fish.
+0x0D: blue fish
+0x0E: "Poof"-sprite, crashes alone.
+0x0F: red egg-laying fish
+0x10: shark (byte after is what's thrown)
+0x11: shark bait, also can be on ceiling
+0x12: giant tuna fish
+0x13: squid (horizontal) (byte after this is what's spitted)
+0x14: squid (vertical) (byte before this is what's spouted)
+0x15: squid ink
+0x16: tiny fish in water (decorative)
+0x17: brown bird
+0x18: blue bird
+0x19: "Poof"-sprite, crashes alone
+0x1A: "Poof"-sprite, crashes alone
+0x0B: "Poof"-sprite, crashes alone
+0x1C: barnacle (ground) (byte after this is what's spitted)
+0x1D: UNUSED. barnacle (vertical) (byte after this is what's spitted)
+0x1E: UNUSED. blue barnacle, spits cannonballs
+0x1F: barnacle spark
+0x20: UNUSED. blue barnacle
+0x21: blue snail
+0x22: UNUSED. octopus (identical?)
+0x23: UNUSED. catfish
+0x24: "Poof"-sprite, crashes alone
+0x25: "Poof"-sprite, crashes alone
+0x26: "Poof"-sprite, crashes alone
+0x27: "Poof"-sprite, crashes alone
+0x28: "Poof"-sprite, crashes alone
+0x29: "Poof"-sprite, crashes alone
+0x2A: "Poof"-sprite, crashes alone
+0x2B: "Poof"-sprite, crashes alone
+0x2C: "Poof"-sprite, crashes alone
+0x2D: "Poof"-sprite, crashes alone
+0x2E: "Poof"-sprite, crashes alone
+0x2F: backpack (1-up)
+0x30: giant tadpole (boss) (put 0x31 and 0x36 after this)
+0x31: frog (for boss)
+0x32: giant seahorse (boss, enemy #3) (put 0x33 and 0x35 before this, 0x34 after this)
+0x33: vertical seahorse (for boss)
+0x34: small seahorse (for boss)
+0x35: giant ink (for boss)
+0x36: frog egg? (for boss)
+0x37: giant crab (boss) (put 0x38 and 0x3D after this)
+0x38: crab's bubble (for boss)
+0x39: tiger flying fish (boss) (put 0x3A after this)
+0x3A: tiger flying fish second formation? (boss)
+0x3B: flounder flying fish (boss) (put 0x3C after this)
+0x3C: flounder flying fish second formation? (boss)
+0x3D: crab's platform shrapnel (for boss)
+0x3E: "Poof"-sprite, crashes alone
+0x3F: "Poof"-sprite, crashes alone

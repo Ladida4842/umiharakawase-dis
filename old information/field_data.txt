@@ -1,0 +1,106 @@
+    Addr     FieldType No. MusicType ... HW WtrType  Time  Next
+00: $98:a10e Riverside F00 Riverside     f0 01 02 e6  5:00 F01 F01 F01 F01
+01: $99:b08a Riverside F01 Riverside     f0 01 02 e6  5:00 F02 F02 F02 F02 
+02: $97:b403 Riverside F02 Riverside     e8 01 02 e6  5:00 F03 F05 F05 F05 
+03: $97:d58e Seaside   F03 Seaside       f0 01 03 e6  4:00 F04 F04 F04 F04 
+04: $85:f000 Seaside   F04 Seaside       f0 01 03 e6  4:00 F39 F39 F39 F39 
+05: $93:c49c Riverside F10 Riverside     f0 01 02 e6  4:00 F09 F09 F09 F09 
+06: $8b:e0ff Seaside   F06 Seaside       f0 01 03 e6  4:00 F07 F07 F07 F07 
+07: $8a:e485 Seaside   F07 Seaside       f0 01 03 e6  6:00 F08 F08 F08 F08 
+08: $9b:d1e3 Riverside F08 Riverside     e8 01 02 e6  4:00 F10 F10 F10 F10 
+09: $9a:ad8c Riverside F11 Riverside     e8 01 02 e6  5:00 F08 F20 F12 F12 
+0a: $92:f0fd Seaside   F14 Seaside       e8 01 03 e6  4:00 F11 F11 F11 F11 
+0b: $98:908a Waterfall F15 Waterfall     f0 01 02 e6  4:00 F55 F59 F59 F59 
+0c: $9a:9e6e Waterfall F12 Waterfall     f0 01 02 e6  5:00 F63 F63 F63 F63 
+0d: $99:dfc9 Waterfall F17 Waterfall     f0 01 02 e6  5:00 F14 F28 F28 F28 
+0e: $99:8000 Seaside   F20 Seaside       e8 01 03 e6  5:00 F15 F15 F15 F15 
+0f: $9a:e6cd Seaside   F21 Seaside       e8 01 03 e6  4:00 F16 F16 F16 F16 
+10: $95:e923 Mt.Stream F22 Mt.Stream     f4 01 02 e6  4:00 F51 F22 F22 F22 
+11: $8c:f27d Seaside   F26 Seaside       e8 01 03 e6  4:00 F52 F50 F50 F50 
+12: $91:e749 Riverside F18 Riverside     e8 01 02 e6  4:00 F51 F51 F51 F51 
+13: $93:ecae Riverside F38 Riverside     e8 01 02 e6  4:00 F54 F54 F54 F54 
+14: $97:a2fa Seaside   F30 Seaside       f0 01 03 e6  4:00 F49 F60 F60 F60 
+15: $8b:f3da Seaside   F45 Seaside       e8 01 03 e6  5:00 F45 F45 F45 F45 
+16: $9a:cb44 Mt.Stream F24 Mt.Stream     f4 01 02 e6  5:00 F61 F43 F43 F43 
+17: $97:f320 Mt.Stream F35 Mt.Stream     f4 01 02 e6  5:00 End End End End 
+18: $92:e10e Riverside F05 Riverside     f0 01 02 e6  4:00 F06 F06 F06 F06 
+19: $96:f214 Wharf     F48 Wharf         e8 01 03 e6  5:00 F62 F62 F62 F62 
+1a: $9a:8f3a Wharf     F47 Wharf         e8 01 03 e6  5:00 F40 F40 F40 F40 
+1b: $99:ef2e Ocean     F52 Ocean         e8 01 03 e6  5:00 F48 F48 F48 F48 
+1c: $9a:d927 Mt.Stream F42 Mt.Stream     f4 01 02 e6  6:00 F18 F46 F46 F46 
+1d: $99:9032 Ocean     F34 Ocean         e8 01 03 e6  5:00 F38 F38 F38 F38 
+1e: $98:f1cd Ocean     F50 Ocean         e8 01 03 e6  5:00 F58 F58 F58 F58 
+1f: $99:a063 Riverside F43 Riverside     e0 01 02 e6  5:00 F60 F60 F60 F60 
+20: $8e:f015 Seaside   F57 Seaside       f0 01 03 e6  5:00 End End End End 
+21: $91:f5f3 Ocean     F55 Ocean         e8 01 03 e6  5:00 End End End End 
+22: $9a:bc97 Mt.Stream F33 Mt.Stream     f4 01 02 e6  5:00 F53 F53 F53 F53 
+23: $96:bccd Mt.Stream F31 Mt.Stream     f4 01 02 e6  8:00 F57 F57 F57 F57 
+24: $9a:8000 Mt.Stream F23 Mt.Stream     f4 01 02 e6  5:00 F37 F37 F37 F37 
+25: $98:d252 Mt.Stream F28 Mt.Stream     f4 01 02 e6  4:00 End End End End 
+26: $98:e293 Mt.Stream F37 Mt.Stream     f4 01 02 e6  4:00 F22 F22 F22 F22 
+27: $97:c4d5 Waterfall F41 Waterfall     f0 01 02 e6  5:00 F43 F43 F43 F43 
+28: $96:ceed Waterfall F16 Waterfall     f0 01 02 e6  5:00 F13 F13 F13 F13 
+29: $96:aa70 Waterfall F29 Waterfall     f0 01 02 e6  5:00 F44 F44 F44 F44 
+2a: $8f:ec7e Wharf     F46 Wharf         e8 01 03 e6  5:00 F41 F41 F41 F41 
+2b: $87:f000 Wharf     F51 Wharf         e8 01 03 e6  5:00 F62 F62 F62 F62 
+2c: $89:f8e8 Mt.Stream F40 Mt.Stream     f4 01 02 e6  4:00 F38 F38 F38 F38 
+2d: $99:c092 Riverside F49 Riverside     f0 01 02 e6  6:00 F42 F42 F42 F42 
+2e: $9b:994a Seaside   F25 Seaside       f0 01 03 e6  4:00 F18 F56 F56 F56 
+2f: $90:f69c Wharf     F56 Wharf         e8 01 03 e6  6:00 F47 F47 F47 F47 
+30: $9b:b9c7 Ocean     F36 Ocean         e8 01 03 e6  8:00 F42 F36 F36 F36
+
+
+
+Yeah, a patch like that would be easy to make.
+
+But actually, looking at this table a bit more... It seems I made a mistake in how this should be read. Like this line here:
+Code: [Select]
+    Addr     FieldType No. MusicType ... HW WtrType  Time  Next
+05: $93:c49c Riverside F10 Riverside     f0 01 02 e6  4:00 F09 F09 F09 F09
+F09 doesn't actually exist. In fact, what Next actually stores is the entry number in the table, not the actual field number. In this case, the ninth entry is:
+Code: [Select]
+09: $9a:ad8c Riverside F11 Riverside     e8 01 02 e6  5:00 F08 F20 F12 F12
+And indeed, the field after F10 is F11. I'll go and fix the table in that post.
+
+EDIT: Or... I was going to, but...
+Code: [Select]
+19: $96:f214 Wharf     F48 Wharf         e8 01 03 e6  5:00 3e 3e 3e 3e
+There is no entry 3e, but the next field should be:
+Code: [Select]
+2f: $90:f69c Wharf     F56 Wharf         e8 01 03 e6  6:00 2f 2f 2f 2f
+This is getting kinda perplexing...
+
+
+
+
+
+Umihara Kawase
+
+Level Format
+
+0xC210E is the beginning of Field 00’s level data. It ends at 0xC3191, and in its entirety it’s 0x1084 bytes big. It includes the tiles to use for the level, starting point for the player, sprites and physical properties of each tile. Probably time and music bytes too. Tile set to use isn’t, however, defined in this bunch of data.
+The mystery begins at 0xC3015. Or, to be honest, anywhere in the data where there’s these strange combos. Check this out:
+
+0xC3015: 8E 4D 8D 4D 8C 4D 8B 00 4D 8A 4D 89 4D 88 4D 87 00 4D 86 4D 85 4D 84 4D 83 00 ...
+Now, those 00s (and other evil purposeless bytes and byte combos) are scattered through the level data. The bytes never appear as a constant stream, it’s always four bytes max, then that combo breaker 00 or 04 or 00 0F 2C or some crazy ‘useless’ byte shows up.
+But regardless, it’s a start. Right now I’ve got to flee, but I’ll be posting more of my findings, mostly sprite construction data, as soon as I get home.
+In the meantime, screw around in that area.
+
+Umihara Kawase - Level 1
+
+The graphics are compressed, but below are Bank 0 and Bank 1 from the first level.
+
+Umihara Kawase - Bank 0 Umihara Kawase - Bank 1
+
+Okay, slowly getting the hang of this. First off, let me explain the property byte in bits.
+
+VHBP AL?N
+---------
+V          is for Vertical flip of the tile.
+ H         is for Horizontal flip of the tile.
+  B        is for Behind. If this bit is set, you (and all sprites, for that matter) will be hiding behind this tile.
+   P AL    are for PALette. 8 palettes to choose from.
+       ?   is... I don't know. Seems to a some kind of a hybrid bit between bank and palette selection.
+           Another interesting this is that this bit is never set.
+        N  is for Bank. If not set, load graphics from bank 0, if set, from 1.
+I’ve also confirmed that the purpose of the 00s is not physical attribute defining. The first $28B bytes are used for defining physmaps and possibly sprites too. Editing any of the bytes in this area will not result in visual changes (except the total garbage-fest that occurs when editing a wrong byte).

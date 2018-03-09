@@ -1,0 +1,307 @@
+start:						----------> SETS UP BANKS, FLAGS, AND CLEARS WORKING RAM AREA
+808f34 phb					-----
+808f35 rep #$10				- Sets up banks
+808f37 sep #$20				-
+808f39 lda $82				-
+808f3b pha					-
+808f3c plb					-
+808f3d ldy $80				-----
+808f3f rep #$20				- Prepares flags
+808f41 stx $90				- Clears working RAM area
+808f43 stz $92				-
+808f45 stz $c0				-
+808f47 stz $c2				-
+808f49 stz $c4				-
+808f4b stz $c6				-
+808f4d stz $c8				-
+808f4f stz $ca				-
+808f51 stz $cc				-
+808f53 stz $ce				-
+808f55 sep #$20				-
+
+label_A:					----------> LOADS LEVEL DATA BYTE, RESETS COUNTER
+808f57 lda $0000,y			-----
+808f5a iny					- Load POS byte, store into $88
+808f5b sta $88				- 
+808f5d lda #$08				- Reset POS byte counter to 8
+808f5f sta $89				-
+
+label_B:
+808f61 lda $0000,y			-----
+808f64 iny					- Load level data byte
+808f65 xba					-
+808f66 lda $88				-----
+808f68 asl a				- Check next left bit of POS byte
+808f69 sta $88				-
+808f6b xba					-
+808f6c bcs label_D			- branch to label_D if LZ byte (if bit in POS byte is set)
+808f6e ldx $90				-----
+808f70 sta $7e0000,x		- Stores level data byte into upper temporary level data area
+808f74 inx					-
+808f75 stx $90				-
+808f77 ldx $92				-----
+808f79 sta $c0,x			- Stores level data byte into lower temporary level data area (16 bytes large)
+808f7b rep #$20				-
+808f7d txa					-
+808f7e inc					-
+808f7f and #$000f			-
+808f82 sta $92				-
+808f84 dec $86				-----
+808f86 bne label_C			- Decrement $86 counter, if 0, go to label_C
+808f88 phy					-----
+808f89 phb					- Setup for jump
+808f8a phk					-
+808f8b lda #$8f91 (#$00)	-
+808f8e pha					-
+808f8f jmp [$0083]			----- goes to jump_1, jump_2, or jump_3
+------
+
+label_T:
+808f92 rep #$30				-----
+808f94 plb					- Pulls bank and y info from stack
+808f95 ply					-
+
+label_C:
+808f96 sep #$20				-----
+808f98 dec $89				- Decrement LZ counter, 
+808f9a bne label_B			- if LZ counter > 0, go to label_B
+808f9c bra label_A			- if LZ counter = 0, go to label_A  
+------
+
+label_D:
+808f9e sta $8c				-----
+808fa0 rep #$20				- Store level data byte to $8C
+808fa2 lsr a				- Clear length bits of LZ byte
+808fa3 lsr a				-
+808fa4 lsr a				-
+808fa5 lsr a				-
+808fa6 and #$0f				-----
+808fa9 bne label_E			- If left 4 bits of LZ byte are not all cleared, go to label_E
+808fab lda $0000,y			-----
+808fae iny					- Load next level/LZ byte
+808faf and #$ff				-----
+808fb2 bne label_E			- If next byte's bits are not all cleared, go to label_E
+808fb4 sep #$20
+808fb6 lda $0000,y
+808fb9 iny
+808fba xba
+808fbb lda $0000,y
+808fbe iny
+808fbf rep #$20
+808fc1 xba
+808fc2 cmp #$0000
+808fc5 beq label_I
+
+label_E:
+808fc7 inc
+808fc8 sta $8a
+808fca lda $8c
+808fcc phy
+808fcd and #$000f
+808fd0 ora #$fff0
+808fd3 clc
+808fd4 adc $92
+808fd6 and #$000f
+808fd9 tay
+808fda sep #$20
+
+label_F:
+808fdc lda $00c0,y
+808fdf ldx $90
+808fe1 sta $7e0000,x
+808fe5 inx
+808fe6 stx $90
+808fe8 ldx $92
+808fea sta $c0,x
+808fec rep #$20
+808fee txa
+808fef inc
+808ff0 and #$000f
+808ff3 sta $92
+808ff5 tya
+808ff6 inc
+808ff7 and #$000f
+808ffa tay
+808ffb dec $86
+808ffd bne label_G
+
+label_U:
+808fff phy
+809000 phb
+809001 phk
+809002 lda #$9008
+809005 pha
+809006 jmp [$0083]
+809009 rep #$30
+80900b plb
+80900c ply
+
+label_G:
+80900d dec $8a
+80900f sep #$20
+809011 bne label_F
+809013 ply
+809014 dec $89
+809016 beq label_H
+809018 jmp label_B
+
+label_H:
+80901b jmp label_A
+
+label_I:
+80901e rep #$30
+809020 plb
+809021 rtl
+809022 rep #$30
+809024 ldx #$1be0
+809027 lda #$e000
+
+label_J:
+80902a sta $00,x
+80902c inx
+80902d inx
+80902e inx
+80902f inx
+809030 cpx #$1de0
+809033 bne label_J
+809035 rts
+
+label_Q:
+809071 rep #$30
+809073 phx
+809074 lda $025b
+809077 and #$00ff
+80907a asl a
+80907b tax
+80907c pla
+80907d clc
+80907e adc $81f218,x
+809082 tax
+809083 rtl
+
+jump_1:
+80aed3 lda #$5400
+80aed6 sta $90
+80aed8 lda #$aed3
+80aedb sta $83
+80aedd lda #$0080
+80aee0 sta $85
+80aee2 lda #$0108
+80aee5 sta $86
+80aee7 rtl
+
+jump_2:
+80aee8 ldx #$0000
+80aeeb ldy #$5240
+
+label_K:
+80aeee lda $7e5502,x
+80aef2 phx
+80aef3 asl a
+80aef4 asl a
+80aef5 asl a
+80aef6 asl a
+80aef7 asl a
+80aef8 and #$01e0
+80aefb clc
+80aefc adc #$55e0
+80aeff tax
+80af00 phb
+80af01 lda #$001f
+80af04 mvn $7e,$7e    -- copies bytes ($1F+1 (32) times)
+80af07 plb
+80af08 plx
+80af09 inx
+80af0a cpx #$0006
+80af0d bne label_K
+80af0f sep #$20
+80af11 lda #$8d80
+80af13 sta $2115
+80af16 rep #$30
+80af18 lda #$af38
+80af1b sta $83
+80af1d lda #$0080
+80af20 sta $85
+80af22 lda #$5502
+80af25 sta $90
+80af27 lda #$0100
+80af2a sta $86
+80af2c lda $022e
+80af2f asl a
+80af30 asl a
+80af31 asl a
+80af32 asl a
+80af33 sta $94
+80af35 stz $96
+80af37 rtl
+
+jump_3 (most common):
+80af38 ldx $96
+80af3a inc $96
+80af3c lda $7e5402,x
+80af40 and #$00ff
+80af43 beq label_P
+80af45 ora #$ff00
+80af48 sta $80
+80af4a ldx #$0000
+
+label_L:
+80af4d lsr $80
+80af4f bcc label_N
+80af51 lda $94
+80af53 sta $2116
+80af56 clc
+80af57 adc #$0010
+80af5a sta $94
+80af5c ldy #$0010
+
+label_M:
+80af5f lda $7e5502,x
+80af63 sta $2118
+80af66 inx
+80af67 inx
+80af68 dey
+80af69 bne label_M
+80af6b lda $80
+80af6d bra label_O
+
+label_N:
+80af6f txa
+80af70 clc
+80af71 adc #$0020
+80af74 tax
+
+label_O:
+80af75 lda $80
+80af77 bit #$ff00
+80af7a bne label_L
+
+label_P:
+80af7c lda #$5502
+80af7f sta $90
+80af81 lda #$0100
+80af84 sta $86
+80af86 rtl
+
+label_R:
+80af87 rep #$30
+80af89 phk
+80af8a plb
+80af8b ldx #$0000
+80af8e jsl label_Q
+------
+
+label_S:
+80af92 lda $810000,x (level header low)
+80af96 sta $80
+80af98 lda $810002,x (level header high)
+80af9c sta $82
+80af9e lda #$aebe
+80afa1 sta $83
+80afa3 lda #$0080
+80afa6 sta $85
+80afa8 lda #$1000
+80afab sta $86
+80afad ldx #$4100
+80afb0 jsl start
+------
