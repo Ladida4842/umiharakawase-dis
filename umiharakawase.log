@@ -178,7 +178,7 @@ CODE_80816A:				;			|
 	PLB				; $808176  AB		| 
 	RTL				; $808177  6B		| apparently this is the game jumper...
 
-CODE_808178:				;-----------------------| 
+CODE_808178:				;=======================| 
 	PHB				; $808178  8B		| 
 	PHD				; $808179  0B		| 
 	PHP				; $80817A  08		| 
@@ -216,7 +216,7 @@ CODE_8081A4:				;-----------------------|
 	PLA				; $8081AA  68		| 
 	RTI				; $8081AB  40		| 
 
-NMI:					;-----------------------| 
+NMI:					;=======================| 
 	REP #$30			; $8081AC  C2 30	| 
 	PHA				; $8081AE  48		| 
 	PHD				; $8081AF  0B		| 
@@ -484,7 +484,7 @@ CODE_808428:				;			| reset DMA buffer when finished
 	STZ.b $00,x			; $808430  74 00	| 
 	RTS				; $808432  60		| 
 
-IRQ:					;-----------------------| 
+IRQ:					;=======================| 
 	SEP #$20			; $808433  E2 20	| 
 	PHA				; $808435  48		| 
 	LDA.l $004211			; $808436  AF 11 42 00	| 
@@ -550,7 +550,7 @@ DATA_8084AB:				;			| same as above but for CPU registers
 	db $0D,$01			; $8084B1		| FastROM enabled here
 	db $FF				; $8084B3		| 
 
-CODE_8084B4:				;-----------------------| initializes all registers
+CODE_8084B4:				;=======================| initializes all registers
 	REP #$30			; $8084B4  C2 30	| 
 	PHK				; $8084B6  4B		| 
 	PLB				; $8084B7  AB		| 
@@ -718,7 +718,7 @@ CODE_8088E5:				;-----------------------|
 	STA.w $1900			; $808900  8D 00 19	| RAM ADDRESS
 	JML CODE_1D8004			; $808903  5C 04 80 1D	| 
 
-CODE_808907:				;-----------------------| song player. A = song to play
+CODE_808907:				;=======================| song player. A = song to play
 	REP #$30			; $808907  C2 30	| 
 	AND.w #$003F			; $808909  29 3F 00	| 
 	PHA				; $80890C  48		| 
@@ -761,7 +761,7 @@ CODE_808966:				;			|
 	RTL				; $808967  6B		| 
 
 
-CODE_808968:				;-----------------------| SFX player. A = SFX to play
+CODE_808968:				;=======================| SFX player. A = SFX to play
 	REP #$30			; $808968  C2 30	| 
 	PHX				; $80896A  DA		| 
 	AND.w #$00FF			; $80896B  29 FF 00	| 
@@ -794,25 +794,25 @@ CODE_8089A7:				;			|
 	PLX				; $8089A7  FA		| 
 	RTL				; $8089A8  6B		| 
 
-DATA_8089A9:				;			| 
-	db $00,$10,$10,$10
-	db $10,$20,$20,$18
-	db $18,$18,$18,$14
-	db $14,$15,$10,$11
-	db $10,$11,$10,$12
-	db $10,$12,$20,$20
-	db $20,$21,$FF,$18
-	db $10,$10,$10,$10
+DATA_8089A9:				;^^^^^^^^^^^^^^^^^^^^^^^| 
+	db $00,$10,$10,$10		; $8089A9		| 
+	db $10,$20,$20,$18		; $8089AD		| 
+	db $18,$18,$18,$14		; $8089B1		| 
+	db $14,$15,$10,$11		; $8089B5		| 
+	db $10,$11,$10,$12		; $8089B9		| 
+	db $10,$12,$20,$20		; $8089BD		| 
+	db $20,$21,$FF,$18		; $8089C1		| 
+	db $10,$10,$10,$10		; $8089C5		| 
 
 DATA_8089C9:				;-----------------------| 
-	db $1A,$01,$02,$03
-	db $04,$05,$06,$07
-	db $08,$09,$0A,$0B
-	db $0C,$0D,$0E,$0F
-	db $10,$11,$12,$13
-	db $14,$15,$16,$17
-	db $18,$19,$1A,$1A
-	db $1A,$1A,$1A,$1A
+	db $1A,$01,$02,$03		; $8089C9		| 
+	db $04,$05,$06,$07		; $8089CD		| 
+	db $08,$09,$0A,$0B		; $8089D1		| 
+	db $0C,$0D,$0E,$0F		; $8089D5		| 
+	db $10,$11,$12,$13		; $8089D9		| 
+	db $14,$15,$16,$17		; $8089DD		| 
+	db $18,$19,$1A,$1A		; $8089E1		| 
+	db $1A,$1A,$1A,$1A		; $8089E5		| 
 
 
 
@@ -823,7 +823,7 @@ DATA_8089C9:				;-----------------------|
 
 
 
-CODE_808A04:				;-----------------------| used by other banks to jump to addrs in this bank
+CODE_808A04:				;=======================| used by other banks to jump to addrs in this bank
 	REP #$30			; $808A04  C2 30	| 
 	PHA				; $808A06  48		| 
 	PHY				; $808A07  5A		| Y contains address to jump to!
@@ -836,7 +836,7 @@ CODE_808A10:				;			|
 	RTL				; $808A10  6B		| 
 
 
-CODE_808A11:				;-----------------------| turn screen on
+CODE_808A11:				;=======================| turn screen on
 	SEP #$20			; $808A11  E2 20	| 
 	LDA.b #$80			; $808A13  A9 80	| 
 	TSB.w $0201			; $808A15  0C 01 02	| RAM ADDRESS
@@ -849,9 +849,9 @@ CODE_808A11:				;-----------------------| turn screen on
 	RTS				; $808A26  60		| 
 
 
-CODE_808A27:				;-----------------------| 
+CODE_808A27:				;=======================| 
 	JSL CODE_808178			; $808A27  22 78 81 80	| return next frame
-CODE_808A2B:				;-----------------------| NMI & F-blank enable (turn screen off)
+CODE_808A2B:				;=======================| NMI & F-blank enable (turn screen off)
 	SEI				; $808A2B  78		| 
 	SEP #$20			; $808A2C  E2 20	| 
 	LDA.b #$80			; $808A2E  A9 80	| 
@@ -928,7 +928,7 @@ CODE_808A99:				;-----------------------| resets VRAM DMA buffer
 	STZ.b $00,x			; $808AA1  74 00	| RAM ADDRESS
 	RTS				; $808AA3  60		| 
 
-CODE_808AA4:				;-----------------------| VRAM DMA buffer handler
+CODE_808AA4:				;=======================| VRAM DMA buffer handler
 	REP #$30			; $808AA4  C2 30	| A = srcaddr, X = vramaddr, Y = bytes, stack = srcbank
 	PHA				; $808AA6  48		| 
 	PHX				; $808AA7  DA		| 
@@ -962,7 +962,7 @@ CODE_808ACC:				;			| why not jump 3 bytes up...
 
 
 
-CODE_808BC0:				;-----------------------| joypad RAM updater
+CODE_808BC0:				;=======================| joypad RAM updater
 	REP #$20			; $808BC0  C2 20	| 
 	LDA.w $0240			; $808BC2  AD 40 02	| RAM ADDRESS
 	AND.w $0248			; $808BC5  2D 48 02	| RAM ADDRESS
@@ -1146,7 +1146,7 @@ CODE_80E44A:				;			|
 	BNE CODE_80E419			; $80E458  D0 BF	| 
 	RTS				; $80E45A  60		| 
 
-DATA_80E45B:				; | pointers to GFX for all the stage BGs
+DATA_80E45B:				;^^^^^^^^^^^^^^^^^^^^^^^| pointers to GFX for all the stage BGs
 	dd DATA_838000			; $80E45B  00 80 83 00	| 
 	dd DATA_858000			; $80E45F  00 80 85 00	| 
 	dd DATA_868000			; $80E463  00 80 86 00	| 
@@ -1156,7 +1156,7 @@ DATA_80E45B:				; | pointers to GFX for all the stage BGs
 	dd DATA_888000			; $80E473  00 80 88 00	| 
 	dl DATA_888000			; $80E477  00 80 88	| 
 
-DATA_80E47A:				; | palette for stage BGs (shared)
+DATA_80E47A:				;^^^^^^^^^^^^^^^^^^^^^^^| palette for stage BGs (shared)
 	dw $0883,$0CA4,$10C5,$14E6,$1907,$1D28,$2149,$256A
 	dw $298B,$2DAC,$31CD,$35EE,$3A0F,$3E30,$4251,$4672
 
@@ -1200,14 +1200,15 @@ CODE_80E4C9:				;			|
 	BNE CODE_80E4BA			; $80E4DA  D0 DE	| 
 	RTS				; $80E4DC  60		| 
 
-DATA_80E4DD:				; | essentially, text chars to upload for levels (when not in REPLAY menu)
+DATA_80E4DD:				;^^^^^^^^^^^^^^^^^^^^^^^| essentially, text chars to upload for levels (when not in REPLAY menu)
 	db $50,$41,$55,$45,$5C,$46,$4C,$44
 	db $60,$61,$62,$63,$64,$65,$66,$67
 	db $68,$69,$6A,$6B,$48,$49,$53,$43
 
-DATA_80E4F5:				; | ???
+DATA_80E4F5:				;-----------------------| ???
 	db $50,$41,$55,$45,$5C,$00,$00,$00
 	db $48,$49,$53,$43
+
 
 CODE_80E501:				;-----------------------| set up HDMA on channels 5,6,7
 	PHK				; $80E501  4B		| 
@@ -1253,43 +1254,49 @@ CODE_80E519:				;			|
 	STA.w $021C			; $80E564  8D 1C 02	| RAM ADDRESS
 	RTS				; $80E567  60		| 
 
-DATA_80E568:				; | HDMA table for layer 2 X/Y (static)
-	db $70 : dw $0000,$018F
-	db $01 : dw $0100,$011F
-	db $00
+DATA_80E568:				;^^^^^^^^^^^^^^^^^^^^^^^| HDMA table for layer 2 X/Y (static)
+	db $70 : dw $0000,$018F		; $80E568		| 
+	db $01 : dw $0100,$011F		; $80E56D		| 
+	db $00				; $80E572		| 
 
-DATA_80E595:				; | HDMA table for mainscreen (static), used for REPLAY menu in level
-	db $50,$13			; | L3 disabled
-	db $40,$17			; | show REPLAY menu
-	db $01,$13			; | L3 disabled
-	db $00
 
-DATA_80E59C:				; | HDMA table for mainscreen (static), used for REPLAY menu in titlescreen
-	db $68,$13			; | L3 disabled
-	db $40,$17			; | show REPLAY menu
-	db $01,$13			; | L3 disabled
-	db $00
 
-DATA_80E5A3:				; | HDMA table for mainscreen (uploaded to RAM), used during level
-	db $40,$13			; | L3 disabled
-	db $10,$17			; | show lives, score, time
-	db $20,$13			; | 
-	db $08,$17			; | show FIELD/PAUSE
-	db $18,$13			; | 
-	db $08,$17			; | show high score
-	db $01,$13			; |\
-	db $00,$17			; || L3 water depends on L1 Ypos, hence why this is in RAM
-	db $01,$13			; |/
-	db $00
 
-DATA_80E5B6:				; | HDMA table for layer 3 X/Y (uploaded to RAM), used during level
-	db $70 : dw $0000,$001F		; | lives, score, time
-	db $20 : dw $0000,$FFFF		; | FIELD/PAUSE
-	db $08 : dw $0000,$FFE7		; | high score
-	db $08 : dw $0000,$FFB7		; | L3 water (Xpos varies, hence why this is in RAM)
-	db $00
 
-CODE_80E5CB:				; | do L3 water stuff?
+
+DATA_80E595:				;^^^^^^^^^^^^^^^^^^^^^^^| HDMA table for mainscreen (static), used for REPLAY menu in level
+	db $50,$13			; $80E595		| L3 disabled
+	db $40,$17			; $80E597		| show REPLAY menu
+	db $01,$13			; $80E599		| L3 disabled
+	db $00				; $80E59B		| 
+
+DATA_80E59C:				;^^^^^^^^^^^^^^^^^^^^^^^| HDMA table for mainscreen (static), used for REPLAY menu in titlescreen
+	db $68,$13			; $80E59C		| L3 disabled
+	db $40,$17			; $80E59E		| show REPLAY menu
+	db $01,$13			; $80E5A0		| L3 disabled
+	db $00				; $80E5A2		| 
+
+DATA_80E5A3:				;^^^^^^^^^^^^^^^^^^^^^^^| HDMA table for mainscreen (uploaded to RAM), used during level
+	db $40,$13			; $80E5A3		| L3 disabled
+	db $10,$17			; $80E5A5		| show lives, score, time
+	db $20,$13			; $80E5A7		| 
+	db $08,$17			; $80E5A9		| show FIELD/PAUSE
+	db $18,$13			; $80E5AB		| 
+	db $08,$17			; $80E5AD		| show high score
+	db $01,$13			; $80E5AF		|\
+	db $00,$17			; $80E5B1		|| L3 water depends on L1 Ypos, hence why this is in RAM
+	db $01,$13			; $80E5B3		|/
+	db $00				; $80E5B5		| 
+
+DATA_80E5B6:				;^^^^^^^^^^^^^^^^^^^^^^^| HDMA table for layer 3 X/Y (uploaded to RAM), used during level
+	db $70 : dw $0000,$001F		; $80E5B6		| lives, score, time
+	db $20 : dw $0000,$FFFF		; $80E5BB		| FIELD/PAUSE
+	db $08 : dw $0000,$FFE7		; $80E5C0		| high score
+	db $08 : dw $0000,$FFB7		; $80E5C5		| L3 water (Xpos varies, hence why this is in RAM)
+	db $00				; $80E5CA		| 
+
+
+CODE_80E5CB:				;-----------------------| do L3 water stuff?
 	REP #$30			; $80E5CB  C2 30	| 
 	JSL CODE_81D397			; $80E5CD  22 97 D3 81	| 
 	JSR CODE_80E706			; $80E5D1  20 06 E7	| 
@@ -1303,17 +1310,17 @@ CODE_80E5CB:				; | do L3 water stuff?
 
 
 
-DATA_80E6E6:				; | water images. latter byte is timer.framecount
-	dl DATA_9C9CDC : db $54
-	dl DATA_9C9CDC : db $54
-	dl DATA_9C9CDC : db $54
-	dl DATA_9C9CDC : db $54
-	dl DATA_9C934E : db $86
-	dl DATA_9C934E : db $86
-	dl DATA_9C934E : db $86
-	dl DATA_9C934E : db $86
+DATA_80E6E6:				;-----------------------| water images. latter byte is timer.framecount
+	dl DATA_9C9CDC : db $54		; $80E6E6  DC 9C 9C 54	| 
+	dl DATA_9C9CDC : db $54		; $80E6EA  DC 9C 9C 54	| 
+	dl DATA_9C9CDC : db $54		; $80E6EE  DC 9C 9C 54	| 
+	dl DATA_9C9CDC : db $54		; $80E6F2  DC 9C 9C 54	| 
+	dl DATA_9C934E : db $86		; $80E6F6  4E 93 9C 86	| 
+	dl DATA_9C934E : db $86		; $80E6FA  4E 93 9C 86	| 
+	dl DATA_9C934E : db $86		; $80E6FE  4E 93 9C 86	| 
+	dl DATA_9C934E : db $86		; $80E702  4E 93 9C 86	| 
 
-CODE_80E706:				; | set up timer for water animation
+CODE_80E706:				;-----------------------| set up timer for water animation
 	REP #$30			; $80E706  C2 30	| 
 	LDA.w #$FFFF			; $80E708  A9 FF FF	| 
 	STA.w $0BC2			; $80E70B  8D C2 0B	| RAM ADDRESS
@@ -1649,50 +1656,66 @@ DATA_80EDDB:				;			| compressed MAP for title screen game logo
 	dw $4143,$0E70,$0010		; $80EE41		| 
 	dw $4153,$0EBA,$0006		; $80EE47		| 
 	dw $4159,$0ED4,$0004		; $80EE4D		| 
-	dw $0000			; $80EE53		| 
+	dw $0000			; $80EE53		| end of map
 
-DATA_80EE55:				; | title screen text tilemaps
-	dw $4307			; | "©1994  TNN / NHK SC" (layer 1)
-	dw $08ED,$08E1,$08E9,$08E9,$08E4,$0800,$0800,$08D4
-	dw $08CE,$08CE,$0800,$08EC,$0800,$08CE,$08C8,$08CB
-	dw $0800,$08D3,$08C3
-	dw $0000
-	dw $060C			; | "＠ ・START" (＠ = cursor icon)
-	dw $3C6A,$3000,$3005,$3053,$3054,$3041,$3052,$3054
-	dw $0000
-	dw $064E			; | "・REPLAY"
-	dw $3005,$3052,$3045,$3050,$304C,$3041,$3059
-	dw $0000
-	dw $0000
-DATA_80EEA7:				; | title screen cursor positions
-	dw $060C
-	dw $064C
-	dw $068C
-DATA_80EEAD:				; | "( STEREO )"
-	dw $068D
-	dw $306E,$3000,$3053,$3054,$3045,$3052,$3045,$304F
-	dw $3000,$306F
-	dw $0000
-	dw $0000
-DATA_80EEC7:				; | "(MONAURAL)"
-	dw $068D
-	dw $306E,$304D,$304F,$304E,$3041,$3055,$3052,$3041
-	dw $304C,$306F
-	dw $0000
-	dw $0000
+DATA_80EE55:				;			| title screen text tilemaps
+	dw $4307			; $80EE55		| VRAMADDR
+	dw $08ED,$08E1,$08E9,$08E9	; $80EE57		|\ "©1994  TNN / NHK SC" (layer 1)
+	dw $08E4,$0800,$0800,$08D4	; $80EE5F		|| 
+	dw $08CE,$08CE,$0800,$08EC	; $80EE67		|| 
+	dw $0800,$08CE,$08C8,$08CB	; $80EE6F		|| 
+	dw $0800,$08D3,$08C3		; $80EE77		|/ 
+	dw $0000			; $80EE7D		| end of map
+	dw $060C			; $80EE7F		| VRAMADDR
+	dw $3C6A,$3000,$3005,$3053	; $80EE81		|\ "＠ ・START" (＠ = cursor icon)
+	dw $3054,$3041,$3052,$3054	; $80EE89		|/ 
+	dw $0000			; $80EE91		| end of map
+	dw $064E			; $80EE93		| VRAMADDR
+	dw $3005,$3052,$3045,$3050	; $80EE95		|\ "・REPLAY"
+	dw $304C,$3041,$3059		; $80EE9D		|/ 
+	dw $0000			; $80EEA3		| end of map
+	dw $0000			; $80EEA5		| end of map for real
 
-DATA_80EEE1:				; | this uploads in place of below
-	dw $3000,$3000,$3000,$3000,$3000,$3000,$3000,$3000
-DATA_80EEF1:				; | title screen "(5 MIN.)" text
-	dw $386E,$3865,$3800,$384D,$3849,$384E,$385B,$386F
+DATA_80EEA7:				;			| title screen cursor positions (VRAMADDR)
+	dw $060C			; $80EEA7		| 
+	dw $064C			; $80EEA9		| 
+	dw $068C			; $80EEAB		| 
 
-DATA_80EF01:				; | PAL for title screen BG
-	dw $0443,$04A4,$04C4,$10A6,$1107,$1D28,$1149,$1D4A
-	dw $1D6B,$298C,$1DAD,$29CD,$31CD,$2DF1,$3211,$3631
+DATA_80EEAD:				;			| "( STEREO )"
+	dw $068D			; $80EEAD		| VRAMADDR
+	dw $306E,$3000,$3053,$3054	; $80EEAF		| 
+	dw $3045,$3052,$3045,$304F	; $80EEB7		| 
+	dw $3000,$306F			; $80EEBF		| 
+	dw $0000			; $80EEC3		| end of map
+	dw $0000			; $80EEC5		| end of map for real
 
-DATA_80EF21:				; | PAL for title screen game logo
-	dw $04C4,$08E5,$1106,$1948,$1D69,$25AB,$2DCC,$31EE
-	dw $3A2F,$4251,$4692,$4EB4,$56D5,$5B17,$6338,$6759
+DATA_80EEC7:				;			| "(MONAURAL)"
+	dw $068D			; $80EEC7		| VRAMADDR
+	dw $306E,$304D,$304F,$304E	; $80EEC9		| 
+	dw $3041,$3055,$3052,$3041	; $80EED1		| 
+	dw $304C,$306F			; $80EED9		| 
+	dw $0000			; $80EEDD		| end of map
+	dw $0000			; $80EEDF		| end of map for real
+
+DATA_80EEE1:				;			| this uploads in place of below
+	dw $3000,$3000,$3000,$3000	; $80EEE1		| 
+	dw $3000,$3000,$3000,$3000	; $80EEE9		| 
+
+DATA_80EEF1:				;			| title screen "(5 MIN.)" text
+	dw $386E,$3865,$3800,$384D	; $80EEF1		| 
+	dw $3849,$384E,$385B,$386F	; $80EEF9		| 
+
+DATA_80EF01:				;			| PAL for title screen BG
+	dw $0443,$04A4,$04C4,$10A6	; $80EF01		| 
+	dw $1107,$1D28,$1149,$1D4A	; $80EF09		| 
+	dw $1D6B,$298C,$1DAD,$29CD	; $80EF11		| 
+	dw $31CD,$2DF1,$3211,$3631	; $80EF19		| 
+
+DATA_80EF21:				;			| PAL for title screen game logo
+	dw $04C4,$08E5,$1106,$1948	; $80EF21		| 
+	dw $1D69,$25AB,$2DCC,$31EE	; $80EF29		| 
+	dw $3A2F,$4251,$4692,$4EB4	; $80EF31		| 
+	dw $56D5,$5B17,$6338,$6759	; $80EF39		| 
 
 CODE_80EF41:				;			| title screen menu handler
 	REP #$30			; $80EF41  C2 30	| 
@@ -1814,10 +1837,11 @@ CODE_80F023:				;			|
 CODE_80F031:				;			| 
 	RTS				;			| 
 
-DATA_80F032:				; | nullifies below
-	dw $0000
-DATA_80F034:				; | cursor tile
-	dw $3C6A
+DATA_80F032:				;			| nullifies below
+	dw $0000			; $80F032		| 
+
+DATA_80F034:				;			| cursor tile
+	dw $3C6A			; $80F034		| 
 
 
 	padbyte $FF : pad $80F2B2
@@ -1843,20 +1867,20 @@ DATA_80F034:				; | cursor tile
 
 warnpc $80FFA0
 org $80FFA0
-VECTOR_NULL:				;-----------------------| 
+VECTOR_NULL:				;=======================| 
 	RTI				; $80FFA0  40		| 
-VECTOR_NMI:				;-----------------------| 
+VECTOR_NMI:				;=======================| 
 	JML NMI				; $80FFA1  5C AC 81 80	| 
-VECTOR_RESET:				;-----------------------| 
+VECTOR_RESET:				;=======================| 
 	SEI				; $80FFA5  78		| 
 	CLC				; $80FFA6  18		| 
 	XCE				; $80FFA7  FB		| 
 	JML RESET			; $80FFA8  5C 00 80 80	| 
-VECTOR_IRQ:				;-----------------------| 
+VECTOR_IRQ:				;=======================| 
 	JML IRQ				; $80FFAC  5C 33 84 80	| 
 warnpc $80FFB0
 
-;Extended Header
+; Extended Header
 org $80FFB0
 	db "8H"				; $80FFB0  38 48	| Maker Code
 	db "ATAJ"			; $80FFB2  41 54 41 4A	| Game Code
@@ -1864,24 +1888,24 @@ org $80FFB0
 	db $00,$00,$00,$00,$00		; $80FFBB		| 
 warnpc $80FFC0
 
-;Cartridge Header
+; Cartridge Header
 org $80FFC0
-	db "UMIHARAKAWASE"		; $80FFC0		| Cartridge title
+	db "UMIHARAKAWASE"		; $80FFC0		| Cartridge title (21 [x15] bytes)
 	padbyte $20 : pad $80FFD5
 warnpc $80FFD5
 org $80FFD5
-	db $30				; $80FFD5		| ROM Speed and Map Mode
-	db $02				; $80FFD6		| Chipset
-	db $0A				; $80FFD7		| ROM size
-	db $01				; $80FFD8		| RAM size
-	db $00				; $80FFD9		| Country
-	db $33				; $80FFDA		| Developer ID code
-	db $00				; $80FFDB		| ROM Version number
-	dw $6746			; $80FFDC		| Checksum complement
+	db $30				; $80FFD5		| ROM Speed and Map Mode [FastROM]
+	db $02				; $80FFD6		| Chipset [ROM+RAM+BATTERY]
+	db $0A				; $80FFD7		| ROM size [2^xA KB = 1 MB]
+	db $01				; $80FFD8		| RAM size [2^1 KB = 2 KB]
+	db $00				; $80FFD9		| Country [Japan]
+	db $33				; $80FFDA		| Developer ID code [new, use $80FFB0]
+	db $00				; $80FFDB		| ROM Version number [v1.00]
+	dw $6746			; $80FFDC		| Checksum complement (inverse of below)
 	dw $98B9			; $80FFDE		| Checksum
 warnpc $80FFE0
 
-;CPU Exception Vectors
+; CPU Exception Vectors
 org $80FFE0
 	db $00,$00,$00,$00		; $80FFE0		| 
 	dw VECTOR_NULL			; $80FFE4 A0 FF		| (Native) COP
@@ -1979,16 +2003,16 @@ DATA_81D3E9:				;-----------------------|
 
 
 DATA_81EC32:				;-----------------------| PAL for layer 3 text
-	dw $0188,$28C6,$7F9D,$7E7A
-	dw $0188,$18CA,$45BF,$34DF
-	dw $0188,$1926,$43FC,$03F7
-	dw $0188,$495A,$665F,$7F9E
+	dw $0188,$28C6,$7F9D,$7E7A	; $81EC32		| 
+	dw $0188,$18CA,$45BF,$34DF	; $81EC3A		| 
+	dw $0188,$1926,$43FC,$03F7	; $81EC42		| 
+	dw $0188,$495A,$665F,$7F9E	; $81EC4A		| 
 
 DATA_81EC52:				;-----------------------| PAL for Kawase
-	dw $3D8E,$1CC9,$2E1B,$42BF
-	dw $5F1F,$024E,$16B1,$2314
-	dw $2174,$357B,$59FF,$10ED
-	dw $01CC,$4E31,$5EF7,$7BDE
+	dw $3D8E,$1CC9,$2E1B,$42BF	; $81EC52		| 
+	dw $5F1F,$024E,$16B1,$2314	; $81EC5A		| 
+	dw $2174,$357B,$59FF,$10ED	; $81EC62		| 
+	dw $01CC,$4E31,$5EF7,$7BDE	; $81EC6A		| 
 
 CODE_81EC72:				;			| upload layer 3 palette
 	REP #$30			; $81EC72  C2 30	| 
@@ -2279,7 +2303,7 @@ CODE_82AAA7:				;			|
 	JSR CODE_82C310			; $82AAA7  20 10 C3	| 
 CODE_82AAAA:				;			| 
 	JSL CODE_81D361			; $82AAAA  22 61 D3 81	| 
-
+	
 	ここ！
 
 
@@ -3074,7 +3098,7 @@ CODE_82B112:				;			|
 	RTS				; $82B112  60		| 
 
 
-CODE_82B113:				;-----------------------| scroll menu into view (upwards)
+CODE_82B113:				;=======================| scroll menu into view (upwards)
 	REP #$30			; $82B113  C2 30	| 
 	LDA.w #$00E0			; $82B115  A9 E0 00	| 
 	STA.b $80			; $82B118  85 80	| RAM ADDRESS
@@ -3122,7 +3146,7 @@ CODE_82B145:				;			|
 	BPL CODE_82B11A			; $82B164  10 B4	| 
 	RTS				; $82B166  60		| 
 
-CODE_82B167:				;-----------------------| scroll menu out of view (downwards)
+CODE_82B167:				;=======================| scroll menu out of view (downwards)
 	REP #$30			; $82B167  C2 30	| 
 	LDA.w #$0020			; $82B169  A9 20 00	| 
 	STA.b $80			; $82B16C  85 80	| RAM ADDRESS
@@ -3155,7 +3179,7 @@ CODE_82B184:				;			|
 	RTS				; $82B1A1  60		| 
 
 
-CODE_82B1A2:				;-----------------------| the text interpreter
+CODE_82B1A2:				;=======================| the text interpreter
 	REP #$30			; $82B1A2  C2 30	| 
 	LDA.w #$0000			; $82B1A4  A9 00 00	| 
 	PHA				; $82B1A7  48		| 
@@ -3278,7 +3302,7 @@ CODE_82B261:				;			|
 	JMP CODE_82B1A8			; $82B26C  4C A8 B1	| 
 
 DATA_82B26F:				;-----------------------| 
-	db $E8,$03,$64,$00,$0A,$00
+	db $E8,$03,$64,$00,$0A,$00	; $82B26F		| 
 
 CODE_82B275:				;			| 
 	REP #$30			; $82B275  C2 30	| 
@@ -3735,17 +3759,18 @@ CODE_82B573:				;			|
 	TAY				; $82B576  A8		| 
 	RTS				; $82B577  60		| 
 
-DATA_82B578:				; | items in REPLAY menu for levels
-	dw DATA_82BDDD			; | 戻る
-	dw DATA_82BDEC			; | セーブする
-	dw DATA_82BDFB			; | 名前を変える
-	dw DATA_82BE0A			; | ファイルを消す
-DATA_82B580:				; | items in REPLAY menu for title screen
-	dw DATA_82BDDD			; | 戻る
-	dw DATA_82BE19			; | 再生する
-	dw DATA_82BDEC			; | セーブする
-	dw DATA_82BDFB			; | 名前を変える
-	dw DATA_82BE0A			; | ファイルを消す
+DATA_82B578:				;^^^^^^^^^^^^^^^^^^^^^^^| items in REPLAY menu for levels
+	dw DATA_82BDDD			; $82B578  DD BD	| 戻る
+	dw DATA_82BDEC			; $82B57A  EC BD	| セーブする
+	dw DATA_82BDFB			; $82B57C  FB BD	| 名前を変える
+	dw DATA_82BE0A			; $82B57E  0A BE	| ファイルを消す
+
+DATA_82B580:				;^^^^^^^^^^^^^^^^^^^^^^^| items in REPLAY menu for title screen
+	dw DATA_82BDDD			; $82B580  DD BD	| 戻る
+	dw DATA_82BE19			; $82B582  19 BE	| 再生する
+	dw DATA_82BDEC			; $82B584  EC BD	| セーブする
+	dw DATA_82BDFB			; $82B586  FB BD	| 名前を変える
+	dw DATA_82BE0A			; $82B588  0A BE	| ファイルを消す
 
 
 CODE_82B58A:				;-----------------------| 
@@ -3790,12 +3815,12 @@ CODE_82B5DA:				;			| exit REPLAY menu
 	JMP CODE_82B167			; $82B5DD  4C 67 B1	| 
 
 
-PTRS_82B5E0:				;			| in-level REPLAY routines
+PTRS_82B5E0:				;^^^^^^^^^^^^^^^^^^^^^^^| in-level REPLAY routines
 	dw CODE_82BB1D			; $82B5E0  1D BB	| セーブする
 	dw CODE_82BC35			; $82B5E2  35 BC	| 名前を変える
 	dw CODE_82BD12			; $82B5E4  12 BD	| ファイルを消す
 
-PTRS_82B5E6:				;			| title screen REPLAY routines
+PTRS_82B5E6:				;^^^^^^^^^^^^^^^^^^^^^^^| title screen REPLAY routines
 	dw CODE_82BA76			; $82B5E6  76 BA	| 再生する
 	dw CODE_82BB1D			; $82B5E8  1D BB	| セーブする
 	dw CODE_82BC35			; $82B5EA  35 BC	| 名前を変える
@@ -3980,15 +4005,15 @@ CODE_82B7AA:				;			|
 	TAY				; $82B7B2  A8		| 
 	RTS				; $82B7B3  60		| 
 
-DATA_82B7B4:				; | 
-	dw DATA_82BEB2			; | 
-	dw DATA_82BECC			; | 
-	dw DATA_82BEB9			; | 
-	dw DATA_82BECC			; | 
-	dw DATA_82BEBF			; | 
-	dw DATA_82BED3			; | 
-	dw DATA_82BEC6			; | 
-	dw DATA_82BED3			; | 
+DATA_82B7B4:				;^^^^^^^^^^^^^^^^^^^^^^^| 
+	dw DATA_82BEB2			; $82B7B4  B2 BE	| 
+	dw DATA_82BECC			; $82B7B6  CC BE	| 
+	dw DATA_82BEB9			; $82B7B8  B9 BE	| 
+	dw DATA_82BECC			; $82B7BA  CC BE	| 
+	dw DATA_82BEBF			; $82B7BC  BF BE	| 
+	dw DATA_82BED3			; $82B7BE  D3 BE	| 
+	dw DATA_82BEC6			; $82B7C0  C6 BE	| 
+	dw DATA_82BED3			; $82B7C2  D3 BE	| 
 
 
 CODE_82B7C4:				;-----------------------| 
@@ -4105,7 +4130,7 @@ CODE_82B8A5:				;			|
 	STA.l $7E54A0,x			; $82B8A5  9F A0 54 7E	| RAM ADDRESS
 	RTS				; $82B8A9  60		| 
 
-DATA_82B8AA:				;			| rows for name entry
+DATA_82B8AA:				;^^^^^^^^^^^^^^^^^^^^^^^| rows for name entry
 	dw DATA_82BEDA			; $82B8AA  DA BE	| numbers
 	dw DATA_82BEEF			; $82B8AC  EF BE	| letters A-M
 	dw DATA_82BEFF			; $82B8AE  FF BE	| letters N-Z
@@ -4349,15 +4374,15 @@ CODE_82BA59:				;			|
 	TAX				; $82BA6B  AA		| 
 	RTS				; $82BA6C  60		| 
 
-DATA_82BA6D:				;			| ?
-	dw $40F5
-	dw $6FF1
-	dw $40F1
+DATA_82BA6D:				;^^^^^^^^^^^^^^^^^^^^^^^| ?
+	dw $40F5			; $82BA6D		| 
+	dw $6FF1			; $82BA6F		| 
+	dw $40F1			; $82BA71		| 
 
 
 CODE_82BA73:				;-----------------------| 
 	JMP CODE_82BC1E			; $82BA73  4C 1E BC	| 
-CODE_82BA76:				;-----------------------| 再生する
+CODE_82BA76:				;=======================| 再生する
 	REP #$30			; $82BA76  C2 30	| 
 	LDA.w $0272			; $82BA78  AD 72 02	| RAM ADDRESS
 	BEQ CODE_82BA73			; $82BA7B  F0 F6	| 
@@ -4431,7 +4456,7 @@ CODE_82BB11:				;-----------------------|
 	JSR CODE_82B167			; $82BB17  20 67 B1	| scroll menu away
 	JMP CODE_82BB22			; $82BB1A  4C 22 BB	| 
 
-CODE_82BB1D:				;-----------------------| セーブする
+CODE_82BB1D:				;=======================| セーブする
 	REP #$30			; $82BB1D  C2 30	| 
 	JSR CODE_82B704			; $82BB1F  20 04 B7	| 
 CODE_82BB22:				;			| 
@@ -4571,7 +4596,7 @@ CODE_82BC2C				;-----------------------|
 	JSR CODE_82B53D			; $82BC2F  20 3D B5	| 
 	JMP CODE_82B167			; $82BC32  4C 67 B1	| scroll menu out
 
-CODE_82BC35:				;-----------------------| 名前を変える
+CODE_82BC35:				;=======================| 名前を変える
 	REP #$30			; $82BC35  C2 30	| 
 	LDA.w $0272			; $82BC37  AD 72 02	| RAM ADDRESS
 	BNE CODE_82BC3F			; $82BC3A  D0 03	| 
@@ -4669,7 +4694,7 @@ CODE_82BD03:				;			|
 
 CODE_82BD0F:				;-----------------------| 
 	JMP CODE_82BC1E			; $82BD0F  4C 1E BC	| 
-CODE_82BD12:				;-----------------------| ファイルを消す
+CODE_82BD12:				;=======================| ファイルを消す
 	REP #$30			; $82BD12  C2 30	| 
 	LDA.w $0272			; $82BD14  AD 72 02	| RAM ADDRESS
 	BEQ CODE_82BD0F			; $82BD17  F0 F6	| 
@@ -4723,39 +4748,38 @@ CODE_82BD87:				;			|
 	JMP CODE_82B167			; $82BD8D  4C 67 B1	| 
 
 
-	;-------------------------------------------------------| 
-	;	for each group below:
-	;	first word (if any) = "position" for border (index into tilemap buffer)
-	;	second word (if any) = width (high byte) and height (low byte) of border
-	;	third word (if any) = YXPCCCTT TTTTTTTT for border (low byte ideally clear)
-	;	then some special bytes for text drawing:
-	;		01 = skip a tile (+2 index to buffer). usually follows FD command (cuz of border)
-	;		80 = show free space (4 tiles)
-	;		81 = probably bytes used by current file (2 tiles)
-	;		88 = probably field # command (4 tiles?)
-	;		FD = end of line (jump to beginning of next)
-	;		FE = position command. byte following is index/2 to tilemap buffer
-	;		FF = end of text
-	;		Fx (when not above) is tile/text modifier
-	;			bits 0,1 = low 2 bits of palette (yxpcCCtt)
-	;			bit 2 = x-flip (yXpccctt)
-	;			(p and high c get auto-set (3000))
-	;		anything else < $80 is tile data (aka text)
-	;-------------------------------------------------------| 
+;===============================================================| 
+; TODO: EXTERNALIZE THESE TABLES THEY TAKE UP WAY TOO MUCH SPACE
+;	for each group below:
+;	first word (if any) = "position" for border (index into tilemap buffer)
+;	second word (if any) = width (high byte) and height (low byte) of border
+;	third word (if any) = YXPCCCTT TTTTTTTT for border (low byte ideally clear)
+;	then some special bytes for text drawing:
+;		01 = skip a tile (+2 index to buffer). usually follows FD command (cuz of border)
+;		80 = show free space (4 tiles)
+;		81 = probably bytes used by current file (2 tiles)
+;		88 = probably field # command (4 tiles?)
+;		FD = end of line (jump to beginning of next)
+;		FE = position command. byte following is index/2 to tilemap buffer
+;		FF = end of text
+;		Fx (when not above) is tile/text modifier
+;			bits 0,1 = low 2 bits of palette (yxpcCCtt)
+;			bit 2 = x-flip (yXpccctt)
+;			(p and high c get auto-set (3000))
+;		anything else < $80 is tile data (aka text)
+;===============================================================| 
 
 
 DATA_82BD90:				;-----------------------| 
 	db $FE,$91			; |
 	db $F2				; |
-	db $52,$45,$50,$4C,$41		; |\ text "REPLAY"
-	db $59				; |/ 
+	db $52,$45,$50,$4C,$41,$59	; || text "REPLAY"
 	db $FF				; | 
 
 DATA_82BD9A:				;-----------------------| 
 	db $FE,$81			; |
 	db $F0				; |
-	db $42,$55,$46,$46,$45		; |\ text "BUFFER"
-	db $52				; |/ 
+	db $42,$55,$46,$46,$45,$52	; || text "BUFFER"
 	db $FF				; | 
 
 DATA_82BDA4:				;-----------------------| 
@@ -4767,156 +4791,145 @@ DATA_82BDA4:				;-----------------------|
 DATA_82BDAC:				;-----------------------| 
 	db $FE,$81			; |
 	db $F0				; |
-	db $46,$49,$4C,$45,$00		; |\ text "FILE NAME"
-	db $4E,$41,$4D,$45		; |/ 
+	db $46,$49,$4C,$45,$00,$4E,$41	; |\ text "FILE NAME"
+	db $4D,$45			; |/ 
 	db $FF				; | 
 
 DATA_82BDB9:				;-----------------------| 
 	db $FE,$A1			; |
 	db $F2				; |
-	db $52,$45,$50,$4C,$41		; |\ text "REPLAY"
-	db $59				; |/ 
+	db $52,$45,$50,$4C,$41,$59	; || text "REPLAY"
 	db $FF				; | 
 
 DATA_82BDC3:				;-----------------------| 
 	db $F2				; | 
-	db $11,$17,$14,$38,$11		; |\ 
-	db $05,$05,$05			; |/ text "あきえりあ・・・" (空きエリア)
-	db $80				; | 
+	db $11,$17,$14,$38,$11,$05,$05	; |\ text "あきえりあ・・・" (空きエリア)
+	db $05				; |/ 
+	db $80				; | ?
 	db $FF				; | 
 
 DATA_82BDCE:				;-----------------------| 
 	db $F0				; | 
-	db $10,$10,$10,$10,$10		; |\ 
-	db $10,$10,$00,$00,$00		; || text "ーーーーーーー      "
-	db $00,$00,$00			; |/ 
+	db $10,$10,$10,$10,$10,$10,$10	; |\ text "ーーーーーーー      "
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 
 DATA_82BDDD:				;-----------------------| 
 	db $F0				; | 
-	db $33,$24,$3E,$39,$00		; |\ 
-	db $00,$00,$00,$00,$00		; || text "もどる         " (戻る)
-	db $00,$00,$00			; |/ 
+	db $33,$24,$3E,$39,$00,$00,$00	; |\ text "もどる         " (戻る)
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 DATA_82BDEC:				;-----------------------| 
 	db $F0				; | 
-	db $1E,$10,$2C,$3E,$1D		; |\ 
-	db $39,$00,$00,$00,$00		; || text "せーぶする       " (セーブする)
-	db $00,$00,$00			; |/ 
+	db $1E,$10,$2C,$3E,$1D,$39,$00	; |\ text "せーぶする       " (セーブする)
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 DATA_82BDFB:				;-----------------------| 
 	db $F0				; | 
-	db $25,$2F,$14,$06,$16		; |\ 
-	db $14,$39,$00,$00,$00		; || text "なまえをかえる      " (名前を変える)
-	db $00,$00,$00			; |/ 
+	db $25,$2F,$14,$06,$16,$14,$39	; |\ text "なまえをかえる      " (名前を変える)
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 DATA_82BE0A:				;-----------------------| 
 	db $F0				; | 
-	db $2C,$07,$12,$39,$06		; |\ 
-	db $19,$1D,$00,$00,$00		; || text "ふぁいるをけす      " (ファイルを消す)
-	db $00,$00,$00			; |/ 
+	db $2C,$07,$12,$39,$06,$19,$1D	; |\ text "ふぁいるをけす      " (ファイルを消す)
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 DATA_82BE19:				;-----------------------| 
 	db $F0				; | 
-	db $1B,$12,$1E,$12,$1D		; |\ 
-	db $39,$00,$00,$00,$00		; || text "さいせいする       " (再生する)
-	db $00,$00,$00			; |/ 
+	db $1B,$12,$1E,$12,$1D,$39,$00	; |\ text "さいせいする       " (再生する)
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 
 DATA_82BE28:				;-----------------------| 
 	db $F0				; | 
-	db $21,$0D,$13,$20,$3E		; |\ 
-	db $3D,$1D,$39,$00,$00		; || text "ちゅうだんする     " (中断する)
-	db $00,$00,$00			; |/ 
+	db $21,$0D,$13,$20,$3E,$3D,$1D	; |\ text "ちゅうだんする     " (中断する)
+	db $39,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 
 DATA_82BE37:				;-----------------------| 
 	db $F2				; | 
-	db $10,$10,$10,$10,$10		; |\ 
-	db $10,$10,$00,$00,$00		; || text "ーーーーーーー      "
-	db $00,$00,$00			; |/ 
+	db $10,$10,$10,$10,$10,$10,$10	; |\ text "ーーーーーーー      "
+	db $00,$00,$00,$00,$00,$00	; |/ 
 	db $FF				; | 
 
 DATA_82BE46:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F1				; | *
 	db $5E				; | *
 	db $FF				; | 
 DATA_82BE53:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $5E				; | *
 	db $FF				; | 
 DATA_82BE5F:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F1				; | *
 	db $5F				; | *
 	db $FF				; | 
 DATA_82BE6C:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $5F				; | *
 	db $FF				; | 
 DATA_82BE78:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F0				; | *
 	db $5E				; | *
 	db $FF				; | 
 DATA_82BE85:				;-----------------------| 
 	db $F0				; | 
 	db $46,$49,$45,$4C,$44		; || text "FIELD"
-	db $88				; | 
+	db $88				; | ?
 	db $00				; | 
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F0				; | *
 	db $5F				; | *
 	db $FF				; | 
 
 DATA_82BE92:				;-----------------------| 
 	db $F0				; | 
-	db $2B,$0E,$13,$1C,$3E		; |\ text "ひょうじ   " (表示)?
-	db $00,$00,$00			; |/ 
+	db $2B,$0E,$13,$1C,$3E,$00,$00	; |\ text "ひょうじ   " (表示)?
+	db $00				; |/ 
 	db $F2				; | 
 	db $53,$49,$5A,$45,$00		; || text "SIZE "
 	db $FF				; | 
 DATA_82BEA2:				;-----------------------| 
 	db $F0				; | 
-	db $2B,$0E,$13,$1C,$3E		; |\ text "ひょうじ  " (表示)?
-	db $00,$00			; |/ 
+	db $2B,$0E,$13,$1C,$3E,$00,$00	; || text "ひょうじ  " (表示)?
 	db $F2				; | 
-	db $46,$49,$45,$4C,$44		; |\ text "FIELD "
-	db $00				; |/
+	db $46,$49,$45,$4C,$44,$00	; || text "FIELD "
 	db $FF				; | 
 
 DATA_82BEB2:				;-----------------------| 
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F1				; | * 
 	db $5E				; | *
 	db $FF				; | 
@@ -4924,14 +4937,14 @@ DATA_82BEB9:				;-----------------------|
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $5E				; | *
 	db $FF				; | 
 DATA_82BEBF:				;-----------------------| 
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F1				; | * 
 	db $5F				; | *
 	db $FF				; | 
@@ -4939,14 +4952,14 @@ DATA_82BEC6:				;-----------------------|
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $5F				; | *
 	db $FF				; | 
 DATA_82BECC:				;-----------------------| 
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F0				; | 
 	db $5E				; | *
 	db $FF				; | 
@@ -4954,16 +4967,15 @@ DATA_82BED3:				;-----------------------|
 	db $F0				; | 
 	db $92				; || ???
 	db $F2				; | 
-	db $81				; | 
+	db $81				; | ?
 	db $F0				; | 
 	db $5F				; | *
 	db $FF				; | 
 
 DATA_82BEDA:				;-----------------------| 
 	db $F0				; | 
-	db $60,$61,$62,$63,$64		; |\ 
-	db $65,$66,$67,$68,$69		; || text "0123456789."
-	db $5B				; |/ 
+	db $60,$61,$62,$63,$64,$65,$66	; |\ text "0123456789."
+	db $67,$68,$69,$5B		; |/ 
 	db $F0				; | ?
 	db $F2				; | ?
 	db $F1				; | 
@@ -4975,15 +4987,13 @@ DATA_82BEDA:				;-----------------------|
 	db $FF				; | 
 DATA_82BEEF:				;-----------------------| 
 	db $F0				; | 
-	db $00,$41,$42,$43,$44		; |\ 
-	db $45,$46,$47,$48,$49		; || text " ABCDEFGHIJKLM"
-	db $4A,$4B,$4C,$4D		; |/ 
+	db $00,$41,$42,$43,$44,$45,$46	; |\ text " ABCDEFGHIJKLM"
+	db $47,$48,$49,$4A,$4B,$4C,$4D	; |/ 
 	db $FF				; | 
 DATA_82BEFF:				;-----------------------| 
 	db $F0				; | 
-	db $4E,$4F,$50,$51,$52		; |\ 
-	db $53,$54,$55,$56,$57		; || text "NOPQRSTUVWXYZ:"
-	db $58,$59,$5A,$6B		; |/ 
+	db $4E,$4F,$50,$51,$52,$53,$54	; |\ text "NOPQRSTUVWXYZ:"
+	db $55,$56,$57,$58,$59,$5A,$6B	; |/ 
 	db $FF				; | 
 DATA_82BF0F:				;-----------------------| 
 	db $F0				; | 
@@ -5027,18 +5037,16 @@ DATA_82BF5F:				;-----------------------|
 	dw $3400			; | 
 	db $FE,$B1			; | 
 	db $F0				; | 
-	db $42,$55,$46,$46,$45		; |\ 
-	db $52,$29,$11,$17,$14		; || text "BUFFERのあきえりあが" ([see below])
-	db $38,$11,$16,$3E		; |/ 
+	db $42,$55,$46,$46,$45,$52,$29	; |\ text "BUFFERのあきえりあが" ([see below])
+	db $11,$17,$14,$38,$11,$16,$3E	; |/ 
 	db $FD				; | 
 	db $01				; | 
-	db $20,$38,$25,$12,$29		; |\ 
-	db $23,$3E,$04,$17,$3B		; || text "たりないので、きろくをちゅ" ([see below])
-	db $18,$06,$21,$0D		; |/ 
+	db $20,$38,$25,$12,$29,$23,$3E	; |\ text "たりないので、きろくをちゅ" ([see below])
+	db $04,$17,$3B,$18,$06,$21,$0D	; |/ 
 	db $FD				; | 
 	db $01				; | 
-	db $13,$20,$3E,$3D,$1C		; |\ text "うだんしています！" (BUFFERの空きエリアが足りないので、記録を中断しています！)
-	db $23,$12,$2F,$1D,$5C		; |/ 
+	db $13,$20,$3E,$3D,$1C,$23,$12	; |\ text "うだんしています！" (BUFFERの空きエリアが足りないので、記録を中断しています！)
+	db $2F,$1D,$5C			; |/ 
 	db $FF				; | 
 
 DATA_82BF93:				;-----------------------| 
@@ -5047,9 +5055,8 @@ DATA_82BF93:				;-----------------------|
 	dw $3400			; | 
 	db $FE,$B2			; | 
 	db $F0				; | 
-	db $53,$52,$41,$4D,$26		; |\ 
-	db $12,$1C,$3E,$0E,$13		; || text "SRAMにいじょうが" ([see below])
-	db $16,$3E			; |/ 
+	db $53,$52,$41,$4D,$26,$12,$1C	; |\ text "SRAMにいじょうが" ([see below])
+	db $3E,$0E,$13,$16,$3E		; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $01				; | 
@@ -5062,22 +5069,19 @@ DATA_82BFB1:				;-----------------------|
 	dw $3400			; | 
 	db $FE,$A1			; | 
 	db $F0				; | 
-	db $53,$52,$41,$4D,$29		; |\ 
-	db $11,$17,$14,$38,$11		; || text "SRAMのあきえりあがたり" ([see below])
-	db $16,$3E,$20,$38		; |/ 
+	db $53,$52,$41,$4D,$29,$11,$17	; |\ text "SRAMのあきえりあがたり" ([see below])
+	db $14,$38,$11,$16,$3E,$20,$38	; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $2F,$1E,$3D,$5C		; || text "ません！" (SRAMの空きエリアが足りません!)
 	db $FD				; | 
 	db $01				; | 
-	db $12,$37,$25,$12,$2C		; |\ 
-	db $07,$12,$39,$06,$19		; || text "いらないふぁいるをけして、や" ([see below])
-	db $1C,$23,$04,$34		; |/ 
+	db $12,$37,$25,$12,$2C,$07,$12	; |\ text "いらないふぁいるをけして、や" ([see below])
+	db $39,$06,$19,$1C,$23,$04,$34	; |/ 
 	db $FD				; | 
 	db $01				; | 
-	db $38,$25,$15,$1C,$23		; |\ 
-	db $18,$20,$3E,$1B,$12		; || text "りなおしてください。" (いらないファイルを消して、やり直してください。)
-	db $03				; |/ 
+	db $38,$25,$15,$1C,$23,$18,$20	; |\ text "りなおしてください。" (いらないファイルを消して、やり直してください。)
+	db $3E,$1B,$12,$03		; |/ 
 	db $FF				; | 
 
 DATA_82BFEC:				;-----------------------| 
@@ -5086,19 +5090,16 @@ DATA_82BFEC:				;-----------------------|
 	dw $3400			; | 
 	db $FE,$B1			; | 
 	db $F0				; | 
-	db $53,$52,$41,$4D,$29		; |\ 
-	db $11,$17,$14,$38,$11		; || text "SRAMのあきえりあがたり" ([see below])
-	db $16,$3E,$20,$38		; |/ 
+	db $53,$52,$41,$4D,$29,$11,$17	; |\ text "SRAMのあきえりあがたり" ([see below])
+	db $14,$38,$11,$16,$3E,$20,$38	; |/ 
 	db $FD				; | 
 	db $01				; | 
-	db $25,$12,$29,$23,$3E		; |\ 
-	db $04,$24,$21,$0D,$13		; || text "ないので、とちゅうまでし" ([see below])
-	db $2F,$23,$3E,$1C		; |/ 
+	db $25,$12,$29,$23,$3E,$04,$24	; |\ text "ないので、とちゅうまでし" ([see below])
+	db $21,$0D,$13,$2F,$23,$3E,$1C	; |/ 
 	db $FD				; | 
 	db $01				; | 
-	db $16,$1E,$10,$2C,$3E		; |\ 
-	db $23,$3E,$17,$2F,$1E		; || text "かせーぶできません。" (SRAMの空きエリアが足りないので、途中までしかセーブできません。)
-	db $3D,$03			; |/ 
+	db $16,$1E,$10,$2C,$3E,$23,$3E	; |\ text "かせーぶできません。" (SRAMの空きエリアが足りないので、途中までしかセーブできません。)
+	db $17,$2F,$1E,$3D,$03		; |/ 
 	db $FF				; | 
 
 DATA_82C022:				;-----------------------| 
@@ -5110,17 +5111,16 @@ DATA_82C022:				;-----------------------|
 	db $FD				; | 
 	db $01				; | 
 	db $F0				; | 
-	db $06,$53,$52,$41,$4D		; |\ 
-	db $26,$1E,$10,$2C,$3E		; || text "をSRAMにせーぶします" (SRAMにセーブします)
-	db $1C,$2F,$1D			; |/ 
+	db $06,$53,$52,$41,$4D,$26,$1E	; |\ text "をSRAMにせーぶします" (SRAMにセーブします)
+	db $10,$2C,$3E,$1C,$2F,$1D	; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $05,$05,$05			; || text "・・・" ([see below])
 	db $F2				; | 
 	db $42				; || text "B" ([see below])
 	db $F0				; | 
-	db $2E,$3E,$20,$3D,$23		; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
-	db $3E,$24,$38,$19,$1C		; |/ 
+	db $2E,$3E,$20,$3D,$23,$3E,$24	; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
+	db $38,$19,$1C			; |/ 
 	db $FF				; | 
 
 DATA_82C04E:				;-----------------------| 
@@ -5129,8 +5129,8 @@ DATA_82C04E:				;-----------------------|
 	dw $3800			; | 
 	db $FE,$C4			; | 
 	db $F0				; | 
-	db $1E,$10,$2C,$3E,$1C		; |\ text "せーぶしました" (セーブしました)
-	db $2F,$1C,$20			; |/ 
+	db $1E,$10,$2C,$3E,$1C,$2F,$1C	; |\ text "せーぶしました" (セーブしました)
+	db $20				; |/ 
 	db $FF				; | 
 
 DATA_82C060:				;-----------------------| 
@@ -5139,9 +5139,8 @@ DATA_82C060:				;-----------------------|
 	dw $3400			; | 
 	db $FE,$C2			; | 
 	db $F0				; | 
-	db $2C,$07,$12,$39,$16		; |\ 
-	db $3E,$11,$38,$2F,$1E		; || text "ふぁいるがありません！" (ファイルがありません！)
-	db $3D,$5C			; |/ 
+	db $2C,$07,$12,$39,$16,$3E,$11	; |\ text "ふぁいるがありません！" (ファイルがありません！)
+	db $38,$2F,$1E,$3D,$5C		; |/ 
 	db $FF				; | 
 
 DATA_82C076:				;-----------------------| 
@@ -5166,16 +5165,15 @@ DATA_82C076:				;-----------------------|
 	db $FD				; | 
 	db $01				; | 
 	db $01				; | 
-	db $16,$17,$16,$14,$2F		; |\ text "かきかえます" (書き換えます)
-	db $1D				; |/ 
+	db $16,$17,$16,$14,$2F,$1D	; || text "かきかえます" (書き換えます)
 	db $FD				; | 
 	db $01				; | 
 	db $05,$05,$05			; || text "・・・" ([see below])
 	db $F2				; | 
 	db $42				; || text "B" ([see below])
 	db $F0				; | 
-	db $2E,$3E,$20,$3D,$23		; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
-	db $3E,$24,$38,$19,$1C		; |/ 
+	db $2E,$3E,$20,$3D,$23,$3E,$24	; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
+	db $38,$19,$1C			; |/ 
 	db $FF				; | 
 
 DATA_82C0AC:				;-----------------------| 
@@ -5184,8 +5182,7 @@ DATA_82C0AC:				;-----------------------|
 	dw $3800			; | 
 	db $FE,$C4			; | 
 	db $F0				; | 
-	db $16,$17,$16,$14,$2F		; |\ text "かきかえました" (書き換えました)
-	db $1C,$20			; |/ 
+	db $16,$17,$16,$14,$2F,$1C,$20	; || text "かきかえました" (書き換えました)
 	db $FF				; | 
 
 DATA_82C0BD:				;-----------------------| 
@@ -5197,25 +5194,23 @@ DATA_82C0BD:				;-----------------------|
 	db $FD				; | 
 	db $01				; | 
 	db $F0				; | 
-	db $06,$19,$1C,$2F,$1D		; |\ text "をけします！ " (を消します！)
-	db $5C,$00			; |/ 
+	db $06,$19,$1C,$2F,$1D,$5C,$00	; || text "をけします！ " (を消します！)
 	db $F2				; | 
 	db $53,$54,$41,$52,$54		; || text "START" ([see below])
 	db $F0				; | 
 	db $2E,$3E			; || text "ぼ" ([see below])
 	db $FD				; | 
 	db $01				; | 
-	db $20,$3D,$06,$15,$1C		; |\ 
-	db $23,$18,$20,$3E,$1B		; || text "たんをおしてください" (STARTボタンを押してください)
-	db $12				; |/ 
+	db $20,$3D,$06,$15,$1C,$23,$18	; |\ text "たんをおしてください" (STARTボタンを押してください)
+	db $20,$3E,$1B,$12		; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $05,$05,$05			; || text "・・・" ([see below])
 	db $F2				; | 
 	db $42				; || text "B" ([see below])
 	db $F0				; | 
-	db $2E,$3E,$20,$3D,$23		; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
-	db $3E,$24,$38,$19,$1C		; |/ 
+	db $2E,$3E,$20,$3D,$23,$3E,$24	; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
+	db $38,$19,$1C			; |/ 
 	db $FF				; | 
 
 DATA_82C0F9:				;-----------------------| 
@@ -5236,16 +5231,16 @@ DATA_82C108:				;-----------------------|
 	db $FD				; | 
 	db $01				; | 
 	db $F0				; | 
-	db $06,$1B,$12,$1E,$12		; |\ text "をさいせいします！" (を再生します！)
-	db $1C,$2F,$1D,$5C		; |/ 
+	db $06,$1B,$12,$1E,$12,$1C,$2F	; |\ text "をさいせいします！" (を再生します！)
+	db $1D,$5C			; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $05,$05,$05			; || text "・・・" ([see below])
 	db $F2				; | 
 	db $42				; || text "B" ([see below])
 	db $F0				; | 
-	db $2E,$3E,$20,$3D,$23		; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
-	db $3E,$24,$38,$19,$1C		; |/ 
+	db $2E,$3E,$20,$3D,$23,$3E,$24	; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
+	db $38,$19,$1C			; |/ 
 	db $FF				; | 
 
 DATA_82C130:				;-----------------------| 
@@ -5254,16 +5249,16 @@ DATA_82C130:				;-----------------------|
 	dw $3800			; | 
 	db $FE,$B3			; | 
 	db $F0				; | 
-	db $21,$0D,$13,$20,$3E		; |\ text "ちゅうだんします" (中断します)
-	db $3D,$1C,$2F,$1D		; |/ 
+	db $21,$0D,$13,$20,$3E,$3D,$1C	; |\ text "ちゅうだんします" (中断します)
+	db $2F,$1D			; |/ 
 	db $FD				; | 
 	db $01				; | 
 	db $05,$05,$05			; || text "・・・" ([see below])
 	db $F2				; | 
 	db $42				; || text "B" ([see below])
 	db $F0				; | 
-	db $2E,$3E,$20,$3D,$23		; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
-	db $3E,$24,$38,$19,$1C		; |/ 
+	db $2E,$3E,$20,$3D,$23,$3E,$24	; |\ text "ぼたんでとりけし" (・・・Bボタンで取り消し)
+	db $38,$19,$1C			; |/ 
 	db $FF				; | 
 
 
@@ -5751,27 +5746,27 @@ CODE_82C766:				;			|
 
 
 
-DATA_82D996:				; | initial PPU reg parameters for TNN logo
-	db $00,$8F			; | format: 21xx,value
-	db $05,$01
-	db $06,$00
-	db $07,$40
-	db $0B,$00
-	db $0D,$C4
-	db $0D,$FF
-	db $0E,$A8
-	db $0E,$FF
-	db $23,$00
-	db $24,$00
-	db $25,$00
-	db $2C,$01
-	db $2D,$00
-	db $2E,$00
-	db $2F,$00
-	db $30,$00
-	db $31,$00
-	db $33,$00
-	db $FF
+DATA_82D996:				;-----------------------| initial PPU reg parameters for TNN logo
+	db $00,$8F			; $82D996		| format: 21xx,value
+	db $05,$01			; $82D998		| 
+	db $06,$00			; $82D99A		| 
+	db $07,$40			; $82D99C		| 
+	db $0B,$00			; $82D99E		| 
+	db $0D,$C4			; $82D9A0		| 
+	db $0D,$FF			; $82D9A2		| 
+	db $0E,$A8			; $82D9A4		| 
+	db $0E,$FF			; $82D9A6		| 
+	db $23,$00			; $82D9A8		| 
+	db $24,$00			; $82D9AA		| 
+	db $25,$00			; $82D9AC		| 
+	db $2C,$01			; $82D9AE		| only layer 1 enabled
+	db $2D,$00			; $82D9B0		| 
+	db $2E,$00			; $82D9B2		| 
+	db $2F,$00			; $82D9B4		| 
+	db $30,$00			; $82D9B6		| 
+	db $31,$00			; $82D9B8		| 
+	db $33,$00			; $82D9BA		| 
+	db $FF				; $82D9BC		| 
 
 CODE_82D9BD:				;-----------------------| TNN logo code (load/display/wait)
 	REP #$30			; $82D9BD  C2 30	| 
@@ -5982,8 +5977,10 @@ org $978000
 
 
 DATA_97E640:				;-----------------------| PAL for TNN logo
-	dw $739C,$1928,$156B,$218B,$739C,$1F38,$1E31,$3651
-	dw $5AD6,$6739,$0000,$3EF7,$4E73,$39CE,$6F7B,$579C
+	dw $739C,$1928,$156B,$218B	; $97E640		| 
+	dw $739C,$1F38,$1E31,$3651	; $97E648		| 
+	dw $5AD6,$6739,$0000,$3EF7	; $97E650		| 
+	dw $4E73,$39CE,$6F7B,$579C	; $97E658		| 
 DATA_97E660:				;-----------------------| GFX for TNN logo [xCC0 bytes]
 	incbin DATA_97E660.bin:0-CC0
 
@@ -6282,7 +6279,7 @@ CODE_1D817C:				;			|
 	STZ.b $02			; $1D819A  64 02	| RAM ADDRESS
 	RTS				; $1D819C  60		| 
 
-PTRS_1D819D:				;-----------------------| 
+PTRS_1D819D:				;^^^^^^^^^^^^^^^^^^^^^^^| 
 	dw CODE_1D81B1			; $1D819D  B1 81	| 
 	dw CODE_1D81B1			; $1D819F  B1 81	| 
 	dw CODE_1D81B1			; $1D81A1  B1 81	| 
@@ -7181,7 +7178,7 @@ CODE_1D880C:				;			| SPC program
 	incsrc CODE_1D880C.asm
 DATA_1D9DEC:				;-----------------------| length of data, ARAM address to upload to
 	dw DATA_1D9E1C-DATA_1D9DF0,$1D20
-DATA_1D9DF0:				;			| not sure what it is
+DATA_1D9DF0:				;			| not sure what this is
 	dw $0A02,$3000
 	dw $0A05,$3000
 	dw $0A07,$3000
