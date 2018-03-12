@@ -263,6 +263,10 @@ code_08BC:				;-------------------------------|
 
 
 
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
+
+
 
 
 
@@ -275,6 +279,15 @@ code_09F5:				;-------------------------------|
 	MOV $03A0+X, A			; $09FF  [$1D8B0B]  D5 A0 03	| ARAM
 	MOV $0380+X, A			; $0A02  [$1D8B0E]  D5 80 03	| ARAM
 	RET				; $0A05  [$1D8B11]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
 
 
 
@@ -303,6 +316,14 @@ code_0A1D:				;-------------------------------|
 	OR A, #$20			; $0A48  [$1D8B54]  08 20	| 
 	MOV $50+X, A			; $0A4A  [$1D8B56]  D4 50	| ARAM
 	RET				; $0A4C  [$1D8B58]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 
 
 
@@ -505,6 +526,15 @@ code_0CEE:				;				|
 
 
 
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
+
+
+
+
+
+
 code_0D41:				;-------------------------------| 
 	MOV A, $0241+X			; $0D41  [$1D8E4D]  F5 41 02	| ARAM
 	BNE code_0D4C			; $0D44  [$1D8E50]  D0 06	| 
@@ -533,6 +563,15 @@ code_0D4C:				;				|
 	MOV A, $18A0+Y			; $0D6F  [$1D8E7B]  F6 A0 18	| ARAM (table?)
 	MOV $0300+X, A			; $0D72  [$1D8E7E]  D5 00 03	| ARAM
 	RET				; $0D75  [$1D8E81]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
 
 
 
@@ -1468,34 +1507,421 @@ code_141D:				;-------------------------------|
 
 
 
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
+
+
+
+
+
+
 code_1443:				;-------------------------------| 
-	ここ！
-
-
-
-
-
+	CLR1 $4E.7			; $1443  [$1D954F]  F2 4E	| ARAM
+	MOV A, $0561+X			; $1445  [$1D9551]  F5 61 05	| ARAM
+	BEQ code_1455			; $1448  [$1D9554]  F0 0B	| 
+	MOV A, $0581+X			; $144A  [$1D9556]  F5 81 05	| ARAM
+	CMP A, $0542+X			; $144D  [$1D9559]  75 42 05	| ARAM
+	BNE code_1455			; $1450  [$1D955C]  D0 03	| 
+	CALL code_17D9			; $1452  [$1D955E]  3F D9 17	| 
+code_1455:				;				| 
+	MOV A, $03A1+X			; $1455  [$1D9561]  F5 A1 03	| ARAM
+	MOV Y, A			; $1458  [$1D9564]  FD		| 
+	MOV A, $03A0+X			; $1459  [$1D9565]  F5 A0 03	| ARAM
+	MOVW $21, YA			; $145C  [$1D9568]  DA 21	| ARAM
+	MOV A, $0380+X			; $145E  [$1D956A]  F5 80 03	| ARAM
+	BEQ code_146D			; $1461  [$1D956D]  F0 0A	| 
+	MOV A, $03C1+X			; $1463  [$1D956F]  F5 C1 03	| ARAM
+	MOV Y, A			; $1466  [$1D9572]  FD		| 
+	MOV A, $03C0+X			; $1467  [$1D9573]  F5 C0 03	| ARAM
+	CALL code_17B4			; $146A  [$1D9576]  3F B4 17	| 
+code_146D:				;				| 
+	BBC $4E.7, code_1473		; $146D  [$1D9579]  F3 4E 03	| ARAM
+	CALL code_16F4			; $1470  [$1D957C]  3F F4 16	| 
+code_1473:				;				| 
+	CLR1 $4E.7			; $1473  [$1D957F]  F2 4E	| ARAM
+	CALL code_178D			; $1475  [$1D9581]  3F 8D 17	| 
+	MOV A, $0400+X			; $1478  [$1D9584]  F5 00 04	| ARAM
+	BEQ code_148C			; $147B  [$1D9587]  F0 0F	| 
+	MOV A, $0401+X			; $147D  [$1D9589]  F5 01 04	| ARAM
+	BNE code_148C			; $1480  [$1D958C]  D0 0A	| 
+	MOV A, $0441+X			; $1482  [$1D958E]  F5 41 04	| ARAM
+	MOV Y, A			; $1485  [$1D9591]  FD		| 
+	MOV A, $0440+X			; $1486  [$1D9592]  F5 40 04	| ARAM
+	CALL code_17B4			; $1489  [$1D9595]  3F B4 17	| 
+code_148C:				;				| 
+	MOV A, $04C1+X			; $148C  [$1D9598]  F5 C1 04	| ARAM
+	BEQ code_1499			; $148F  [$1D959B]  F0 08	| 
+	MOV A, $04E1+X			; $1491  [$1D959D]  F5 E1 04	| ARAM
+	CMP A, $04A2+X			; $1494  [$1D95A0]  75 A2 04	| ARAM
+	BEQ code_149C			; $1497  [$1D95A3]  F0 03	| 
+code_1499:				;				| 
+	JMP code_1551			; $1499  [$1D95A5]  5F 51 15	| 
+code_149C:				;				| 
+	MOV X, $28			; $149C  [$1D95A8]  F8 28	| ARAM
+	MOV A, $0203+X			; $149E  [$1D95AA]  F5 03 02	| ARAM
+	MOV Y, A			; $14A1  [$1D95AD]  FD		| 
+	MOV X, $26			; $14A2  [$1D95AE]  F8 26	| ARAM
+	MOV A, $04C2+X			; $14A4  [$1D95B0]  F5 C2 04	| ARAM
+	MUL YA				; $14A7  [$1D95B3]  CF		| 
+	MOV A, Y			; $14A8  [$1D95B4]  DD		| 
+	CLRC				; $14A9  [$1D95B5]  60		| 
+	ADC A, $04A1+X			; $14AA  [$1D95B6]  95 A1 04	| ARAM
+	JMP code_152B			; $14AD  [$1D95B9]  5F 2B 15	| 
 
 code_14B0:				;-------------------------------| 
-	ここ！
+	CLR1 $4E.7			; $14B0  [$1D95BC]  F2 4E	| ARAM
+	MOV A, $0400+X			; $14B2  [$1D95BE]  F5 00 04	| ARAM
+	BEQ code_14EE			; $14B5  [$1D95C1]  F0 37	| 
+	MOV A, $0401+X			; $14B7  [$1D95C3]  F5 01 04	| ARAM
+	BEQ code_14C5			; $14BA  [$1D95C6]  F0 09	| 
+	MOV A, $0401+X			; $14BC  [$1D95C8]  F5 01 04	| ARAM
+	DEC A				; $14BF  [$1D95CB]  9C		| 
+	MOV $0401+X, A			; $14C0  [$1D95CC]  D5 01 04	| ARAM
+	BRA code_14EE			; $14C3  [$1D95CF]  2F 29	| 
+code_14C5:				;				| 
+	SET1 $4E.7			; $14C5  [$1D95D1]  E2 4E	| ARAM
+	MOV A, $0400+X			; $14C7  [$1D95D3]  F5 00 04	| ARAM
+	DEC A				; $14CA  [$1D95D6]  9C		| 
+	MOV $0400+X, A			; $14CB  [$1D95D7]  D5 00 04	| ARAM
+	BNE code_14DB			; $14CE  [$1D95DA]  D0 0B	| 
+	MOV A, $02A0+X			; $14D0  [$1D95DC]  F5 A0 02	| ARAM
+	MOV $0420+X, A			; $14D3  [$1D95DF]  D5 20 04	| ARAM
+	MOV A, $0460+X			; $14D6  [$1D95E2]  F5 60 04	| ARAM
+	BRA code_14EB			; $14D9  [$1D95E5]  2F 10	| 
+code_14DB:				;				| 
+	CLRC				; $14DB  [$1D95E7]  60		| 
+	MOV A, $0420+X			; $14DC  [$1D95E8]  F5 20 04	| ARAM
+	ADC A, $0440+X			; $14DF  [$1D95EB]  95 40 04	| ARAM
+	MOV $0420+X, A			; $14E2  [$1D95EE]  D5 20 04	| ARAM
+	MOV A, $0421+X			; $14E5  [$1D95F1]  F5 21 04	| ARAM
+	ADC A, $0441+X			; $14E8  [$1D95F4]  95 41 04	| ARAM
+code_14EB:				;				| 
+	MOV $0421+X, A			; $14EB  [$1D95F7]  D5 21 04	| ARAM
+code_14EE:				;				| 
+	CALL code_178D			; $14EE  [$1D95FA]  3F 8D 17	| 
+	MOV A, $04C1+X			; $14F1  [$1D95FD]  F5 C1 04	| ARAM
+	BEQ code_1551			; $14F4  [$1D9600]  F0 5B	| 
+	MOV A, $04E1+X			; $14F6  [$1D9602]  F5 E1 04	| ARAM
+	CMP A, $04A2+X			; $14F9  [$1D9605]  75 A2 04	| ARAM
+	BNE code_154A			; $14FC  [$1D9608]  D0 4C	| 
+	MOV A, $0501+X			; $14FE  [$1D960A]  F5 01 05	| ARAM
+	CMP A, $0502+X			; $1501  [$1D960D]  75 02 05	| ARAM
+	BNE code_150B			; $1504  [$1D9610]  D0 05	| 
+	MOV A, $0522+X			; $1506  [$1D9612]  F5 22 05	| ARAM
+	BRA code_151E			; $1509  [$1D9615]  2F 13	| 
+code_150B:				;				| 
+	MOV Y, A			; $150B  [$1D9617]  FD		| 
+	MOV A, $0501+X			; $150C  [$1D9618]  F5 01 05	| ARAM
+	INC A				; $150F  [$1D961B]  BC		| 
+	MOV $0501+X, A			; $1510  [$1D961C]  D5 01 05	| ARAM
+	CMP Y, #$00			; $1513  [$1D961F]  AD 00	| 
+	BEQ code_151A			; $1515  [$1D9621]  F0 03	| 
+	MOV A, $04C1+X			; $1517  [$1D9623]  F5 C1 04	| ARAM
+code_151A:				;				| 
+	CLRC				; $151A  [$1D9626]  60		| 
+	ADC A, $0521+X			; $151B  [$1D9627]  95 21 05	| ARAM
+code_151E:				;				| 
+	MOV $04C1+X, A			; $151E  [$1D962A]  D5 C1 04	| ARAM
+	MOV A, $04A1+X			; $1521  [$1D962D]  F5 A1 04	| ARAM
+	CLRC				; $1524  [$1D9630]  60		| 
+	ADC A, $04C2+X			; $1525  [$1D9631]  95 C2 04	| ARAM
+	MOV $04A1+X			; $1528  [$1D9634]  D5 A1 04	| ARAM
+code_152B:				;				| 
+	MOV $23, A			; $152B  [$1D9637]  C4 23	| ARAM
+	ASL A				; $152D  [$1D9639]  1C		| 
+	ASL A				; $152E  [$1D963A]  1C		| 
+	BCC code_1533			; $152F  [$1D963B]  90 02	| 
+	EOR A, #$FF			; $1531  [$1D963D]  48 FF	| 
+code_1533:				;				| 
+	MOV Y, A			; $1533  [$1D963F]  FD		| 
+	MOV A, $04C1+X			; $1534  [$1D9640]  F5 C1 04	| ARAM
+	CMP A, #$F1			; $1537  [$1D9643]  68 F1	| 
+	BCC code_1540			; $1539  [$1D9645]  90 05	| 
+	AND A, #$0F			; $153B  [$1D9647]  28 0F	| 
+	MUL YA				; $153D  [$1D9649]  CF		| 
+	BRA code_1544			; $153E  [$1D964A]  2F 04	| 
+code_1540:				;				| 
+	MUL YA				; $1540  [$1D964C]  CF		| 
+	MOV A, Y			; $1541  [$1D964D]  DD		| 
+	MOV Y, #$00			; $1542  [$1D964E]  8D 00	| 
+code_1544:				;				| 
+	CALL code_17D1			; $1544  [$1D9650]  3F D1 17	|
+code_1547:				;				|  
+	JMP code_0CA6			; $1547  [$1D9653]  5F A6 0C	| 
 
-
-
-
-
+code_154A:				;				| 
+	MOV A, $04A2+X			; $154A  [$1D9656]  F5 A2 04	| ARAM
+	INC A				; $154D  [$1D9659]  BC		| 
+	MOV $04A2+X, A			; $154E  [$1D965A]  D5 A2 04	| ARAM
+code_1551:				;-------------------------------| 
+	BBS $4E.7, code_1547		; $1551  [$1D965D]  E3 4E F3	| ARAM
+	RET				; $1554  [$1D9660]  6F		| 
 
 code_1555:				;-------------------------------| 
-	ここ！
-
-
-
-
-
-
+	MOV A, $3F			; $1555  [$1D9661]  E4 3F	| ARAM
+	BEQ code_156B			; $1557  [$1D9663]  F0 12	| 
+	MOVW YA, $41			; $1559  [$1D9665]  BA 41	| ARAM
+	ADDW YA, $3D			; $155B  [$1D9667]  7A 3D	| ARAM
+	MOV $3D, A			; $155D  [$1D9669]  C4 3D	| ARAM
+	MOV A, Y			; $155F  [$1D966B]  DD		| 
+	AND A, #$1F			; $1560  [$1D966C]  28 1F	| 
+	MOV $3E, A			; $1562  [$1D966E]  C4 3E	| ARAM
+	DBNZ $3F, code_156B		; $1564  [$1D9670]  6E 3F 04	| ARAM
+	MOVW YA, $3F			; $1567  [$1D9673]  BA 3F	| ARAM
+	MOVW $3D, YA			; $1569  [$1D9675]  DA 3D	| ARAM
+code_156B:				;				| 
+	MOV A, $3A			; $156B  [$1D9677]  E4 3A	| ARAM
+	BEQ 15				; $156D  [$1D9679]  F0 15	| 
+	MOVW YA, $36			; $156F  [$1D967B]  BA 36	| ARAM
+	ADDW YA, $32			; $1571  [$1D967D]  7A 32	| ARAM
+	MOVW $32, YA			; $1573  [$1D967F]  DA 32	| ARAM
+	MOVW YA, $38			; $1575  [$1D9681]  BA 38	| ARAM
+	ADDW YA, $34			; $1577  [$1D9683]  7A 34	| ARAM
+	DBNZ $3A, code_1582		; $1579  [$1D9685]  6E 3A 06	| ARAM
+	MOVW YA, $3A			; $157C  [$1D9688]  BA 3A	| ARAM
+	MOVW $32, YA			; $157E  [$1D968A]  DA 32	| ARAM
+	MOV Y, $3C			; $1580  [$1D968C]  EB 3C	| ARAM
+code_1582:				;				| 
+	MOVW $34, YA			; $1582  [$1D968E]  DA 34	| ARAM
+code_1584:				;				| 
+	RET				; $1584  [$1D9690]  6F		| 
 
 
 code_1585:				;-------------------------------| 
-	ここ！
+	MOV X, $28			; $1585  [$1D9691]  F8 28	| ARAM
+	MOV A, $0204+X			; $1587  [$1D9693]  F5 04 02	| ARAM
+	BEQ code_15BF			; $158A  [$1D9696]  F0 33	| 
+	MOV A, $0206+X			; $158C  [$1D9698]  F5 06 02	| ARAM
+	MOV $46, A			; $158F  [$1D969B]  C4 46	| ARAM
+	MOV A, $0207+X			; $1591  [$1D969D]  F5 07 02	| ARAM
+	MOV $47, A			; $1594  [$1D96A0]  C4 47	| ARAM
+	MOV A, $0201+X			; $1596  [$1D96A2]  F5 01 02	| ARAM
+	PUSH A				; $1599  [$1D96A5]  2D		| 
+	MOV A, $0202+X			; $159A  [$1D96A6]  F5 02 02	| ARAM
+	MOV Y, A			; $159D  [$1D96A9]  FD		| 
+	POP A				; $159E  [$1D96AA]  AE		| 
+	ADDW YA, $46			; $159F  [$1D96AB]  7A 46	| ARAM
+	MOVW $46, YA			; $15A1  [$1D96AD]  DA 46	| ARAM
+	MOV A, $0204+X			; $15A3  [$1D96AF]  F5 04 02	| ARAM
+	DEC A				; $15A6  [$1D96B2]  9C		| 
+	MOV $0204+X, A			; $15A7  [$1D96B3]  D5 04 02	| ARAM
+	BNE code_15B5			; $15AA  [$1D96B6]  D0 09	| 
+	MOV A, #$00			; $15AC  [$1D96B8]  E8 00	| 
+	MOV $46, A			; $15AE  [$1D96BA]  C4 46	| ARAM
+	MOV A, $0205+X			; $15B0  [$1D96BC]  F5 05 02	| ARAM
+	MOV $47, A			; $15B3  [$1D96BF]  C4 47	| ARAM
+code_15B5:				;				| 
+	MOV A, $46			; $15B5  [$1D96C1]  E4 46	| ARAM
+	MOV $0201+X, A			; $15B7  [$1D96C3]  D5 01 02	| ARAM
+	MOV A, $47			; $15BA  [$1D96C6]  E4 47	| ARAM
+	MOV $0202+X, A			; $15BC  [$1D96C8]  D5 02 02	| ARAM
+code_15BF:				;				| 
+	MOV A, $020A+X			; $15BF  [$1D96CB]  F5 0A 02	| ARAM
+	BEQ code_1602			; $15C2  [$1D96CE]  F0 3E	| 
+	MOV A, $020C+X			; $15C4  [$1D96D0]  F5 0C 02	| ARAM
+	MOV $46, A			; $15C7  [$1D96D3]  C4 46	| ARAM
+	MOV A, $020D+X			; $15C9  [$1D96D5]  F5 0D 02	| ARAM
+	MOV $47, A			; $15CC  [$1D96D8]  C4 47	| ARAM
+	MOV A, $0208+X			; $15CE  [$1D96DA]  F5 08 02	| ARAM
+	PUSH A				; $15D1  [$1D96DD]  2D		| 
+	MOV A, $0209+X			; $15D2  [$1D96DE]  F5 09 02	| ARAM
+	MOV Y, A			; $15D5  [$1D96E1]  FD		| 
+	POP A				; $15D6  [$1D96E2]  AE		| 
+	ADDW YA, $46			; $15D7  [$1D96E3]  7A 46	| ARAM
+	MOVW $46, YA			; $15D9  [$1D96E5]  DA 46	| ARAM
+	MOV A, $020A+X			; $15DB  [$1D96E7]  F5 0A 02	| ARAM
+	DEC A				; $15DE  [$1D96EA]  9C		| 
+	MOV $020A+X, A			; $15DF  [$1D96EB]  D5 0A 02	| ARAM
+	BNE code_15F3			; $15E2  [$1D96EE]  D0 0F	| 
+	MOV $14, A			; $15E4  [$1D96F0]  C4 14	| ARAM
+	MOV $46, #$00			; $15E6  [$1D96F2]  8F 00 46	| ARAM
+	MOV A, $020B+X			; $15E9  [$1D96F5]  F5 0B 02	| ARAM
+	MOV $47, A			; $15EC  [$1D96F8]  C4 47	| ARAM
+	BNE code_15F3			; $15EE  [$1D96FA]  D0 03	| 
+	CALL code_0BD4			; $15F0  [$1D96FC]  3F D4 0B	| 
+code_15F3:				;				| 
+	MOV A, $46			; $15F3  [$1D96FF]  E4 46	| ARAM
+	MOV $0208+X, A			; $15F5  [$1D9701]  D5 08 02	| ARAM
+	MOV A, $47			; $15F8  [$1D9704]  E4 47	| ARAM
+	MOV $0209+X, A			; $15FA  [$1D9706]  D5 09 02	| ARAM
+	MOV A, #$FF			; $15FD  [$1D9709]  E8 FF	| 
+	MOV $020E+X, A			; $15FF  [$1D970B]  D5 0E 02	| ARAM
+code_1602:				;				| 
+	CALL code_1324			; $1602  [$1D970E]  3F 24 13	| 
+code_1605:				;				| 
+	CALL code_1611			; $1605  [$1D9711]  3F 11 16	| 
+	CALL code_1336			; $1608  [$1D9714]  3F 36 13	| 
+	CMP $02, #$08			; $160B  [$1D9717]  78 08 02	| ARAM
+	BNE code_1605			; $160E  [$1D971A]  D0 F5	| 
+	RET				; $1610  [$1D971C]  6F		| 
+
+code_1611:				;-------------------------------| 
+	MOV X, $28			; $1611  [$1D971D]  F8 28	| ARAM
+	MOV A, $0209+X			; $1613  [$1D971F]  F5 09 02	| ARAM
+	MOV X, $26			; $1616  [$1D9722]  F8 26	| ARAM
+	CMP A, #$00			; $1618  [$1D9724]  68 00	| 
+	BNE code_1625			; $161A  [$1D9726]  D0 09	| 
+	MOV A, #$00			; $161C  [$1D9728]  E8 00	| 
+	MOV $4F+X, A			; $161E  [$1D972A]  D4 4F	| ARAM
+	MOV $50+X, A			; $1620  [$1D972C]  D4 50	| ARAM
+	JMP code_173F			; $1622  [$1D972E]  5F 3F 17	| 
+
+code_1625:				;				| 
+	MOV A, $0301+X			; $1625  [$1D9731]  F5 01 03	| ARAM
+	BEQ code_165D			; $1628  [$1D9734]  F0 33	| 
+	MOV X, $28			; $162A  [$1D9736]  F8 28	| ARAM
+	MOV A, $020E+X			; $162C  [$1D9738]  F5 0E 02	| ARAM
+	OR A, $04			; $162F  [$1D973B]  04 04	| ARAM
+	MOV $020E+X, A			; $1631  [$1D973D]  D5 0E 02	| ARAM
+	MOV X, $26			; $1634  [$1D9740]  F8 26	| ARAM
+	MOV A, $0301+X			; $1636  [$1D9742]  F5 01 03	| ARAM
+	DEC A				; $1639  [$1D9745]  9C		| 
+	MOV $0301+X, A			; $163A  [$1D9746]  D5 01 03	| ARAM
+	BNE code_1649			; $163D  [$1D9749]  D0 0A	| 
+	MOV A, #$00			; $163F  [$1D974B]  E8 00	| 
+	MOV $0320+X, A			; $1641  [$1D974D]  D5 20 03	| ARAM
+	MOV A, $0360+X			; $1644  [$1D9750]  F5 60 03	| ARAM
+	BRA code_165A			; $1647  [$1D9753]  2F 11	| 
+code_1649:				;				| 
+	MOV A, $0340+X			; $1649  [$1D9755]  F5 40 03	| ARAM
+	CLRC				; $164C  [$1D9758]  60		| 
+	ADC A, $0320+X			; $164D  [$1D9759]  95 20 03	| ARAM
+	MOV $0320+X, A			; $1650  [$1D975C]  D5 20 03	| ARAM
+	MOV A, $0321+X			; $1653  [$1D975F]  F5 21 03	| ARAM
+	CLRC				; $1656  [$1D9762]  60		| 
+	ADC A, $0341+X			; $1657  [$1D9763]  95 41 03	| ARAM
+code_165A:				;				| 
+	MOV $0321+X, A			; $165A  [$1D9766]  D5 21 03	| ARAM
+code_165D:				;				| 
+	MOV A, $0561+X			; $165D  [$1D9769]  F5 61 05	| ARAM
+	MOV $46, A			; $1660  [$1D976C]  C4 46	| ARAM
+	BEQ code_1698			; $1662  [$1D976E]  F0 34	| 
+	MOV A, $0581+X			; $1664  [$1D9770]  F5 81 05	| ARAM
+	CMP A, $0542+X			; $1667  [$1D9773]  75 42 05	| ARAM
+	BNE code_1691			; $166A  [$1D9776]  D0 25	| 
+	MOV X, $28			; $166C  [$1D9778]  F8 28	| ARAM
+	MOV A, $020E+X			; $166E  [$1D977A]  F5 0E 02	| ARAM
+	OR A, $04			; $1671  [$1D977D]  04 04	| ARAM
+	MOV $020E+X, A			; $1673  [$1D977F]  D5 0E 02	| ARAM
+	MOV X, $26			; $1676  [$1D9782]  F8 26	| ARAM
+	MOV A, $0541+X			; $1678  [$1D9784]  F5 41 05	| ARAM
+	BPL code_1685			; $167B  [$1D9787]  10 08	| 
+	INC $46				; $167D  [$1D9789]  AB 46	| ARAM
+	BNE code_1685			; $167F  [$1D978B]  D0 04	| 
+	MOV A, #$80			; $1681  [$1D978D]  E8 80	| 
+	BRA code_1689			; $1683  [$1D978F]  2F 04	| 
+code_1685:				;				| 
+	CLRC				; $1685  [$1D9791]  60		| 
+	ADC A, $0562+X			; $1686  [$1D9792]  95 62 05	| ARAM
+code_1689:				;				| 
+	MOV $0541+X, A			; $1689  [$1D9795]  D5 41 05	| ARAM
+	CALL code_17EC			; $168C  [$1D9798]  3F EC 17	| 
+	BRA code_169D			; $168F  [$1D979B]  2F 0C	| 
+code_1691:				;				| 
+	MOV A, $0542+X			; $1691  [$1D979D]  F5 42 05	| ARAM
+	INC A				; $1694  [$1D97A0]  BC		| 
+	MOV $0542+X, A			; $1695  [$1D97A1]  D5 42 05	| ARAM
+code_1698:				;				| 
+	MOV A, #$FF			; $1698  [$1D97A4]  E8 FF	| 
+	CALL code_17F9			; $169A  [$1D97A6]  3F F9 17	| 
+code_169D:				;				| 
+	MOV A, $0380+X			; $169D  [$1D97A9]  F5 80 03	| ARAM
+	BEQ code_16D4			; $16A0  [$1D97AC]  F0 32	| 
+	MOV X, $28			; $16A2  [$1D97AE]  F8 28	| ARAM
+	MOV A, $020E+X			; $16A4  [$1D97B0]  F5 0E 02	| ARAM
+	OR A, $04			; $16A7  [$1D97B3]  04 04	| 
+	MOV $020E+X, A			; $16A9  [$1D97B5]  D5 0E 02	| ARAM
+	MOV X, $26			; $16AC  [$1D97B8]  F8 26	| ARAM
+	MOV A, $0380+X			; $16AE  [$1D97BA]  F5 80 03	| ARAM
+	DEC A				; $16B1  [$1D97BD]  9C		| 
+	MOV $0380+X, A			; $16B2  [$1D97BE]  D5 80 03	| ARAM
+	BNE code_16C1			; $16B5  [$1D97C1]  D0 0A	| 
+	MOV A, #$00			; $16B7  [$1D97C3]  E8 00	| 
+	MOV $03A0+X, A			; $16B9  [$1D97C5]  D5 A0 03	| ARAM
+	MOV A, $03E0+X			; $16BC  [$1D97C8]  F5 E0 03	| ARAM
+	BRA code_16D1			; $16BF  [$1D97CB]  2F 10	| 
+code_16C1:				;				| 
+	MOV A, $03C0+X			; $16C1  [$1D97CD]  F5 C0 03	| ARAM
+	CLRC				; $16C4  [$1D97D0]  60		| 
+	ADC A, $03A0+X			; $16C5  [$1D97D1]  95 A0 03	| ARAM
+	MOV $03A0+X, A			; $16C8  [$1D97D4]  D5 A0 03	| ARAM
+	MOV A, $03A1+X			; $16CB  [$1D97D7]  F5 A1 03	| ARAM
+	ADC A, $03C1+X			; $16CE  [$1D97DA]  95 C1 03	| ARAM
+code_16D1:				;				| 
+	MOV $03A1+X, A			; $16D1  [$1D97DD]  D5 A1 03	| ARAM
+code_16D4:				;				| 
+	MOV X, $28			; $16D4  [$1D97E0]  F8 28	| ARAM
+	MOV A, $020E+X			; $16D6  [$1D97E2]  F5 0E 02	| ARAM
+	MOV X, $26			; $16D9  [$1D97E5]  F8 26	| ARAM
+	AND A, $04			; $16DB  [$1D97E7]  24 04	| ARAM
+	BEQ code_173F			; $16DD  [$1D97E9]  F0 60	| 
+	MOV A, $29			; $16DF  [$1D97EB]  E4 29	| ARAM
+	BNE code_16EE			; $16E1  [$1D97ED]  D0 0B	| 
+	MOV A, $03A1+X			; $16E3  [$1D97EF]  F5 A1 03	| ARAM
+	MOV Y, A			; $16E6  [$1D97F2]  FD		| 
+	MOV A, $03A0+X			; $16E7  [$1D97F3]  F5 A0 03	| ARAM
+	MOVW $21, YA			; $16EA  [$1D97F6]  DA 21	| ARAM
+	BRA code_16F4			; $16EC  [$1D97F8]  2F 06	| 
+code_16EE:				;				| 
+	MOV $22, #$0A			; $16EE  [$1D97FA]  8F 0A 22	| ARAM
+	MOV $21, #$00			; $16F1  [$1D97FD]  8F 00 21	| ARAM
+code_16F4:				;-------------------------------| 
+	MOV $46, #$00			; $16F4  [$1D9800]  8F 00 46	| ARAM
+code_16F7:				;				| 
+	MOV Y, $22			; $16F7  [$1D9803]  EB 22	| ARAM
+	MOV A, $188C+Y			; $16F9  [$1D9805]  F6 8C 18	| ARAM (ROM table)
+	SETC				; $16FC  [$1D9808]  80		| 
+	SBC A, $188B+Y			; $16FD  [$1D9809]  B6 8B 18	| ARAM (ROM table)
+	MOV Y, $21			; $1700  [$1D980C]  EB 21	| ARAM
+	MUL YA				; $1702  [$1D980E]  CF		| 
+	MOV A, Y			; $1703  [$1D980F]  DD		| 
+	MOV Y, $22			; $1704  [$1D9810]  EB 22	| ARAM
+	CLRC				; $1706  [$1D9812]  60		| 
+	ADC A, $188B+Y			; $1707  [$1D9813]  96 8B 18	| ARAM (ROM table)
+	MOV Y, A			; $170A  [$1D9816]  FD		| 
+	MOV A, $0361+X			; $170B  [$1D9817]  F5 61 03	| ARAM
+	MUL YA				; $170E  [$1D981A]  CF		| 
+	MOV A, $03E1+X			; $170F  [$1D981B]  F5 E1 03	| ARAM
+	ASL A				; $1712  [$1D981E]  1C		| 
+	BBC $46.0, code_1717		; $1713  [$1D981F]  13 46 01	| ARAM
+	ASL A				; $1716  [$1D9822]  1C		| 
+code_1717:				;				| 
+	MOV A, Y			; $1717  [$1D9823]  DD		| 
+	BCC code_171D			; $1718  [$1D9824]  90 03	| 
+	EOR A, #$FF			; $171A  [$1D9826]  48 FF	| 
+	INC A				; $171C  [$1D9828]  BC		| 
+code_171D:				;				| 
+	PUSH A				; $171D  [$1D9829]  2D		| 
+	MOV A, $46			; $171E  [$1D982A]  E4 46	| ARAM
+	BNE code_1728			; $1720  [$1D982C]  D0 06	| 
+	POP A				; $1722  [$1D982E]  AE		| 
+	MOV $0661+X, A			; $1723  [$1D982F]  D5 61 06	| 
+	BRA code_172C			; $1726  [$1D9832]  2F 04	| 
+code_1728:				;				| 
+	POP A				; $1728  [$1D9834]  AE		| 
+	MOV $0662+X, A			; $1729  [$1D9835]  D5 62 06	| ARAM
+code_172C:				;				| 
+	MOV Y, #$14			; $172C  [$1D9838]  8D 14	| 
+	MOV A, #$00			; $172E  [$1D983A]  E8 00	| 
+	SUBW YA, $21			; $1730  [$1D983C]  9A 21	| ARAM
+	MOVW $21, YA			; $1732  [$1D983E]  DA 21	| ARAM
+	INC $46				; $1734  [$1D9840]  AB 46	| ARAM
+	BBC $46.1, code_16F7		; $1736  [$1D9842]  33 46 BE	| ARAM
+	MOV A, $50+X			; $1739  [$1D9845]  F4 50	| ARAM
+	OR A, #$10			; $173B  [$1D9847]  08 10	| 
+	MOV $50+X, A			; $173D  [$1D9849]  D4 50	| ARAM
+code_173F:				;-------------------------------| 
+	RET				; $173F  [$1D984B]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 
 
 
@@ -1504,17 +1930,40 @@ code_1585:				;-------------------------------|
 
 
 code_1752:				;-------------------------------| 
-	ここ！
+	AND A, #$7F			; $1752  [$1D985E]  28 7F	| 
+	MOV $0460+X, A			; $1754  [$1D9860]  D5 60 04	| ARAM
+	SETC				; $1757  [$1D9863]  80		| 
+	SBC A, $0421+X			; $1758  [$1D9864]  B5 21 04	| ARAM
+	PUSH A				; $175B  [$1D9867]  2D		| 
+	MOV A, $0400+X			; $175C  [$1D9868]  F5 00 04	| ARAM
+	MOV X, A			; $175F  [$1D986B]  5D		| 
+	POP A				; $1760  [$1D986C]  AE		| 
+	CALL code_1798			; $1761  [$1D986D]  3F 98 17	| 
+	MOV $0440+X, A			; $1764  [$1D9870]  D5 40 04	| ARAM
+	MOV A, Y			; $1767  [$1D9873]  DD		| 
+	MOV $0441+X, A			; $1768  [$1D9874]  D5 41 04	| ARAM
+	RET				; $176B  [$1D9877]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+
+
 
 
 
 
 
 code_178D:				;-------------------------------| 
-	ここ！
-
-
-
+	MOV A, $0421+X			; $178D  [$1D9899]  F5 21 04	| ARAM
+	MOV $22, A			; $1790  [$1D989C]  C4 22	| ARAM
+	MOV A, $0420+X			; $1792  [$1D989E]  F5 20 04	| ARAM
+	MOV $21, A			; $1795  [$1D98A1]  C4 21	| ARAM
+	RET				; $1797  [$1D98A3]  6F		| 
 
 
 code_1798:				;-------------------------------| 
@@ -1531,6 +1980,7 @@ code_17A0:				;				|
 	DIV YA, X			; $17A6  [$1D98B2]  9E		| 
 	POP Y				; $17A7  [$1D98B3]  EE		| 
 	MOV X, $26			; $17A8  [$1D98B4]  F8 26	| ARAM
+code_17AA:				;				| 
 	BBC $23.7, code_17B3		; $17AA  [$1D98B6]  F3 23 06	| ARAM
 	MOVW $46, YA			; $17AD  [$1D98B9]  DA 46	| ARAM
 	MOV YA, $00			; $17AF  [$1D98BB]  BA 00	| ARAM
@@ -1538,6 +1988,73 @@ code_17A0:				;				|
 code_17B3:				;				| 
 	RET				; $17B3  [$1D98BF]  6F		| 
 
+
+code_17B4:				;-------------------------------| 
+	SET1 $4E.7			; $17B4  [$1D98C0]  E2 4E	| ARAM
+	MOV $23, Y			; $17B6  [$1D98C2]  CB 23	| ARAM
+	CALL code_17AA			; $17B8  [$1D98C4]  3F AA 17	| 
+	PUSH Y				; $17BB  [$1D98C7]  6D		| 
+	MOV Y, A			; $17BC  [$1D98C8]  FD		| 
+	MOV X, $28			; $17BD  [$1D98C9]  F8 28	| ARAM
+	MOV A, $0203+X			; $17BF  [$1D98CB]  F5 03 02	| ARAM
+	MUL YA				; $17C2  [$1D98CE]  CF		| 
+	MOV $46, Y			; $17C3  [$1D98CF]  CB 46	| 
+	MOV $47, #$00			; $17C5  [$1D98D1]  8F 00 47	| ARAM
+	MOV A, $0203+X			; $17C8  [$1D98D4]  F5 03 02	| ARAM
+	POP Y				; $17CB  [$1D98D7]  EE		| 
+	MUL YA				; $17CC  [$1D98D8]  CF		| 
+	ADDW YA, $46			; $17CD  [$1D98D9]  7A 46	| ARAM
+	MOV X, $26			; $17CF  [$1D98DB]  F8 26	| ARAM
+code_17D1:				;-------------------------------| 
+	CALL code_17AA			; $17D1  [$1D98DD]  3F AA 17	| 
+	ADDW YA, $21			; $17D4  [$1D98E0]  7A 21	| ARAM
+	MOVW $21, YA			; $17D6  [$1D98E2]  DA 21	| ARAM
+	RET				; $17D8  [$1D98E4]  6F		| 
+
+
+code_17D9:				;-------------------------------| 
+	SET1 $4E.7			; $17D9  [$1D98E5]  E2 4E	| ARAM
+	MOV X, $28			; $17DB  [$1D98E7]  F8 28	| ARAM
+	MOV A, $0203+X			; $17DD  [$1D98E9]  F5 03 02	| ARAM
+	MOV X, $26			; $17E0  [$1D98EC]  F8 26	| ARAM
+	MOV Y, A			; $17E2  [$1D98EE]  FD		| 
+	MOV A, $0562+X			; $17E3  [$1D98EF]  F5 62 05	| ARAM
+	MUL YA				; $17E6  [$1D98F2]  CF		| 
+	MOV A, Y			; $17E7  [$1D98F3]  DD		| 
+	CLRC				; $17E8  [$1D98F4]  60		| 
+	ADC A, $0541+X			; $17E9  [$1D98F5]  95 41 05	| ARAM
+code_17EC:				;-------------------------------| 
+	ASL A				; $17EC  [$1D98F8]  1C		| 
+	BCC code_17F1			; $17ED  [$1D98F9]  90 02	| 
+	EOR A, #$FF			; $17EF  [$1D98FB]  48 FF	| 
+code_17F1:				;				| 
+	MOV Y, A			; $17F1  [$1D98FD]  FD		| 
+	MOV A, $0561+X			; $17F2  [$1D98FE]  F5 61 05	| ARAM
+	MUL YA				; $17F5  [$1D9901]  CF		| 
+	MOV A, Y			; $17F6  [$1D9902]  DD		| 
+	EOR A, #$FF			; $17F7  [$1D9903]  48 FF	| 
+code_17F9:				;-------------------------------| 
+	MOV Y, A			; $17F9  [$1D9905]  FD		| 
+	MOV X, $28			; $17FA  [$1D9906]  F8 28	| ARAM
+	MOV A, $0209+X			; $17FC  [$1D9908]  F5 09 02	| ARAM
+	MOV X, $26			; $17FF  [$1D990B]  F8 26	| 
+	MUL YA				; $1801  [$1D990D]  CF		| 
+	MOV A, $0300+X			; $1802  [$1D990E]  F5 00 03	| ARAM
+	MUL YA				; $1805  [$1D9911]  CF		| 
+	MOV A, $0321+X			; $1806  [$1D9912]  F5 21 03	| ARAM
+	MUL YA				; $1809  [$1D9915]  CF		| 
+	MOV A, Y			; $180A  [$1D9916]  DD		| 
+	MOV $0361+X			; $180B  [$1D9917]  D5 61 03	| ARAM
+	RET				; $180E  [$1D991A]  6F		| 
+
+
+
+
+
+
+
+;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+;data lies below. not sure how its referenced yet
 
 
 
