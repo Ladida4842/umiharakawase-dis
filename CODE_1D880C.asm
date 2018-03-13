@@ -194,10 +194,10 @@ code_085A:				;				|
 	MOV Y, #$02			; $0864  [$1D8970]  8D 02	| 
 	MUL YA				; $0866  [$1D8972]  CF		| 
 	CLRC				; $0867  [$1D8973]  60		| 
-	ADC A, #$C0			; $0868  [$1D8974]  88 C0	| 
+	ADC A, #ptrs_18C0		; $0868  [$1D8974]  88 C0	| 
 	MOV $48, A			; $086A  [$1D8976]  C4 48	| ARAM
 	MOV A, Y			; $086C  [$1D8978]  DD		| 
-	ADC A, #$18			; $086D  [$1D8979]  88 18	| 
+	ADC A, #ptrs_18C0>>8		; $086D  [$1D8979]  88 18	| 
 	MOV $49, A			; $086F  [$1D897B]  C4 49	| ARAM
 code_0871:				;				| 
 	MOV Y, #$00			; $0871  [$1D897D]  8D 00	| 
@@ -208,9 +208,7 @@ code_0871:				;				|
 	MOV addr_087E+2, A		; $087B  [$1D8987]  C5 80 08	| ... and this...
 addr_087E:				;				| 
 	JMP code_08BC			; $087E  [$1D898A]  5F BC 08	| <--- store here
-									| where exactly can this jump?
-									| what are the possible addresses?
-									| the default just loops back
+
 
 code_0881:				;				| 
 	JMP code_0C26			; $0881  [$1D898D]  5F 26 0C	| 
@@ -224,10 +222,10 @@ code_0884:				;				|
 	MOV Y, #$02			; $088E  [$1D899A]  8D 02	| 
 	MUL YA				; $0890  [$1D899C]  CF		| 
 	CLRC				; $0891  [$1D899D]  60		| 
-	ADC A, #$20			; $0892  [$1D899E]  88 20	| 
+	ADC A, #ptrs_1A20		; $0892  [$1D899E]  88 20	| 
 	MOV $48, A			; $0894  [$1D89A0]  C4 48	| ARAM
 	MOV A, Y			; $0896  [$1D89A2]  DD		| 
-	ADC A, #$1A			; $0897  [$1D89A3]  88 1A	| 
+	ADC A, #ptrs_1A20>>8		; $0897  [$1D89A3]  88 1A	| 
 	MOV $49, A			; $0899  [$1D89A5]  C4 49	| ARAM
 	BRA code_0871			; $089B  [$1D89A7]  2F D4	| 
 
@@ -243,10 +241,10 @@ code_08A0:				;				|
 	MOV Y, #$02			; $08AA  [$1D89B6]  8D 02	| 
 	MUL YA				; $08AC  [$1D89B8]  CF		| 
 	CLRC				; $08AD  [$1D89B9]  60		| 
-	ADC A, #$80			; $08AE  [$1D89BA]  88 80	| 
+	ADC A, #ptrs_1B80		; $08AE  [$1D89BA]  88 80	| 
 	MOV $48, A			; $08B0  [$1D89BC]  C4 48	| ARAM
 	MOV A, Y			; $08B2  [$1D89BE]  DD		| 
-	ADC A, #$1B			; $08B3  [$1D89BF]  88 1B	| 
+	ADC A, #ptrs_1B80>>8		; $08B3  [$1D89BF]  88 1B	| 
 	MOV $49, A			; $08B5  [$1D89C1]  C4 49	| ARAM
 	BRA code_0871			; $08B7  [$1D89C3]  2F B8	| 
 
@@ -323,7 +321,9 @@ code_0A1D:				;-------------------------------|
 
 
 
-;～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+code_0AA7:				;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~| 
+	CALL code_1364			; $0AA7  [$1D8BB3]  3F 64 13	| 
+	ここ！
 
 
 
@@ -2058,9 +2058,539 @@ code_17F9:				;-------------------------------|
 
 
 
+ptrs_18C0:				;===============================| 
+	dw code_0AA7
+	dw code_0AB8
+	dw code_0AC6
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0AD4
+	dw code_0ADD
+	dw code_0AE7
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_182A
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_095C
+	dw code_0965
+	dw code_08BC
+	dw code_096E
+	dw code_09B0
+	dw code_09C6
+	dw code_08BC
+	dw code_09CF
+	dw code_09D5
+	dw code_09D8
+	dw code_08BC
+	dw code_09E3
+	dw code_09E6
+	dw code_09E9
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_09EC
+	dw code_0A06
+	dw code_0A69
+	dw code_0A88
+	dw code_0A0F
+	dw code_0926
+	dw code_0A4D
+	dw code_0A5B
+	dw code_0D7F
+	dw code_0D90
+	dw code_0DA0
+	dw code_0BB3
+	dw code_180F
+	dw code_1820
+	dw code_08BC
+	dw code_08BC
+	dw code_0AF1
+	dw code_0B00
+	dw code_0B14
+	dw code_0B28
+	dw code_0B4A
+	dw code_0B69
+	dw code_0B78
+	dw code_0B8A
+	dw code_0BD4
+	dw code_08DF
+	dw code_08CD
+	dw code_0D41
+	dw code_0D76
+	dw code_0D29
+	dw code_0BBC
+	dw code_0BC5
 
+ptrs_1A20:				;===============================| 
+	dw code_0AA7
+	dw code_0AB8
+	dw code_0AC6
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0AD4
+	dw code_0ADD
+	dw code_0AE7
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_182A
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_095C
+	dw code_0965
+	dw code_08BC
+	dw code_096E
+	dw code_09B0
+	dw code_09C6
+	dw code_08BC
+	dw code_09CF
+	dw code_09D5
+	dw code_09D8
+	dw code_08BC
+	dw code_09E3
+	dw code_09E6
+	dw code_09E9
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_09EC
+	dw code_0A06
+	dw code_0A69
+	dw code_0A88
+	dw code_0A0F
+	dw code_0926
+	dw code_0A4D
+	dw code_0A5B
+	dw code_0D7F
+	dw code_0D90
+	dw code_0DA0
+	dw code_0BB3
+	dw code_180F
+	dw code_1820
+	dw code_08BC
+	dw code_08BC
+	dw code_0AF1
+	dw code_0B00
+	dw code_0B14
+	dw code_0B28
+	dw code_0B4A
+	dw code_0B69
+	dw code_0B78
+	dw code_0B8A
+	dw code_0BD4
+	dw code_08DF
+	dw code_08CD
+	dw code_0D41
+	dw code_0D76
+	dw code_0D29
+	dw code_0BBC
+	dw code_0BC5
 
-
+ptrs_1B80:				;===============================| 
+	dw code_0AA7
+	dw code_0AB8
+	dw code_0AC6
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0AD4
+	dw code_0ADD
+	dw code_0AE7
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_0935
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BF
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_182A
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_0915
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_095C
+	dw code_0965
+	dw code_08BC
+	dw code_096E
+	dw code_09B0
+	dw code_09C6
+	dw code_08BC
+	dw code_09CF
+	dw code_09D5
+	dw code_09D8
+	dw code_08BC
+	dw code_09E3
+	dw code_09E6
+	dw code_09E9
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_08BC
+	dw code_09EC
+	dw code_0A06
+	dw code_0A69
+	dw code_0A88
+	dw code_0A0F
+	dw code_0926
+	dw code_0A4D
+	dw code_0A5B
+	dw code_0D7F
+	dw code_0D90
+	dw code_0DA0
+	dw code_0BB3
+	dw code_180F
+	dw code_1820
+	dw code_08BC
+	dw code_08BC
+	dw code_0AF1
+	dw code_0B00
+	dw code_0B14
+	dw code_0B28
+	dw code_0B4A
+	dw code_0B69
+	dw code_0B78
+	dw code_0B8A
+	dw code_0BD4
+	dw code_08DF
+	dw code_08CD
+	dw code_0D41
+	dw code_0D76
+	dw code_0D29
+	dw code_0BBC
+	dw code_0DB6
 
 base off
 arch 65816
