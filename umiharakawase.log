@@ -598,12 +598,14 @@ CODE_8084FC:				;			|
 	BCC CODE_8084FC			; $80850D  90 ED	| 
 	SEP #$20			; $80850F  E2 20	| 
 	STA.w $025B			; $808511  8D 5B 02	| RAM ADDRESS
-c	BRA c				; $808514  80 0C	| 
+	BRA CODE_808522			; $808514  80 0C	| 
 CODE_808516:				;			| 
 	JSR CODE_8088B2			; $808516  20 B2 88	| 
 	BRA CODE_8084FC			; $808519  80 E1	| 
 CODE_80851B:				;			| 
-	ここ！
+;	ここ！
+
+CODE_808522:				;			| 
 
 
 
@@ -689,7 +691,7 @@ CODE_808877:				;			|
 	LDA.w #$1000			; $808896  A9 00 10	| 
 	STA.w $0259			; $808899  8D 59 02	| RAM ADDRESS
 	JSL CODE_81EC81			; $80889C  22 81 EC 81	| 
-	ここ！
+;	ここ！
 
 
 
@@ -697,7 +699,7 @@ CODE_808877:				;			|
 
 CODE_8088B2:				;-----------------------| 
 	JSL CODE_82AA9A			; $8088B2  22 9A AA 82	| 
-	ここ！
+;	ここ！
 
 
 
@@ -2133,7 +2135,7 @@ CODE_81ED5B:				;			|
 	CPX.w #$0010			; $81ED64  E0 10 00	| 
 	BNE CODE_81ED5B			; $81ED67  D0 F2	| 
 	LDX.w #$0000			; $81ED69  A2 00 00	| 
-	ここ！
+;	ここ！
 
 
 
@@ -2303,8 +2305,8 @@ CODE_82AAA7:				;			|
 	JSR CODE_82C310			; $82AAA7  20 10 C3	| 
 CODE_82AAAA:				;			| 
 	JSL CODE_81D361			; $82AAAA  22 61 D3 81	| 
-	
-	ここ！
+
+;	ここ！
 
 
 
@@ -4591,7 +4593,7 @@ CODE_82BC1E:				;-----------------------|
 	RTS				; $82BC2B  60		| 
 
 
-CODE_82BC2C				;-----------------------| 
+CODE_82BC2C:				;-----------------------| 
 	JSR CODE_82AEF6			; $82BC2C  20 F6 AE	| 
 	JSR CODE_82B53D			; $82BC2F  20 3D B5	| 
 	JMP CODE_82B167			; $82BC32  4C 67 B1	| scroll menu out
@@ -5963,7 +5965,7 @@ DATA_8F8000:				;-----------------------| GFX for Kawase
 
 
 
-warnpc $8F8000
+warnpc $908000
 
 
 
@@ -7212,6 +7214,16 @@ DATA_1DA00F:				;			|
 DATA_1DA012:				;			| 
 	dl $00F03D
 
-;more data after this but im unsure how its formatted/accessed (definitely related to above pointers)
+incbin DATA_1DA015.bin
 
 warnpc $1E8000
+org $1E8000
+
+incbin DATA_1E8000.bin
+
+warnpc $1F8000
+org $1F8000
+
+incbin DATA_1F8000.bin
+
+warnpc $208000

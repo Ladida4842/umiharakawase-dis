@@ -2031,7 +2031,7 @@ code_151E:				;				|
 	MOV A, $04A1+X			; $1521  [$1D962D]  F5 A1 04	| ARAM
 	CLRC				; $1524  [$1D9630]  60		| 
 	ADC A, $04C2+X			; $1525  [$1D9631]  95 C2 04	| ARAM
-	MOV $04A1+X			; $1528  [$1D9634]  D5 A1 04	| ARAM
+	MOV $04A1+X, A			; $1528  [$1D9634]  D5 A1 04	| ARAM
 code_152B:				;				| 
 	MOV $23, A			; $152B  [$1D9637]  C4 23	| ARAM
 	ASL A				; $152D  [$1D9639]  1C		| 
@@ -2077,7 +2077,7 @@ code_1555:				;-------------------------------|
 	MOVW $3D, YA			; $1569  [$1D9675]  DA 3D	| ARAM
 code_156B:				;				| 
 	MOV A, $3A			; $156B  [$1D9677]  E4 3A	| ARAM
-	BEQ 15				; $156D  [$1D9679]  F0 15	| 
+	BEQ code_1584			; $156D  [$1D9679]  F0 15	| 
 	MOVW YA, $36			; $156F  [$1D967B]  BA 36	| ARAM
 	ADDW YA, $32			; $1571  [$1D967D]  7A 32	| ARAM
 	MOVW $32, YA			; $1573  [$1D967F]  DA 32	| ARAM
@@ -2388,7 +2388,7 @@ code_17A0:				;				|
 code_17AA:				;				| 
 	BBC $23.7, code_17B3		; $17AA  [$1D98B6]  F3 23 06	| ARAM
 	MOVW $46, YA			; $17AD  [$1D98B9]  DA 46	| ARAM
-	MOV YA, $00			; $17AF  [$1D98BB]  BA 00	| ARAM
+	MOVW YA, $00			; $17AF  [$1D98BB]  BA 00	| ARAM
 	SUBW YA, $46			; $17B1  [$1D98BD]  9A 46	| ARAM
 code_17B3:				;				| 
 	RET				; $17B3  [$1D98BF]  6F		| 
@@ -2449,7 +2449,7 @@ code_17F9:				;-------------------------------|
 	MOV A, $0321+X			; $1806  [$1D9912]  F5 21 03	| ARAM
 	MUL YA				; $1809  [$1D9915]  CF		| 
 	MOV A, Y			; $180A  [$1D9916]  DD		| 
-	MOV $0361+X			; $180B  [$1D9917]  D5 61 03	| ARAM
+	MOV $0361+X, A			; $180B  [$1D9917]  D5 61 03	| ARAM
 	RET				; $180E  [$1D991A]  6F		| 
 
 
@@ -2457,7 +2457,7 @@ code_180F:				;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 	CALL code_1364			; $180F  [$1D991B]  3F 64 13	| 
 	MOV $0581+X, A			; $1812  [$1D991E]  D5 81 05	| ARAM
 	CALL code_1364			; $1815  [$1D9921]  3F 64 13	| 
-	MOV $05A2+X, A			; $1818  [$1D9924]  D5 62 05	| ARAM
+	MOV $0562+X, A			; $1818  [$1D9924]  D5 62 05	| ARAM
 	CALL code_1364			; $181B  [$1D9927]  3F 64 13	| 
 	BRA code_1822			; $181E  [$1D992A]  2F 02	| 
 code_1820:				;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~| 
