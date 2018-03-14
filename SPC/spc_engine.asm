@@ -1,4 +1,7 @@
 arch spc700
+
+dw spc_code_end-spc_engine,spc_engine
+
 base $0700
 
 spc_engine:				;=ARAM===[ROM]======RAW=BYTES===| 
@@ -727,17 +730,17 @@ code_0BF6:				;-------------------------------|
 	ASL A				; $0BF8  [$1D8D04]  1C		| 
 	ASL A				; $0BF9  [$1D8D05]  1C		| 
 	MOV Y, A			; $0BFA  [$1D8D06]  FD		| 
-	MOV A, $1D20+Y			; $0BFB  [$1D8D07]  F6 20 1D	| ARAM actually table from ROM [1D9DEC]
+	MOV A, data_1D20+Y		; $0BFB  [$1D8D07]  F6 20 1D	| ARAM actually table from ROM [1D9DEC]
 	PUSH Y				; $0BFE  [$1D8D0A]  6D		| 
 	MOV $0280+X, A			; $0BFF  [$1D8D0B]  D5 80 02	| ARAM
 	MOV $46, A			; $0C02  [$1D8D0E]  C4 46	| ARAM
 	CALL code_0A1D			; $0C04  [$1D8D10]  3F 1D 0A	| 
 	POP Y				; $0C07  [$1D8D13]  EE		| 
-	MOV A, $1D21+Y			; $0C08  [$1D8D14]  F6 21 1D	| ARAM actually table from ROM [1D9DEC]
+	MOV A, data_1D20+1+Y		; $0C08  [$1D8D14]  F6 21 1D	| ARAM actually table from ROM [1D9DEC]
 	PUSH Y				; $0C0B  [$1D8D17]  6D		| 
 	CALL code_09F5			; $0C0C  [$1D8D18]  3F F5 09	| 
 	POP Y				; $0C0F  [$1D8D1B]  EE		| 
-	MOV A, $1D22+Y			; $0C10  [$1D8D1C]  F6 22 1D	| ARAM actually table from ROM [1D9DEC]
+	MOV A, data_1D20+2+Y		; $0C10  [$1D8D1C]  F6 22 1D	| ARAM actually table from ROM [1D9DEC]
 	BEQ code_0C1B			; $0C13  [$1D8D1F]  F0 06	| 
 	MOV A, $50+X			; $0C15  [$1D8D21]  F4 50	| ARAM
 	OR A, #$04			; $0C17  [$1D8D23]  08 04	| 
@@ -747,7 +750,7 @@ code_0C1B:				;				|
 	AND A, #$FB			; $0C1D  [$1D8D29]  28 FB	| 
 code_0C1F:				;				| 
 	MOV $50+X, A			; $0C1F  [$1D8D2B]  D4 50	| ARAM
-	MOV A, $1D23+Y			; $0C21  [$1D8D2D]  F6 23 1D	| ARAM actually table from ROM [1D9DEC]
+	MOV A, data_1D20+3+Y		; $0C21  [$1D8D2D]  F6 23 1D	| ARAM actually table from ROM [1D9DEC]
 	BRA code_0C28			; $0C24  [$1D8D30]  2F 02	| 
 
 code_0C26:				;-------------------------------| 
@@ -3064,6 +3067,33 @@ ptrs_1B80:				;===============================|
 	dw code_0D29
 	dw code_0BBC
 	dw code_0DB6
+
+
+
+spc_code_end:				;===============================| 
+
+base off
+
+	dw spc_engine_end-data_1D20,data_1D20
+
+base $1D20
+
+
+data_1D20:				;-------------------------------| not sure what this is
+	dw $0A02,$3000
+	dw $0A05,$3000
+	dw $0A07,$3000
+	dw $0A01,$3000
+	dw $0A06,$3000
+	dw $0A07,$3000
+	dw $0403,$3300
+	dw $0803,$2F00
+	dw $0C03,$2A00
+	dw $1003,$2700
+	dw $0A04,$3000
+
+spc_engine_end:				;===============================| end of data, ARAM address to jump to
+	dw $0000,spc_engine
 
 base off
 arch 65816

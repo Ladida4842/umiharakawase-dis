@@ -2874,10 +2874,11 @@ CODE_82AF8D:				;			|
 	TAY				; $82AF94  A8		| 
 	DEY				; $82AF95  88		| 
 	DEY				; $82AF96  88		| 
-	BRA CODE_82AFA9			; $82AF97  80 08	| 
+	BRA CODE_82AFA1			; $82AF97  80 08	| 
 CODE_82AF99:				;			| 
 	LDA.l $7E5500,x			; $82AF99  BF 00 55 7E	| RAM ADDRESS
 	STA.l $7E5400,x			; $82AF9D  9F 00 54 7E	| RAM ADDRESS
+CODE_82AFA1:				;			| 
 	INX				; $82AFA1  E8		| 
 	INX				; $82AFA2  E8		| 
 	DEY				; $82AFA3  88		| 
@@ -3480,7 +3481,7 @@ CODE_82B388:				;			|
 	PLY				; $82B395  7A		| 
 	PLX				; $82B396  FA		| 
 	PLA				; $82B397  68		| 
-	STA.b $80			; $82B398  85 82	| RAM ADDRESS
+	STA.b $82			; $82B398  85 82	| RAM ADDRESS
 	PLA				; $82B39A  68		| 
 	LDA.b $80			; $82B39B  A5 80	| RAM ADDRESS
 	PHA				; $82B39D  48		| 
@@ -5810,7 +5811,7 @@ CODE_82D9F3:				;			|
 CODE_82DA0A:				;			| 
 	STZ.w $2118			; $82DA0A  9C 18 21	| 
 	DEX				; $82DA0D  CA		| 
-	BNE CODE_82D9E4			; $82DA0E  D0 FA	| 
+	BNE CODE_82DA0A			; $82DA0E  D0 FA	| 
 	LDA.w #$4000			; $82DA10  A9 00 40	| 
 	STA.w $2116			; $82DA13  8D 16 21	| 
 	LDX.w #$0000			; $82DA16  A2 00 00	| 
@@ -6998,7 +6999,7 @@ CODE_1D86AB:				;			|
 	XBA				; $1D86B4  EB		| 
 	LDY.b $14			; $1D86B5  A4 14	| RAM ADDRESS
 	INY				; $1D86B7  C8		| 
-	BNE CODE_1D8696			; $1D86B8  D0 05	| 
+	BNE CODE_1D86BF			; $1D86B8  D0 05	| 
 	INC.b $16			; $1D86BA  E6 16	| RAM ADDRESS
 	LDY.w #$8000			; $1D86BC  A0 00 80	| 
 CODE_1D86BF:				;			| 
@@ -7174,26 +7175,9 @@ CODE_1D8804:				;			|
 	PLP				; $1D8806  28		| 
 	RTS				; $1D8807  60		| 
 
-DATA_1D8808:				;-----------------------| length of program, ARAM address to upload to
-	dw DATA_1D9DEC-CODE_1D880C,$0700
-CODE_1D880C:				;			| SPC program
-	incsrc CODE_1D880C.asm
-DATA_1D9DEC:				;-----------------------| length of data, ARAM address to upload to
-	dw DATA_1D9E1C-DATA_1D9DF0,$1D20
-DATA_1D9DF0:				;			| not sure what this is
-	dw $0A02,$3000
-	dw $0A05,$3000
-	dw $0A07,$3000
-	dw $0A01,$3000
-	dw $0A06,$3000
-	dw $0A07,$3000
-	dw $0403,$3300
-	dw $0803,$2F00
-	dw $0C03,$2A00
-	dw $1003,$2700
-	dw $0A04,$3000
-DATA_1D9E1C:				;-----------------------| end of data, ARAM address to jump to
-	dw $0000,$0700
+DATA_1D8808:				;-----------------------| SPC program
+	incsrc SPC/spc_engine.asm
+
 
 padbyte $00 : pad $1DA000
 warnpc $1DA000
@@ -7214,16 +7198,16 @@ DATA_1DA00F:				;			|
 DATA_1DA012:				;			| 
 	dl $00F03D
 
-incbin DATA_1DA015.bin
+incbin SPC/DATA_1DA015.bin
 
 warnpc $1E8000
 org $1E8000
 
-incbin DATA_1E8000.bin
+incbin SPC/DATA_1E8000.bin
 
 warnpc $1F8000
 org $1F8000
 
-incbin DATA_1F8000.bin
+incbin SPC/DATA_1F8000.bin
 
 warnpc $208000
