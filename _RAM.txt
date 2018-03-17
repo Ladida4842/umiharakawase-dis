@@ -34,33 +34,33 @@
 
 7E0240	2 bytes		joypad port 1 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
 7E0242	2 bytes		joypad port 2 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
-7E0244  2 bytes		joypad port 1 pressed (aka 1 frame)
-7E0246  2 bytes		joypad port 2 pressed (aka 1 frame)
-7E0248  2 bytes		inverse of joypad port 1 data
+7E0244	2 bytes		joypad port 1 pressed (aka 1 frame)
+7E0246	2 bytes		joypad port 2 pressed (aka 1 frame)
+7E0248	2 bytes		inverse of joypad port 1 data
 7E024A	2 bytes		inverse of joypad port 2 data
-7E024C  2 bytes		copy of joypad port 1 data
-7E024E  2 bytes		copy of joypad port 2 data
+7E024C	2 bytes		copy of joypad port 1 data
+7E024E	2 bytes		copy of joypad port 2 data
 
 7E0250	2 bytes		16bit frame counter. resets on blackscreens
 
 7E025B	1 byte		might be tileset?
 
-7E0270  2 bytes		title screen cursor position (0,1,2)
+7E0270	2 bytes		title screen cursor position (0,1,2)
 7E0272	2 bytes		title screen timer (until it plays demo)
-7E0274  2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
+7E0274	2 bytes		how many times youve pressed select on the title screen (for the 5min thingy)
 
 7E0280	until 02F0	VRAM DMA buffer. 2 byte length, 2 byte vramaddr, 3 byte srcaddr. so 7 bytes each
 			if length is 0000, end of buffer
 7E02F0	2 bytes		??? maybe empty
 7E02F2	2 bytes		index to 0280
 
-7E0300  x20 bytes	tiles for high score (xC), score (xC), and time (x8) counters
+7E0300	x20 bytes	tiles for high score (xC), score (xC), and time (x8) counters
 
 7E0B80	x13 bytes	HDMA table (212C, 1 reg write once) [ch6]
-7E0B93  x5 bytes	maybe empty, or extension for above
+7E0B93	x5 bytes	maybe empty, or extension for above
 
 7E0B98	x15 bytes	HDMA table (2111-2112, 2 regs write twice each) [ch7]
-7E0BAD  x3 bytes	maybe empty, or extension for above
+7E0BAD	x3 bytes	maybe empty, or extension for above
 
 7E0BB0	2 bytes		???
 
@@ -73,7 +73,22 @@
 
 7E1000	??? bytes	GFX for fishing line uploaded here (since theyre dynamic)
 
-7E1A01  1 byte		bit 6 determines stereo/monaural output?
+7E1900	2 bytes		command for spc process. 1=sfx, 2=samples?, 3=music?, 4=misc data? (high byte clear)
+7E1902	2 bytes		value for above (basically holds sfx/song #, among other things)
+7E1908	1 byte		set to 1 if monaural, cleared if stereo
+7E190A	2 bytes		copy of 7E1900? (at least temporarily)
+7E190C	2 bytes		???
+7E190E	3 bytes		holds address for indirect addressing
+7E1911	3 bytes		prolly same
+7E1914	3 bytes		same?
+7E1917	3 bytes		same jesus stick to a single pointer lol
+7E191A	1 byte		???
+7E191C	1 byte		???
+7E1960	2 bytes		holds some ARAM address?
+7E19A0	10 bytes	???
+7E19C0	20 bytes	some table (10 words)
+7E19E0	20 bytes	copy of above?
+7E1A01	1 byte		bit 6 determines stereo/monaural output? set = monaural
 
 7E1BE0	x200 bytes	OAM mirror
 7E1DE0	x20 bytes	OAM high table
@@ -92,4 +107,4 @@
 
 7E5200	x200 bytes	CGRAM mirror
 7E5400	x200 bytes	CGRAM mirror mirror, but also REPLAY tilemap buffer. i guess its multi-use
-7E5600  16 bytes	more or less scratch RAM for the REPLAY menu
+7E5600	16 bytes	more or less scratch RAM for the REPLAY menu

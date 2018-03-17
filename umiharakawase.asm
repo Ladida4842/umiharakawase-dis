@@ -7,7 +7,7 @@ output "海腹川背.sfc", create
 //convert snes address to pc address
 expression real(q) = ((q & $7fff) | ((q & $7f0000) >> 1))
 
-//convert pc address to snes address
+//convert pc address to (fastrom) snes address
 expression snes(q) = (((q & $3f8000) << 1) | ((q & $7fff) | $8000) | $800000)
 
 //lorom addressing
@@ -25,7 +25,7 @@ macro warnpc(offset) {
 	}
 }
 
-//implements fill up to a certain snes address
+//implements fill up to a certain snes address (if offset is greater than current address, wont fill)
 macro pad(offset, byte) {
 	if origin() < real({offset}) {
 		evaluate x = origin()
@@ -37,35 +37,31 @@ macro pad(offset, byte) {
 evaluate pcaddr = 0
 evaluate oldpc = 0
 
-//saves current snes address. only 1 level deep! need pullpc afterwards!
+//basically base, but saves old *snes* address
 inline pushpc(new) {
 	global evaluate pcaddr = origin()
 	base {new}
 	global evaluate oldpc = real({new})
 }
 
-//restores snes address. requires prior pushpc!
-macro pullpc() {
-	global evaluate x = {pcaddr}
-	global evaluate y = {oldpc}
-	base snes({x} + origin() - {y})
+//basically base off
+inline pullpc() {
+	base snes({pcaddr} + origin() - {oldpc})
 }
 
 evaluate baseaddr = 0
 evaluate oldbase = 0
 
-//saves current base address. only 1 level deep! need pullbase afterwards!
+//like pushpc() but saves old *base* address
 inline pushbase(new) {
 	global evaluate baseaddr = pc()
 	base {new}
-	global evaluate oldbase = real({new})
+	global evaluate oldbase = {new}
 }
 
-//restores base address. requires prior pushbase!
-macro pullbase() {
-	global evaluate x = {baseaddr}
-	global evaluate y = {oldbase}
-	base ({x} + pc() - {y})
+//like pullpc() but based off of the old base
+inline pullbase() {
+	base ({baseaddr} + pc() - {oldbase})
 }
 
 

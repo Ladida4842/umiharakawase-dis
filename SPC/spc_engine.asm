@@ -4,7 +4,7 @@ dw spc_code_end-spc_engine,spc_engine
 
 pushbase($0700)
 
-spc_engine:				//ARAM===[ROM]======RAW=BYTES===| 
+spc_engine:				//=ARAM===[ROM]======RAW=BYTES==| 
 	CLRP				// $0700  [$1D880C]  20		| 
 	LDX #$DF			// $0701  [$1D880D]  CD DF	| 
 	TXS				// $0703  [$1D880F]  BD		| 
@@ -17,7 +17,7 @@ code_0707:				//				| clear $0000-$00DE
 	STA $48				// $070C  [$1D8818]  C4 48	| ARAM
 	STA $49=#$01			// $070E  [$1D881A]  8F 01 49	| ARAM
 	TAY				// $0711  [$1D881D]  FD		| 
-code_0712:				//				| clear $0100-$07FF? rofl=definitely a mistake
+code_0712:				//				| clear $0100-$07FF? rofl, definitely a mistake
 	STA ($48)+Y			// $0712  [$1D881E]  D7 48	| INDIRECT ARAM
 	INY				// $0714  [$1D8820]  FC		| D7 becomes 00 (NOP). 48 FC is EOR #$FC
 	BNE code_0719			// $0715  [$1D8821]  D0 02	| so this wont branch after it loops back (00 xor FC = FC=FC xor FC = 00)
@@ -3096,4 +3096,5 @@ spc_engine_end:				//==============================| end of data	RAM address to 
 	dw $0000,spc_engine
 
 pullbase()
+
 architecture wdc65816
