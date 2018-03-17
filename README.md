@@ -3,12 +3,12 @@ disassembly of Umihara Kawase for the Super Famicom
 
 INCOMPLETE
 
-does not assemble properly yet (kinda just backing it up rn)
+now assembles with bass. just run "bass umiharakawase.asm"
+
+https://byuu.org/tool/bass/
 
 
-when it DOES assemble properly it'll be with asar (for now):
-
-https://github.com/RPGHacker/asar
+older asar version moved to folder /[old] asar
 
 
 RAM still needs lots of work
