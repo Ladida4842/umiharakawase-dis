@@ -928,7 +928,7 @@ TSB.b *08      ;$04 ~a
 
 JMP (*16,x)    ;$7C =a
 JMP (*16)      ;$6C =a
-JMP [*16]      ;$DC =a
+JML [*16]      ;$DC =a
 JMP *16        ;$4C =a
 JML *24        ;$5C =a
 

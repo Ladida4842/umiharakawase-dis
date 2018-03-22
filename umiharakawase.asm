@@ -37,14 +37,14 @@ macro pad(offset, byte) {
 evaluate pcaddr = 0
 evaluate oldpc = 0
 
-//basically base, but saves old *snes* address
+//misnomer. basically base, but saves old *snes* address
 inline pushpc(new) {
 	global evaluate pcaddr = origin()
 	base {new}
 	global evaluate oldpc = real({new})
 }
 
-//basically base off
+//misnomer. basically base off
 inline pullpc() {
 	base snes({pcaddr} + origin() - {oldpc})
 }
@@ -52,14 +52,14 @@ inline pullpc() {
 evaluate baseaddr = 0
 evaluate oldbase = 0
 
-//like pushpc() but saves old *base* address
+//misnomer. like pushpc() above but saves old *base* address
 inline pushbase(new) {
 	global evaluate baseaddr = pc()
 	base {new}
 	global evaluate oldbase = {new}
 }
 
-//like pullpc() but based off of the old base
+//misnomer. like pullpc() above but based off of the old base
 inline pullbase() {
 	base ({baseaddr} + pc() - {oldbase})
 }

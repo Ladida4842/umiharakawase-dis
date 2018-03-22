@@ -5,15 +5,120 @@ org($818000)
 
 
 
+code_819A88:				//----------------------| 
+	REP #$30			// $819A88  C2 30	| 
+	PHK				// $819A8A  4B		| 
+	PLB				// $819A8B  AB		| 
+	STZ.w $026B			// $819A8C  9C 6B 02	| RAM ADDRESS
+	STZ.w $04C0			// $819A8F  9C C0 04	| RAM ADDRESS
+	LDX.w #$0800			// $819A92  A2 00 08	| RAM ADDRESS
+	LDY.w #$00FC			// $819A95  A0 FC 00	| 
+code_819A98:				//			| 
+	STZ.b $00,x			// $819A98  74 00	| RAM ADDRESS
+	INX				// $819A9A  E8		| 
+	INX				// $819A9B  E8		| 
+	DEY				// $819A9C  88		| 
+	BNE code_819A98			// $819A9D  D0 F9	| 
+	RTL				// $819A9F  6B		| 
 
-code_81D361:				//----------------------| possibly RNG generator
+
+
+
+
+
+code_81CB6D:				//----------------------| 
+	REP #$30			// $81CB6D  C2 30	| 
+	PHK				// $81CB6F  4B		| 
+	PLB				// $81CB70  AB		| 
+	LDX.w #$001E			// $81CB71  A2 1E 00	| 
+	LDA.w $0406			// $81CB74  AD 06 04	| RAM ADDRESS
+	AND.w #$FFF0			// $81CB77  29 F0 FF	| 
+	STA.w $04DE			// $81CB7A  8D DE 04	| RAM ADDRESS
+	STZ.w $04DC			// $81CB7D  9C DC 04	| RAM ADDRESS
+	LSR				// $81CB80  4A		| 
+	LSR				// $81CB81  4A		| 
+	LSR				// $81CB82  4A		| 
+	LSR				// $81CB83  4A		| 
+code_81CB84:				//			| 
+	STA.w $04E0,x			// $81CB84  9D E0 04	| RAM ADDRESS
+	DEX				// $81CB87  CA		| 
+	DEX				// $81CB88  CA		| 
+	BPL code_81CB84			// $81CB89  10 F9	| 
+	LDX.w #$000C			// $81CB8B  A2 0C 00	| 
+	JSL code_809071			// $81CB8E  22 71 90 80	| 
+	LDA.w #$003C			// $81CB92  A9 3C 00	| 
+	LDY.w #$0000			// $81CB95  A0 00 00	| 
+code_81CB98:				//			| 
+	STA.w $04A0,y			// $81CB98  99 A0 04	| RAM ADDRESS
+	PHA				// $81CB9B  48		| 
+	LDA.l data_81F218&$FF0000,x	// $81CB9C  BF 00 00 81	| weird ROM addressing
+	AND.w #$00FF			// $81CBA0  29 FF 00	| 
+	STA.w $04A8,y			// $81CBA3  99 A8 04	| RAM ADDRESS
+	LDA.l data_81F218&$FF0000+1,x	// $81CBA6  BF 01 00 81	| weird ROM addressing
+	AND.w #$00FF			// $81CBAA  29 FF 00	| 
+	STA.w $04B0,y			// $81CBAD  99 B0 04	| RAM ADDRESS
+	PLA				// $81CBB0  68		| 
+	CLC				// $81CBB1  18		| 
+	ADC.w #$001E			// $81CBB2  69 1E 00	| 
+	INX				// $81CBB5  E8		| 
+	INX				// $81CBB6  E8		| 
+	INY				// $81CBB7  C8		| 
+	INY				// $81CBB8  C8		| 
+	CPY.w #$0008			// $81CBB9  C0 08 00	| 
+	BNE code_81CB98			// $81CBBC  D0 DA	| 
+	RTL				// $81CBBE  6B		| 
+
+
+
+
+
+
+
+code_81D270:				//----------------------| 
+	REP #$30			// $81D270  C2 30	| 
+	LDA.w $025B			// $81D272  AD 5B 02	| RAM ADDRESS
+	AND.w #$00FF			// $81D275  29 FF 00	| 
+	STA.w $023C			// $81D278  8D 3C 02	| RAM ADDRESS
+	JSL code_81D346			// $81D27B  22 46 D3 81	| stage # becomes seed for RNG
+	STA.w $04B8			// $81D27F  8D B8 04	| RAM ADDRESS
+	JSL code_81D346			// $81D282  22 46 D3 81	| 
+	STA.w $04BA			// $81D286  8D BA 04	| RAM ADDRESS
+	JSL code_81D346			// $81D289  22 46 D3 81	| 
+	STA.w $04BC			// $81D28D  8D BC 04	| RAM ADDRESS
+	JSL code_81D346			// $81D290  22 46 D3 81	| 
+	STA.w $04BE			// $81D294  8D BE 04	| RAM ADDRESS
+	RTL				// $81D297  6B		| 
+
+
+
+
+
+
+
+code_81D346:				//----------------------| RNG? another one?
+	REP #$30			// $81D346  C2 30	| 
+	LDA.w $023C			// $81D348  AD 3C 02	| RAM ADDRESS
+	CLC				// $81D34B  18		| 
+	ADC.w #$8765			// $81D34C  69 65 87	| 
+	ROL				// $81D34F  2A		| 
+	XBA				// $81D350  EB		| 
+	EOR.w #$BCDE			// $81D351  49 DE BC	| 
+	ROR				// $81D354  6A		| 
+	ROR				// $81D355  6A		| 
+	ADC.w #$1969			// $81D356  69 69 19	| 
+	ROR				// $81D359  6A		| 
+	ADC.w $023C			// $81D35A  6D 3C 02	| RAM ADDRESS
+	STA.w $023C			// $81D35D  8D 3C 02	| RAM ADDRESS
+	RTL				// $81D360  6B		| 
+
+code_81D361:				//----------------------| possibly random number RNG number generator
 	REP #$30			// $81D361  C2 30	| 
 	LDA.w $023E			// $81D363  AD 3E 02	| RAM ADDRESS
 	CLC				// $81D366  18		| 
-	ADC.w #$8765			// $81D367  69 65 87	| INDIRECT ROM ADDRESS?
+	ADC.w #$8765			// $81D367  69 65 87	| 
 	ROL				// $81D36A  2A		| 
 	XBA				// $81D36B  EB		| 
-	EOR.w #$BCDE			// $81D36C  49 DE BC	| ?
+	EOR.w #$BCDE			// $81D36C  49 DE BC	| 
 	ROR				// $81D36F  6A		| 
 	ROR				// $81D370  6A		| 
 	ADC.w #$1969			// $81D371  69 69 19	| 
@@ -58,6 +163,30 @@ code_81D397:				//----------------------|
 
 
 data_81D3E9:				//----------------------| 
+//	ここ！
+
+
+
+
+
+
+
+
+
+code_81D998:				//----------------------| 
+	REP #$30			// $81D998  C2 30	| 
+	PHK				// $81D99A  4B		| 
+	PLB				// $81D99B  AB		| 
+	LDA.w #$0A00			// $81D99C  A9 00 0A	| RAM ADDRESS
+	LDY.w #$000C			// $81D99F  A0 0C 00	| 
+code_81D9A2:				//			| 
+	TAX				// $81D9A2  AA		| 
+	STZ.b $00,x			// $81D9A3  74 00	| 
+	CLC				// $81D9A5  18		| 
+	ADC.w #$0020			// $81D9A6  69 20 00	| 
+	DEY				// $81D9A9  88		| 
+	BNE code_81D9A2			// $81D9AA  D0 F6	| 
+	RTL				// $81D9AC  6B		| 
 
 
 
@@ -205,7 +334,9 @@ code_81ED5B:				//			|
 
 
 
-data_81F218:				//----------------------| ??
+
+
+data_81F218:				//----------------------| field data pointers
 	dw data_81F298
 	dw data_81F2BD
 	dw data_81F2E2
@@ -271,8 +402,21 @@ data_81F218:				//----------------------| ??
 	dw data_81F963
 	dw data_81F988
 
-data_81F298:				//----------------------| 
+data_81F298:				//----------------------| stage 0 (not field #)
+	dl data_98A10E			// $81F298  0E A1 98	| level pointer (tilemap/etc)
+	db $00				// $81F29B		| tileset (FG and BG are tied together)
+	db $00				// $81F29C		| field # (aka what the game tells you) (hex)
+	db $04				// $81F29D		| song #
+	db $04,$07,$00,$00,$00,$17	// $81F29E		| sprites
+	dw $643C,$6428,$0000,$0000	// $81F2A4		| ??? (low byte into $04A8, high byte into $04B0)
+	db $00,$00,$00,$00,$00,$00,$04	// $81F2AC		| objects?
+	db $F0,$01,$02			// $81F2B3		| water stuff
+	db $E6				// $81F2B6		| ???
+	dw $0500			// $81F2B7		| time (BCD, low byte = seconds, high = minutes)
+	db $01,$01,$01,$01		// $81F2B9		| exit pointers
+
 data_81F2BD:				//----------------------| 
+//	ここ！
 data_81F2E2:				//----------------------| 
 data_81F307:				//----------------------| 
 data_81F32C:				//----------------------| 

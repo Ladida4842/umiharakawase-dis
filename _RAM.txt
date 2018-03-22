@@ -25,12 +25,15 @@
 7E022A	2 bytes		sort of index for fishing lure GFX to use. if high bit set, dont update
 7E022C	2 bytes		sort of index for fishing hook GFX to use. if high bit set, dont update
 
+7E022E	2 bytes		holds some sort of VRAM address
+
 7E0236	2 bytes		OAM addr for obj priority
 
 7E0238	2 bytes		palette index to upload to (low byte). if high byte negative, no palette update
 7E023A	2 bytes		number of colors to update
 
-7E023E	2 bytes		possibly RNG output
+7E023C	2 bytes		possibly RNG output
+7E023E	2 bytes		possibly RNG output (seems like theres 2 different ones)
 
 7E0240	2 bytes		joypad port 1 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
 7E0242	2 bytes		joypad port 2 data [byetUDLRaxlr000-]. bit 0 = joypad connected (0=no, 1=yes)
@@ -43,7 +46,15 @@
 
 7E0250	2 bytes		16bit frame counter. resets on blackscreens
 
-7E025B	1 byte		might be tileset?
+7E0254	3 bytes		high score in BCD
+7E0257	3 bytes		score in BCD
+7E025A  1 byte		lives in BCD
+
+7E025B	1 byte		might be tileset? actually stage #
+
+7E026D	1 byte		timer frame counter (-1 each frame. when zero, subtracts 1sec from time and resets to x3C)
+7E026E	1 byte		[timer] seconds in BCD
+7E026F	1 byte		[timer] minutes (high nibble cleared)
 
 7E0270	2 bytes		title screen cursor position (0,1,2)
 7E0272	2 bytes		title screen timer (until it plays demo)
@@ -54,7 +65,10 @@
 7E02F0	2 bytes		??? maybe empty
 7E02F2	2 bytes		index to 0280
 
-7E0300	x20 bytes	tiles for high score (xC), score (xC), and time (x8) counters
+7E0300	xC bytes	tiles for high score counter (1 word per tile, low byte is tile high byte is properties)
+7E030C	xC bytes	tiles for score counter (same as above)
+7E0318	x8 bytes	tiles for time counter (same)
+7E0320	x8 bytes	tiles for lives counter (same)
 
 7E0B80	x13 bytes	HDMA table (212C, 1 reg write once) [ch6]
 7E0B93	x5 bytes	maybe empty, or extension for above

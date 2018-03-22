@@ -1,4 +1,4 @@
-architecture spc700
+architecture spc700_hybrid
 
 dw spc_code_end-spc_engine,spc_engine
 

@@ -1,5 +1,35 @@
 org($828000)
 
+code_828000:				//----------------------| 
+	JSR code_828004			// $828000  20 04 80	| 
+	RTL				// $828003  6B		| 
+
+code_828004:				//			| in: Y = %0000xxxxxxyyyyyy
+	TYA				// $828004  98		| out: $80 = %0xxxxxx000000000
+	AND.w #$003F			// $828005  29 3F 00	| 	$82 = %0yyyyyy000000000+$4000
+	XBA				// $828008  EB		| 
+	ASL				// $828009  0A		| 
+	STA.b $80			// $82800A  85 80	| RAM ADDRESS
+	TYA				// $82800C  98		| 
+	AND.w #$0FC0			// $82800D  29 C0 0F	| 
+	ASL				// $828010  0A		| 
+	ASL				// $828011  0A		| 
+	ASL				// $828012  0A		| 
+	CLC				// $828013  18		| 
+	ADC.w #$4000			// $828014  69 00 40	| 
+	STA.b $82			// $828017  85 82	| RAM ADDRESS
+	RTS				// $828019  60		| 
+
+
+
+
+
+
+code_828593:				//----------------------| 
+	PHK				// $828593  4B		| 
+	PLB				// $828594  AB		| 
+	JSR ($0006,x)			// $828595  FC 06 00	| RAM ADDRESS
+	RTL				// $828598  6B		| 
 
 
 
@@ -15,7 +45,10 @@ data_82A75B:				//----------------------|
 
 
 
-
+data_82AA8E:				//----------------------| ??? possibly pointers to demo controls?
+	dl data_8DFF4F; db $00		// $82AA8E  4F FF 8D 00	| ???
+	dl data_9C9BB6; db $03		// $82AA92  B6 9B 9C 03	| ???
+	dl data_95FFB0; db $27		// $82AA96  B0 FF 95 27	| ???
 
 code_82AA9A:				//----------------------| 
 	PHB				// $82AA9A  8B		| 
@@ -29,18 +62,63 @@ code_82AAA7:				//			|
 	JSR code_82C310			// $82AAA7  20 10 C3	| 
 code_82AAAA:				//			| 
 	JSL code_81D361			// $82AAAA  22 61 D3 81	| 
+	REP #$30			// $82AAAE  C2 30	| 
+	XBA				// $82AAB0  EB		| 
+	STA.w $4204			// $82AAB1  8D 04 42	| 
+	LDA.w $0272			// $82AAB4  AD 72 02	| RAM ADDRESS
+	CLC				// $82AAB7  18		| 
+	ADC.w #$0003			// $82AAB8  69 03 00	| 
+	CMP.w #$0100			// $82AABB  C9 00 01	| 
+	BCC code_82AAC3			// $82AABE  90 03	| 
+	LDA.w #$00FF			// $82AAC0  A9 FF 00	| 
+code_82AAC3:				//			| 
+	SEP #$20			// $82AAC3  E2 20	| 
+	STA.w $4206			// $82AAC5  8D 06 42	| 
+	REP #$20			// $82AAC8  C2 20	| 
+	PHA				// $82AACA  48		| 
+	PLA				// $82AACB  68		| 
+	NOP				// $82AACC  EA		| 
+	NOP				// $82AACD  EA		| 
+	LDA.w $4216			// $82AACE  AD 16 42	| 
+	SEC				// $82AAD1  38		| 
+	SBC.w #$0003			// $82AAD2  E9 03 00	| 
+	BPL code_82AAF9			// $82AAD5  10 22	| 
+	LDA.w $4216			// $82AAD7  AD 16 42	| 
+	ASL				// $82AADA  0A		| 
+	ASL				// $82AADB  0A		| 
+	TAX				// $82AADC  AA		| 
+	LDA.w data_82AA8E+2,x		// $82AADD  BD 90 AA	| 
+	STA.w $0264			// $82AAE0  8D 64 02	| RAM ADDRESS
+	LDA.w data_82AA8E,x		// $82AAE3  BD 8E AA	| 
+	STA.w $0262			// $82AAE6  8D 62 02	| RAM ADDRESS
+	LDA.w #$0001			// $82AAE9  A9 01 00	| 
+	STA.w $0265			// $82AAEC  8D 65 02	| RAM ADDRESS
+	LDA.w data_82AA8E+3,x		// $82AAEF  BD 91 AA	| 
+	REP #$20			// $82AAF2  C2 20	| 
+	AND.w #$00FF			// $82AAF4  29 FF 00	| 
+	PLB				// $82AAF7  AB		| 
+	RTL				// $82AAF8  6B		| 
 
-//	ここ！
+code_82AAF9:				//			| 
+	JSR code_82C73E			// $82AAF9  20 3E C7	| 
+	REP #$30			// $82AAFC  C2 30	| 
+	LDA.w #$0070			// $82AAFE  A9 70 00	| SAVEADDR
+	STA.w $0264			// $82AB01  8D 64 02	| RAM ADDRESS
+	LDA.b $80			// $82AB04  A5 80	| RAM ADDRESS
+	CLC				// $82AB06  18		| 
+	ADC.w #$000E			// $82AB07  69 0E 00	| 
+	STA.w $0262			// $82AB0A  8D 62 02	| RAM ADDRESS
+	LDA.w #$0001			// $82AB0D  A9 01 00	| 
+	STA.w $0265			// $82AB10  8D 65 02	| RAM ADDRESS
+	LDA.b $84			// $82AB13  A5 84	| RAM ADDRESS
+	PLB				// $82AB15  AB		| 
+	RTL				// $82AB16  6B		| 
 
 
-
-
-
-
-
-
-
-
+code_82AB17:				//----------------------| ?????
+	REP #$30			// $82AB17  C2 30	| 
+	LDX.w #code_82AD8A		// $82AB19  A2 8A AD	| 
+	BRA code_82AB2A			// $82AB1C  80 0C	| 
 code_82AB1E:				//----------------------| REPLAY menu setup (title screen)
 	REP #$30			// $82AB1E  C2 30	| 
 	LDX.w #code_82AD77		// $82AB20  A2 77 AD	| 
